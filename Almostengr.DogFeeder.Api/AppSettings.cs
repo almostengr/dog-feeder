@@ -7,9 +7,9 @@ namespace Almostengr.DogFeeder
     {
         public IList<TimeSpan> FeedTimes { get; set; }
         public HomeAssistant HomeAssistant { get; set; }
-        public string ConnectionString {get;set;}
+        public string ConnectionString { get; set; }
     }
-    
+
     public class HomeAssistant
     {
         public string Url { get; set; }

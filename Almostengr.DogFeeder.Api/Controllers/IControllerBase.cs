@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Almostengr.DogFeeder.Api.Controllers
@@ -5,12 +6,12 @@ namespace Almostengr.DogFeeder.Api.Controllers
     public interface IControllerBase
     {
         [HttpGet]
-        ActionResult<T> GetAll<T>();
+        Task<ActionResult<T>> GetAsync<T>();
 
         [HttpGet]
-        ActionResult<T> Get<T>(int id);
+        Task<ActionResult<T>> GetAsync<T>(int id);
 
         [HttpPost]
-        ActionResult<T> Post<T>(T t);
+        Task<ActionResult<T>> PostAsync<T>(T t);
     }
 }
