@@ -26,6 +26,7 @@ namespace Almostengr.DogFeeder.Web
             services.AddControllersWithViews();
 
             // services.AddScoped<
+            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

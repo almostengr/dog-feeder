@@ -1,0 +1,9 @@
+@model List<ScheduleViewModel>
+
+<div>
+    @foreach (var item in Model)
+    {
+        <div>@item.Id</div>
+        <div>@item.ScheduledTime</div>
+    }
+</div>

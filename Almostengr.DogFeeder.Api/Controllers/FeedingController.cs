@@ -9,16 +9,16 @@ using Microsoft.Extensions.Logging;
 
 namespace Almostengr.DogFeeder.Api.Controllers
 {
-    public class FeedingController : ControllerBase
+    public class FeedingController : BaseController
     {
         private readonly ILogger<FeedingController> _logger;
         private readonly AppSettings _appSettings;
         private readonly IFeedingRepository _repository;
 
-        public FeedingController(ILogger<FeedingController> logger, AppSettings appSettings, IFeedingRepository repository)
+        public FeedingController(ILogger<FeedingController> logger,  IFeedingRepository repository)
         {
             _logger = logger;
-            _appSettings = appSettings;
+            // _appSettings = appSettings;
             _repository = repository;
         }
 
@@ -29,7 +29,7 @@ namespace Almostengr.DogFeeder.Api.Controllers
             return Ok(feedings);
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<ActionResult<Feeding>> GetAsync(int id)
         {
             var feeding = await _repository.GetFeedingAsync(id);

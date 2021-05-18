@@ -1,0 +1,9 @@
+@model List<FeedingViewModel>
+
+<div>
+    @foreach (var item in Model)
+    {
+        <div>@item.Id</div>
+        <div>@item.Timestamp</div>
+    }
+</div>

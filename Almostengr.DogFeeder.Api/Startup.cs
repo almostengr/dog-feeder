@@ -23,16 +23,15 @@ namespace Almostengr.DogFeeder.Api
         public void ConfigureServices(IServiceCollection services)
         {
             AppSettings appSettings = Configuration.GetSection(nameof(appSettings)).Get<AppSettings>();
-            services.AddSingleton(appSettings);
+            // services.AddSingleton(appSettings);
 
             services.AddDbContext<DogFeederDbContext>(options => 
-                options.UseMySQL(appSettings.ConnectionString)
-            );
+                options.UseMySQL(Configuration.GetConnectionString("DbConnection")));
 
             services.AddScoped<IFeedingRepository, FeedingRepository>();
             services.AddScoped<IScheduleRepository, ScheduleRepository>();
 
-            services.AddSingleton<ScheduleFeedWorker>();
+            // services.AddSingleton<ScheduleFeedWorker>();
 
             services.AddControllers();
         }

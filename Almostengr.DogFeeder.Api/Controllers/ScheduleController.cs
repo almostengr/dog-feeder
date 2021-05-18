@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Almostengr.DogFeeder.Api.Controllers
 {
-    public class ScheduleController : ControllerBase
+    public class ScheduleController : BaseController
     {
         private readonly ILogger<ScheduleController> _logger;
         private readonly IScheduleRepository _repository;
