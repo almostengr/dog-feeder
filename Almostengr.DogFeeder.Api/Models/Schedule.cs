@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Almostengr.DogFeeder.Models
+namespace Almostengr.DogFeeder.Api.Models
 {
     public class Schedule
     {
@@ -10,5 +10,6 @@ namespace Almostengr.DogFeeder.Models
 
         [Required]
         public DateTime ScheduledTime { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 }

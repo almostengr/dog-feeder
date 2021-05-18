@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Almostengr.DogFeeder.Api.Models;
 using Almostengr.DogFeeder.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,7 +26,7 @@ namespace Almostengr.DogFeeder.Api.Data
             return await _dbContext.Feedings.FirstOrDefaultAsync(f => f.Id == id);
         }
 
-        public async Task Create(Feeding entity)
+        public async Task CreateFeeding(Feeding entity)
         {
             await _dbContext.Feedings.AddAsync(entity);
         }

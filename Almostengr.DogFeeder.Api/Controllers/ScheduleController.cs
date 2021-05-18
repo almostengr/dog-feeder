@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Almostengr.DogFeeder.Api.Data;
-using Almostengr.DogFeeder.Models;
+using Almostengr.DogFeeder.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -41,7 +41,7 @@ namespace Almostengr.DogFeeder.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Schedule>> PostAsync(Schedule model)
         {
-            await _repository.Create(model);
+            await _repository.CreateSchedule(model);
             await _repository.SaveChangesAsync();
 
             return CreatedAtRoute(nameof(GetAsync), new { Id = model.Id, model });

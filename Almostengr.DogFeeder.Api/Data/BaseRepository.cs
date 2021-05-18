@@ -4,7 +4,7 @@ using Almostengr.DogFeeder.Models;
 
 namespace Almostengr.DogFeeder.Api.Data
 {
-    public class BaseRepository
+    public abstract class BaseRepository
     {
         private readonly DogFeederDbContext _dbContext;
 

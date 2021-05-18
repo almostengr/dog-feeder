@@ -1,3 +1,4 @@
+using Almostengr.DogFeeder.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Almostengr.DogFeeder.Models

@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Almostengr.DogFeeder.Api.Data;
-using Almostengr.DogFeeder.Models;
+using Almostengr.DogFeeder.Api.Models;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Almostengr.DogFeeder.Api.Worker
 {
@@ -14,6 +17,7 @@ namespace Almostengr.DogFeeder.Api.Worker
         private readonly ILogger<ScheduleFeedWorker> _logger;
         private readonly IScheduleRepository _schedule;
         private readonly IFeedingRepository _feeding;
+        private HttpClient _httpClient;
 
         public ScheduleFeedWorker(ILogger<ScheduleFeedWorker> logger, IScheduleRepository schedule, IFeedingRepository feeding)
         {
@@ -24,6 +28,7 @@ namespace Almostengr.DogFeeder.Api.Worker
 
         public override void Dispose()
         {
+            _httpClient.Dispose();
             base.Dispose();
         }
 
@@ -40,6 +45,8 @@ namespace Almostengr.DogFeeder.Api.Worker
         public override Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Starting worker");
+            _httpClient = new HttpClient();
+            _httpClient.BaseAddress = new Uri("http://localhost");
 
             return base.StartAsync(cancellationToken);
         }
@@ -48,6 +55,8 @@ namespace Almostengr.DogFeeder.Api.Worker
         {
             _logger.LogInformation("Stopping worker");
 
+            _httpClient.Dispose();
+            
             return base.StopAsync(cancellationToken);
         }
 
@@ -58,34 +67,76 @@ namespace Almostengr.DogFeeder.Api.Worker
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            List<Schedule> schedules = await GetSchedule(true);
+            List<Schedule> schedules = await GetActiveSchedules(true);
 
             while (!stoppingToken.IsCancellationRequested)
             {
                 DateTime currentTime = DateTime.Now;
 
-                if (currentTime.Minute % 5 == 0)
+                if (currentTime.Minute % 15 == 0)
                 {
-                    schedules = await GetSchedule(false);
+                    schedules = await GetActiveSchedules(false);
                 }
 
-                foreach (var schedule in schedules)
-                {
-                    if (schedule.ScheduledTime.Hour == currentTime.Hour &&
-                        schedule.ScheduledTime.Minute == currentTime.Minute)
-                    {
-                        // perform the feeding
-                    }
-                }
+                await CompareScheduleToFeedTime(schedules);
 
-                await Task.Delay(TimeSpan.FromSeconds(60));
+                await Task.Delay(TimeSpan.FromSeconds(25));
             }
         }
 
-        private async Task<List<Schedule>> GetSchedule(bool firstRun)
+        private async Task<List<Schedule>> GetActiveSchedules(bool firstRun)
         {
-            _logger.LogInformation("Refreshing schdule information");
-            return await _schedule.GetAllSchedulesAsync();
+            _logger.LogInformation("Refreshing schedule information");
+            return await _schedule.GetAllActiveSchedulesAsync();
+        }
+
+        private async Task CompareScheduleToFeedTime(List<Schedule> schedules)
+        {
+            DateTime currentTime = DateTime.Now;
+
+            foreach (var schedule in schedules)
+            {
+                if (schedule.ScheduledTime.Hour == currentTime.Hour &&
+                    schedule.ScheduledTime.Minute == currentTime.Minute)
+                {
+                    // perform the feeding
+                    StringContent stringContent;
+                    
+                    try
+                    {
+                        Feeding feeding = new Feeding(schedule.Id);
+                        var jsonState = JsonConvert.SerializeObject(feeding).ToLower();
+                        stringContent = new StringContent(jsonState, Encoding.ASCII, "application/json");
+
+                        // _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _haToken);
+
+                        HttpResponseMessage responseMessage = await _httpClient.PostAsync("feeding", stringContent);
+
+                        if (responseMessage.IsSuccessStatusCode)
+                        {
+                            _logger.LogInformation(responseMessage.StatusCode.ToString());
+                        }
+                        else
+                        {
+                            _logger.LogError(responseMessage.StatusCode.ToString());
+                        }
+                        
+                        stringContent.Dispose();
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex.Message);
+                    }
+
+                    // if (stringContent != null)
+                    // {
+                    //     stringContent.Dispose();
+                    // }
+                }
+
+                await Task.Delay(TimeSpan.FromSeconds(60));
+                break;
+            }
         }
 
     }

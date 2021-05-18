@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Almostengr.DogFeeder.Api.Data;
+using Almostengr.DogFeeder.Api.Models;
 using Almostengr.DogFeeder.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -43,10 +45,18 @@ namespace Almostengr.DogFeeder.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Feeding>> PostAsync(Feeding model)
         {
-            await _repository.Create(model);
-            await _repository.SaveChangesAsync();
+            try
+            {
+                await _repository.CreateFeeding(model);
+                await _repository.SaveChangesAsync();
 
-            return CreatedAtRoute(nameof(GetAsync), new {Id = model.Id, model});
+                return CreatedAtRoute(nameof(GetAsync), new { Id = model.Id, model });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return NotFound();
+            }
         }
     }
 }

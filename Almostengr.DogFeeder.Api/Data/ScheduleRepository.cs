@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Almostengr.DogFeeder.Api.Models;
 using Almostengr.DogFeeder.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,12 +23,17 @@ namespace Almostengr.DogFeeder.Api.Data
             return await _dbContext.Schedules.ToListAsync();
         }
 
+        public async Task<List<Schedule>> GetAllActiveSchedulesAsync()
+        {
+            return await _dbContext.Schedules.Where(s => s.IsActive == true).ToListAsync();
+        }
+
         public async Task<Schedule> GetScheduleAsync(int id)
         {
             return await _dbContext.Schedules.FirstOrDefaultAsync(s => s.Id == id);
         }
 
-        public async Task Create(Schedule entity)
+        public async Task CreateSchedule(Schedule entity)
         {
             await _dbContext.Schedules.AddAsync(entity);
         }
@@ -39,11 +46,6 @@ namespace Almostengr.DogFeeder.Api.Data
             }
 
             _dbContext.Schedules.Remove(schedule);
-        }
-
-        private async Task<bool> ScheduleExists(int id)
-        {
-            return await _dbContext.Schedules.AnyAsync(s => s.Id == id);
         }
 
         public async Task SaveChangesAsync(){
