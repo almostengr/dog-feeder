@@ -7,12 +7,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Almostengr.DogFeeder.Api.Controllers
 {
-    public class ScheduleController : BaseController
+    public class SchedulesController : BaseController
     {
-        private readonly ILogger<ScheduleController> _logger;
+        private readonly ILogger<SchedulesController> _logger;
         private readonly IScheduleRepository _repository;
 
-        public ScheduleController(ILogger<ScheduleController> logger, IScheduleRepository repository)
+        public SchedulesController(ILogger<SchedulesController> logger, IScheduleRepository repository)
+            :base(logger)
         {
             _logger = logger;
             _repository = repository;
@@ -21,13 +22,35 @@ namespace Almostengr.DogFeeder.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IList<Schedule>>> GetAsync()
         {
+            _logger.LogInformation("Getting all schedules");
+
             var schedules = await _repository.GetAllSchedulesAsync();
             return Ok(schedules);
         }
 
-        [HttpGet]
+        [HttpGet, Route("active")]
+        public async Task<ActionResult<IList<Schedule>>> GetActiveAsync()
+        {
+            _logger.LogInformation("Getting all active schedules");
+
+            var schedules = await _repository.GetAllActiveSchedulesAsync();
+            return Ok(schedules);
+        }
+
+        [HttpGet, Route("inactive")]
+        public async Task<ActionResult<IList<Schedule>>> GetInactiveAsync()
+        {
+            _logger.LogInformation("Getting all inactive schedules");
+
+            var schedules = await _repository.GetAllInactiveSchedulesAsync();
+            return Ok(schedules);
+        }
+
+        [HttpGet("{id}")]
         public async Task<ActionResult<Schedule>> GetAsync(int id)
         {
+            _logger.LogInformation("Getting single schedule");
+
             var schedule = await _repository.GetScheduleAsync(id);
 
             if (schedule != null)
@@ -41,15 +64,20 @@ namespace Almostengr.DogFeeder.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Schedule>> PostAsync(Schedule model)
         {
+            _logger.LogInformation("Creating schedule");
+
             await _repository.CreateSchedule(model);
             await _repository.SaveChangesAsync();
 
-            return CreatedAtRoute(nameof(GetAsync), new { Id = model.Id, model });
+            // return CreatedAtRoute(nameof(GetAsync), new { Id = model.Id, model });
+            return NoContent();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAsync(int id)
         {
+            _logger.LogInformation("Deleting schedule");
+            
             var existingSchedule = await _repository.GetScheduleAsync(id);
             if (existingSchedule == null)
             {
@@ -65,13 +93,15 @@ namespace Almostengr.DogFeeder.Api.Controllers
         [HttpPut]
         public async Task<ActionResult> UpdateAsync(Schedule schedule)
         {
+            _logger.LogInformation("Updating schedule");
+
             var existingSchedule = await _repository.GetScheduleAsync(schedule.Id);
             if (existingSchedule == null)
             {
                 return NotFound();
             }
 
-            // await _repository.Update(schedule);
+            _repository.UpdateSchedule(schedule);
             await _repository.SaveChangesAsync();
 
             return NoContent();

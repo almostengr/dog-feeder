@@ -51,5 +51,15 @@ namespace Almostengr.DogFeeder.Api.Data
         public async Task SaveChangesAsync(){
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<List<Schedule>> GetAllInactiveSchedulesAsync()
+        {
+            return await _dbContext.Schedules.Where(s => s.IsActive == false).ToListAsync();
+        }
+
+        public void UpdateSchedule(Schedule schedule)
+        {
+            _dbContext.Schedules.Update(schedule);
+        }
     }
 }

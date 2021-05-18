@@ -1,4 +1,6 @@
+using Almostengr.DogFeeder.Api.Worker;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace Almostengr.DogFeeder.Api
@@ -12,9 +14,14 @@ namespace Almostengr.DogFeeder.Api
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseSystemd()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                })
+                .ConfigureServices(services => 
+                {
+                    services.AddHostedService<ScheduleFeedWorker>();
                 });
     }
 }

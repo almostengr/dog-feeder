@@ -8,7 +8,13 @@ namespace Almostengr.DogFeeder.Models
         public DogFeederDbContext(DbContextOptions<DogFeederDbContext> options) : base(options)
         { }
 
-        public DbSet<Feeding> Feedings { get; set; }
-        public DbSet<Schedule> Schedules { get; set; }
+        public virtual DbSet<Feeding> Feedings { get; set; }
+        public virtual DbSet<Schedule> Schedules { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Feeding>().ToTable(nameof(Feeding).ToLower());
+            modelBuilder.Entity<Schedule>().ToTable(nameof(Schedule).ToLower());
+        }
     }
 }

@@ -3,28 +3,28 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Almostengr.DogFeeder.Api.Data;
 using Almostengr.DogFeeder.Api.Models;
-using Almostengr.DogFeeder.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace Almostengr.DogFeeder.Api.Controllers
 {
-    public class FeedingController : BaseController
+    public class FeedingsController : BaseController
     {
-        private readonly ILogger<FeedingController> _logger;
-        private readonly AppSettings _appSettings;
+        private readonly ILogger<FeedingsController> _logger;
         private readonly IFeedingRepository _repository;
 
-        public FeedingController(ILogger<FeedingController> logger,  IFeedingRepository repository)
+        public FeedingsController(ILogger<FeedingsController> logger,  IFeedingRepository repository)
+            :base(logger)
         {
             _logger = logger;
-            // _appSettings = appSettings;
             _repository = repository;
         }
 
         [HttpGet]
         public async Task<ActionResult<IList<Feeding>>> GetAsync()
         {
+            _logger.LogInformation("Getting all feedings");
+            
             var feedings = await _repository.GetAllFeedingsAsync();
             return Ok(feedings);
         }
@@ -32,6 +32,8 @@ namespace Almostengr.DogFeeder.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Feeding>> GetAsync(int id)
         {
+            _logger.LogInformation("Getting single feeding"); 
+
             var feeding = await _repository.GetFeedingAsync(id);
 
             if (feeding != null)
@@ -45,6 +47,8 @@ namespace Almostengr.DogFeeder.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Feeding>> PostAsync(Feeding model)
         {
+            _logger.LogInformation("Posting feeding");
+
             try
             {
                 await _repository.CreateFeeding(model);

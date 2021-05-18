@@ -6,8 +6,8 @@ namespace Almostengr.DogFeeder.Web.Controllers
 {
     public class ScheduleController : BaseController
     {
-        public ScheduleController(ILogger<BaseController> logger, HttpClient httpClient) : 
-            base(logger, httpClient)
+        public ScheduleController(ILogger<ScheduleController> logger, HttpClient httpClient, AppSettings appSettings) : 
+            base(logger, httpClient, appSettings)
         {
         }
 

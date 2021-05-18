@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Almostengr.DogFeeder.Api.Data;
 using Almostengr.DogFeeder.Api.Models;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -15,15 +14,11 @@ namespace Almostengr.DogFeeder.Api.Worker
     public class ScheduleFeedWorker : BackgroundService
     {
         private readonly ILogger<ScheduleFeedWorker> _logger;
-        private readonly IScheduleRepository _schedule;
-        private readonly IFeedingRepository _feeding;
         private HttpClient _httpClient;
 
-        public ScheduleFeedWorker(ILogger<ScheduleFeedWorker> logger, IScheduleRepository schedule, IFeedingRepository feeding)
+        public ScheduleFeedWorker(ILogger<ScheduleFeedWorker> logger)
         {
             _logger = logger;
-            _schedule = schedule;
-            _feeding = feeding;
         }
 
         public override void Dispose()
@@ -32,21 +27,11 @@ namespace Almostengr.DogFeeder.Api.Worker
             base.Dispose();
         }
 
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
         public override Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Starting worker");
             _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("http://localhost");
+            _httpClient.BaseAddress = new Uri("http://localhost:5000");
 
             return base.StartAsync(cancellationToken);
         }
@@ -56,13 +41,8 @@ namespace Almostengr.DogFeeder.Api.Worker
             _logger.LogInformation("Stopping worker");
 
             _httpClient.Dispose();
-            
-            return base.StopAsync(cancellationToken);
-        }
 
-        public override string ToString()
-        {
-            return base.ToString();
+            return base.StopAsync(cancellationToken);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -80,14 +60,34 @@ namespace Almostengr.DogFeeder.Api.Worker
 
                 await CompareScheduleToFeedTime(schedules);
 
-                await Task.Delay(TimeSpan.FromSeconds(25));
+                // await Task.Delay(TimeSpan.FromSeconds(25));
+                await Task.Delay(TimeSpan.FromSeconds(5));
             }
         }
 
         private async Task<List<Schedule>> GetActiveSchedules(bool firstRun)
         {
             _logger.LogInformation("Refreshing schedule information");
-            return await _schedule.GetAllActiveSchedulesAsync();
+
+            try
+            {
+                HttpResponseMessage responseMessage = await _httpClient.GetAsync("schedules/active");
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    _logger.LogInformation(responseMessage.StatusCode.ToString());
+                    return JsonConvert.DeserializeObject<List<Schedule>>(responseMessage.Content.ReadAsStringAsync().Result);
+                }
+                else
+                {
+                    _logger.LogInformation(responseMessage.StatusCode.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            return new List<Schedule>();
         }
 
         private async Task CompareScheduleToFeedTime(List<Schedule> schedules)
@@ -96,46 +96,44 @@ namespace Almostengr.DogFeeder.Api.Worker
 
             foreach (var schedule in schedules)
             {
-                if (schedule.ScheduledTime.Hour == currentTime.Hour &&
-                    schedule.ScheduledTime.Minute == currentTime.Minute)
+                if (schedule.ScheduledTime.Hour == currentTime.Hour && schedule.ScheduledTime.Minute == currentTime.Minute)
                 {
-                    // perform the feeding
-                    StringContent stringContent;
-                    
-                    try
-                    {
-                        Feeding feeding = new Feeding(schedule.Id);
-                        var jsonState = JsonConvert.SerializeObject(feeding).ToLower();
-                        stringContent = new StringContent(jsonState, Encoding.ASCII, "application/json");
+                    await PerformFeeding(schedule.Id);
+                    break;
+                }
+            }
+        }
 
-                        // _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _haToken);
+        private async Task PerformFeeding(int scheduleId)
+        {
+            StringContent stringContent;
 
-                        HttpResponseMessage responseMessage = await _httpClient.PostAsync("feeding", stringContent);
+            try
+            {
+                Feeding feeding = new Feeding(scheduleId);
+                var jsonState = JsonConvert.SerializeObject(feeding).ToLower();
+                stringContent = new StringContent(jsonState, Encoding.ASCII, "application/json");
 
-                        if (responseMessage.IsSuccessStatusCode)
-                        {
-                            _logger.LogInformation(responseMessage.StatusCode.ToString());
-                        }
-                        else
-                        {
-                            _logger.LogError(responseMessage.StatusCode.ToString());
-                        }
-                        
-                        stringContent.Dispose();
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex.Message);
-                    }
+                // _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _haToken);
 
-                    // if (stringContent != null)
-                    // {
-                    //     stringContent.Dispose();
-                    // }
+                HttpResponseMessage responseMessage = await _httpClient.PostAsync("feeding", stringContent);
+
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    _logger.LogInformation(responseMessage.StatusCode.ToString());
+                }
+                else
+                {
+                    _logger.LogError(responseMessage.StatusCode.ToString());
                 }
 
+                stringContent.Dispose();
+
                 await Task.Delay(TimeSpan.FromSeconds(60));
-                break;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
             }
         }
 

@@ -6,8 +6,8 @@ namespace Almostengr.DogFeeder.Web.Controllers
 {
     public class SettingsController : BaseController
     {
-        public SettingsController(ILogger<BaseController> logger, HttpClient httpClient) : 
-            base(logger, httpClient)
+        public SettingsController(ILogger<SettingsController> logger, HttpClient httpClient, AppSettings appSettings) : 
+            base(logger, httpClient, appSettings)
         {
         }
 

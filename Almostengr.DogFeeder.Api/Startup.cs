@@ -1,5 +1,4 @@
 using Almostengr.DogFeeder.Api.Data;
-using Almostengr.DogFeeder.Api.Worker;
 using Almostengr.DogFeeder.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,8 +30,6 @@ namespace Almostengr.DogFeeder.Api
             services.AddScoped<IFeedingRepository, FeedingRepository>();
             services.AddScoped<IScheduleRepository, ScheduleRepository>();
 
-            // services.AddSingleton<ScheduleFeedWorker>();
-
             services.AddControllers();
         }
 
@@ -44,7 +41,7 @@ namespace Almostengr.DogFeeder.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             app.UseRouting();
 
