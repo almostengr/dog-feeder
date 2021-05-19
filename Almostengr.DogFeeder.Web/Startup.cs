@@ -24,11 +24,14 @@ namespace Almostengr.DogFeeder.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            AppSettings appSettings = Configuration.GetSection(nameof(appSettings)).Get<AppSettings>();
+            services.AddSingleton(appSettings);
+
             services.AddControllersWithViews();
 
-            services.AddTransient<IHttpClientFactory, httpclie
+            // services.AddTransient<IHttpClientFactory, httpclie
 
-            services.AddHttpClient();
+            // services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

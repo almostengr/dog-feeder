@@ -1,4 +1,8 @@
+using System;
+using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading.Tasks;
+using Almostengr.DogFeeder.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -6,14 +10,20 @@ namespace Almostengr.DogFeeder.Web.Controllers
 {
     public class ScheduleController : BaseController
     {
-        public ScheduleController(ILogger<ScheduleController> logger, HttpClient httpClient, AppSettings appSettings) : 
-            base(logger, httpClient, appSettings)
+        private readonly ILogger<ScheduleController> _logger;
+        private readonly AppSettings _appSettings;
+
+        public ScheduleController(ILogger<ScheduleController> logger, AppSettings appSettings)
+         : base(logger, appSettings)
         {
+            _logger = logger;
+            _appSettings = appSettings;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var schedules = await GetAsync<List<ScheduleViewModel>>("schedules");
+            return View(schedules);
         }
     }
 }

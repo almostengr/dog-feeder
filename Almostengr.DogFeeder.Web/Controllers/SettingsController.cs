@@ -4,10 +4,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Almostengr.DogFeeder.Web.Controllers
 {
-    public class SettingsController : BaseController
+    public class SettingsController : Controller
     {
-        public SettingsController(ILogger<SettingsController> logger, HttpClient httpClient, AppSettings appSettings) : 
-            base(logger, httpClient, appSettings)
+        public SettingsController(ILogger<SettingsController> logger,  AppSettings appSettings) 
         {
         }
 

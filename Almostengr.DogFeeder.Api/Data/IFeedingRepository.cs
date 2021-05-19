@@ -11,5 +11,6 @@ namespace Almostengr.DogFeeder.Api.Data
         Task<List<Feeding>> GetAllFeedingsAsync();
         Task<Feeding> GetFeedingAsync(int id);
         Task SaveChangesAsync();
+        Task<List<Feeding>> GetRecentFeedingsAsync();
     }
 }

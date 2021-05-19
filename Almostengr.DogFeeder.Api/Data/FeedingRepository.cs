@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Almostengr.DogFeeder.Api.Models;
 using Almostengr.DogFeeder.Models;
@@ -18,7 +20,19 @@ namespace Almostengr.DogFeeder.Api.Data
 
         public async Task<List<Feeding>> GetAllFeedingsAsync()
         {
-            return await _dbContext.Feedings.ToListAsync();
+            return await _dbContext.Feedings
+                .OrderByDescending(f => f.Timestamp)
+                .ToListAsync();
+        }
+
+        public async Task<List<Feeding>> GetRecentFeedingsAsync()
+        {
+            DateTime currentDate = DateTime.Now; 
+
+            return await _dbContext.Feedings
+                .Where(f => f.Timestamp >= currentDate.AddDays(-7))
+                .OrderByDescending(f => f.Timestamp)
+                .ToListAsync();
         }
 
         public async Task<Feeding> GetFeedingAsync(int id)

@@ -19,14 +19,11 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Feedings" asp-action="Index">Feedings</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="feeding" asp-action="Index">Feedings</a>
                         </li>
-                        @* <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li> *@
-                        @* <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li> *@
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="schedule" asp-action="Index">Schedules</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -41,8 +38,8 @@
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2021 - 
-            <a href="https://thealmostengineer.com" target="_blank">Almostengr DogFeeder</a> - 
-            <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <a href="https://thealmostengineer.com/dogfeeder" target="_blank">Almostengr DogFeeder</a>
+            @* <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> *@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

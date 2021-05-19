@@ -21,6 +21,15 @@ namespace Almostengr.DogFeeder.Api.Controllers
         }
 
         [HttpGet]
+        public async Task<ActionResult<IList<Feeding>>> GetRecentFeedingsAsync()
+        {
+            _logger.LogInformation("Getting recent feedings");
+
+            var feedings = await _repository.GetRecentFeedingsAsync();
+            return Ok(feedings);
+        }
+        
+        [HttpGet, Route("all")]
         public async Task<ActionResult<IList<Feeding>>> GetAsync()
         {
             _logger.LogInformation("Getting all feedings");
