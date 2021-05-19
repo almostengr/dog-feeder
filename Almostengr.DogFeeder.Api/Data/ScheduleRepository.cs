@@ -28,7 +28,7 @@ namespace Almostengr.DogFeeder.Api.Data
             return await _dbContext.Schedules.Where(s => s.IsActive == true).ToListAsync();
         }
 
-        public async Task<Schedule> GetScheduleAsync(int id)
+        public async Task<Schedule> GetScheduleByIdAsync(int id)
         {
             return await _dbContext.Schedules.FirstOrDefaultAsync(s => s.Id == id);
         }
