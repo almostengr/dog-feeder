@@ -51,14 +51,13 @@ namespace Almostengr.DogFeeder.Api.Controllers
         {
             _logger.LogInformation("Getting single schedule");
 
-            var schedule = await _repository.GetScheduleAsync(id);
+            var schedule = await _repository.GetScheduleByIdAsync(id);
 
-            if (schedule != null)
+            if (schedule == null)
             {
-                return Ok(schedule);
+                return NotFound();
             }
-
-            return NotFound();
+            return Ok(schedule);
         }
 
         [HttpPost]
@@ -66,11 +65,12 @@ namespace Almostengr.DogFeeder.Api.Controllers
         {
             _logger.LogInformation("Creating schedule");
 
-            await _repository.CreateSchedule(model);
+            var schedule = await _repository.CreateSchedule(model);
             await _repository.SaveChangesAsync();
 
+            return CreatedAtRoute(nameof(schedule), new {Id = schedule.Id}, schedule);
             // return CreatedAtRoute(nameof(GetAsync), new { Id = model.Id, model });
-            return NoContent();
+//             return NoContent();
         }
 
         [HttpDelete("{id}")]
@@ -78,7 +78,7 @@ namespace Almostengr.DogFeeder.Api.Controllers
         {
             _logger.LogInformation("Deleting schedule");
             
-            var existingSchedule = await _repository.GetScheduleAsync(id);
+            var existingSchedule = await _repository.GetScheduleByIdAsync(id);
             if (existingSchedule == null)
             {
                 return NotFound();
@@ -90,12 +90,12 @@ namespace Almostengr.DogFeeder.Api.Controllers
             return NoContent();
         }
 
-        [HttpPut]
-        public async Task<ActionResult> UpdateAsync(Schedule schedule)
+        [HttpPut("{id}"]
+        public async Task<ActionResult> UpdateAsync(int id, Schedule schedule)
         {
             _logger.LogInformation("Updating schedule");
 
-            var existingSchedule = await _repository.GetScheduleAsync(schedule.Id);
+            var existingSchedule = await _repository.GetScheduleByIdAsync(id);
             if (existingSchedule == null)
             {
                 return NotFound();
