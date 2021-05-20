@@ -1,9 +1,18 @@
-@model List<FeedingViewModel>
+@model List<ScheduleViewModel>
 
-<div>
-    @foreach (var item in Model)
-    {
-        <div>@item.Id</div>
-        <div>@item.Timestamp</div>
-    }
+<div class="row bg-dark text-white">
+    @* <div class="col-2">Schedule ID</div> *@
+    <div class="col-2">Schedule Time</div>
+    <div class="col-2">Occurrence</div>
+    <div class="col-2">Active</div>
 </div>
+@foreach (var item in Model)
+{
+    <div class="row">
+        @* <div class="col-2">@item.Id</div> *@
+        <div class="col-2">@item.ScheduledTime</div>
+        <!-- TODO place value once table has been updated -->
+        <div class="col-2">Daily</div>
+        <div class="col-2">@item.IsActive</div>
+    </div>
+}

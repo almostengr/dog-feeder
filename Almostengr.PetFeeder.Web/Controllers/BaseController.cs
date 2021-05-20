@@ -11,7 +11,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
     {
         private readonly ILogger<BaseController> _logger;
         private readonly AppSettings _appSettings;
-        private readonly HttpClient _httpClient;
+        // private readonly HttpClient _httpClient;
 
         public BaseController(ILogger<BaseController> logger, AppSettings appSettings)
         {
@@ -19,7 +19,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
             // _httpClient = httpClient;
             _appSettings = appSettings;
 
-            _httpClient.BaseAddress = new Uri(_appSettings.ApiBaseUrl);
+            // _httpClient.BaseAddress = new Uri(_appSettings.ApiBaseUrl);
         }
 
         public async Task<T> GetAsync<T>(string route) where T : class
