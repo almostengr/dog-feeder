@@ -1,0 +1,172 @@
+using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using Almostengr.PetFeeder.DataTransfer;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+
+namespace Almostengr.PetFeeder
+{
+    public class FeederWorker : BackgroundService
+    {
+        private readonly ILogger<FeederWorker> _logger;
+        private readonly AppSettings _appSettings;
+        private HttpClient _httpClientHA;
+        private StringContent _stringContent;
+
+        public FeederWorker(ILogger<FeederWorker> logger, AppSettings appSettings)
+        {
+            _logger = logger;
+            _appSettings = appSettings;
+        }
+
+        public override void Dispose()
+        {
+            _httpClientHA.Dispose();
+            _stringContent.Dispose();
+            base.Dispose();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override Task StartAsync(CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("Starting dog feeder");
+
+            _httpClientHA = new HttpClient();
+            _httpClientHA.BaseAddress = new Uri(_appSettings.HomeAssistant.Url);
+
+            return base.StartAsync(cancellationToken);
+        }
+
+        public override Task StopAsync(CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("Stopping dog feeder");
+            return base.StopAsync(cancellationToken);
+        }
+
+        public override string ToString()
+        {
+            return base.ToString();
+        }
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            DateTime lastFeedTime = await GetLastFeedTimeFromHomeAssistant();
+
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                FeedTheDog(lastFeedTime);
+
+                await Task.Delay(TimeSpan.FromSeconds(60), stoppingToken);
+            }
+        }
+
+        private DateTime FeedTheDog(DateTime lastFeedDateTime)
+        {
+            _logger.LogInformation("Checking whether to feed the dog");
+
+            TimeSpan currentTime = DateTime.Now.TimeOfDay;
+
+            foreach (var feedTime in _appSettings.FeedTimes)
+            {
+                if (currentTime == feedTime)
+                {
+                    _logger.LogInformation("Feeding the dog");
+
+                    lastFeedDateTime = DateTime.Now;
+                    break;
+                }
+            }
+
+            return lastFeedDateTime;
+        }
+
+        private async Task PostDataToHomeAssistant(string sensorData)
+        {
+            _logger.LogInformation("Sending data to Home Assistant");
+
+            string route = "api/states/sensor.dog_feeder_status";
+
+            try
+            {
+                SensorState sensorState = new SensorState(sensorData);
+                var jsonState = JsonConvert.SerializeObject(sensorState).ToLower();
+                _stringContent = new StringContent(jsonState, Encoding.ASCII, "application/json");
+
+                _httpClientHA.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", _appSettings.HomeAssistant.Token);
+
+                HttpResponseMessage response = await _httpClientHA.PostAsync(route, _stringContent);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    HaApiResponse haApiResponse =
+                        JsonConvert.DeserializeObject<HaApiResponse>(response.Content.ReadAsStringAsync().Result);
+                    _logger.LogInformation(response.StatusCode.ToString());
+                    _logger.LogInformation("Updated: " + haApiResponse.Last_Updated.ToString());
+                }
+                else
+                {
+                    _logger.LogError(response.StatusCode.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            if (_stringContent != null)
+            {
+                _stringContent.Dispose();
+            }
+        }
+
+        private async Task<DateTime> GetLastFeedTimeFromHomeAssistant()
+        {
+            _logger.LogInformation("Get last feed time from Home Assistant");
+
+            string route = "api/states/sensor.dog_feeder_status";
+            DateTime lastFeedTime = DateTime.Now;
+
+            try
+            {
+                _httpClientHA.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", _appSettings.HomeAssistant.Token);
+
+                HttpResponseMessage response = await _httpClientHA.PostAsync(route, _stringContent);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    HaApiResponse haApiResponse =
+                        JsonConvert.DeserializeObject<HaApiResponse>(response.Content.ReadAsStringAsync().Result);
+                    _logger.LogInformation(response.StatusCode.ToString());
+                    lastFeedTime = DateTime.Parse(haApiResponse.Last_Updated);
+                }
+                else
+                {
+                    _logger.LogError(response.StatusCode.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            return lastFeedTime;
+        }
+
+    }
+}

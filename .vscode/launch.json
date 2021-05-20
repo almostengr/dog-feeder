@@ -9,9 +9,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Almostengr.DogFeeder.Api/bin/Debug/netcoreapp3.1/Almostengr.DogFeeder.Api.dll",
+            "program": "${workspaceFolder}/Almostengr.PetFeeder.Api/bin/Debug/netcoreapp3.1/Almostengr.PetFeeder.Api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Almostengr.DogFeeder.Api",
+            "cwd": "${workspaceFolder}/Almostengr.PetFeeder.Api",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",
@@ -29,9 +29,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Almostengr.DogFeeder.Web/bin/Debug/netcoreapp3.1/Almostengr.DogFeeder.Web.dll",
+            "program": "${workspaceFolder}/Almostengr.PetFeeder.Web/bin/Debug/netcoreapp3.1/Almostengr.PetFeeder.Web.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Almostengr.DogFeeder.Web",
+            "cwd": "${workspaceFolder}/Almostengr.PetFeeder.Web",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",

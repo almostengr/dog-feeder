@@ -1,0 +1,13 @@
+@model List<FeedingViewModel>
+
+<div>
+@foreach (var item in Model)
+{
+    string wasScheduled = item.ScheduleId > 0 ? "Yes" : "No";
+
+    <div class="row">
+    <div class="col-2 px-1">@item.Timestamp</div>
+    <div class="col-2 px-1">@wasScheduled</div>
+    </div>
+}
+</div>
