@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Almostengr.PetFeeder.Api.Data;
 using Almostengr.PetFeeder.Api.Models;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -11,14 +12,17 @@ using Newtonsoft.Json;
 
 namespace Almostengr.PetFeeder.Api.Worker
 {
-    public class ScheduleFeedWorker : BackgroundService
+    public class ScheduleFeedWorker : BaseWorker
     {
         private readonly ILogger<ScheduleFeedWorker> _logger;
+        private readonly IFeedingRepository _feedingRepository;
         private HttpClient _httpClient;
 
-        public ScheduleFeedWorker(ILogger<ScheduleFeedWorker> logger)
+        public ScheduleFeedWorker(ILogger<ScheduleFeedWorker> logger, IFeedingRepository feedingRepository)
+            : base(logger)
         {
             _logger = logger;
+            _feedingRepository = feedingRepository;
         }
 
         public override void Dispose()
@@ -98,36 +102,25 @@ namespace Almostengr.PetFeeder.Api.Worker
             {
                 if (schedule.ScheduledTime.Hour == currentTime.Hour && schedule.ScheduledTime.Minute == currentTime.Minute)
                 {
-                    await PerformFeeding(schedule.Id);
+                    await PerformFeeding(schedule);
                     break;
                 }
             }
         }
 
-        private async Task PerformFeeding(int scheduleId)
+        private async Task PerformFeeding(Schedule schedule)
         {
-            StringContent stringContent;
-
             try
             {
-                Feeding feeding = new Feeding(scheduleId);
-                var jsonState = JsonConvert.SerializeObject(feeding).ToLower();
-                stringContent = new StringContent(jsonState, Encoding.ASCII, "application/json");
+                Feeding feeding = new Feeding();
+                feeding.Timestamp = DateTime.Now;
+                feeding.Amount = schedule.FeedingAmount;
+                feeding.ScheduleId = schedule.Id;
 
-                // _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _haToken);
+                // run the motor to dispense food
 
-                HttpResponseMessage responseMessage = await _httpClient.PostAsync("feeding", stringContent);
-
-                if (responseMessage.IsSuccessStatusCode)
-                {
-                    _logger.LogInformation(responseMessage.StatusCode.ToString());
-                }
-                else
-                {
-                    _logger.LogError(responseMessage.StatusCode.ToString());
-                }
-
-                stringContent.Dispose();
+                await _feedingRepository.CreateFeeding(feeding);
+                await _feedingRepository.SaveChangesAsync();
 
                 await Task.Delay(TimeSpan.FromSeconds(60));
             }

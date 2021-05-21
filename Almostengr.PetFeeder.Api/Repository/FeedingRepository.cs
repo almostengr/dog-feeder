@@ -6,7 +6,7 @@ using Almostengr.PetFeeder.Api.Models;
 using Almostengr.PetFeeder.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Almostengr.PetFeeder.Api.Data
+namespace Almostengr.PetFeeder.Api.Repository
 {
     public class FeedingRepository : BaseRepository, IFeedingRepository
     {
@@ -35,7 +35,7 @@ namespace Almostengr.PetFeeder.Api.Data
                 .ToListAsync();
         }
 
-        public async Task<Feeding> GetFeedingAsync(int id)
+        public async Task<Feeding> GetFeedingByIdAsync(int id)
         {
             return await _dbContext.Feedings.FirstOrDefaultAsync(f => f.Id == id);
         }
@@ -45,8 +45,28 @@ namespace Almostengr.PetFeeder.Api.Data
             await _dbContext.Feedings.AddAsync(entity);
         }
 
+        public async Task<List<Feeding>> FindOldFeedings(){
+            DateTime currentDateTime = DateTime.Now;
+            return await _dbContext.Feedings
+                .Where(f => f.Timestamp <= currentDateTime.AddDays(-90))
+                .ToListAsync();
+        }
+
         public async Task SaveChangesAsync(){
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task DeleteFeeding(int feedingId)
+        {
+            if (feedingId == null)
+            {
+                throw new ArgumentNullException(nameof(feedingId));
+            }
+
+            Feeding feeding = await GetFeedingByIdAsync(feedingId);
+
+            _dbContext.Feedings.Remove(feeding);
+        }
+
     }
 }

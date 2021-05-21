@@ -6,7 +6,7 @@ using Almostengr.PetFeeder.Api.Models;
 using Almostengr.PetFeeder.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Almostengr.PetFeeder.Api.Data
+namespace Almostengr.PetFeeder.Api.Repository
 {
     public class ScheduleRepository : BaseRepository, IScheduleRepository
     {
@@ -38,12 +38,14 @@ namespace Almostengr.PetFeeder.Api.Data
             await _dbContext.Schedules.AddAsync(entity);
         }
 
-        public void DeleteSchedule(Schedule schedule)
+        public async Task DeleteSchedule(int scheduleId)
         {
-            if (schedule == null)
+            if (scheduleId == null)
             {
-                throw new ArgumentNullException(nameof(schedule));
+                throw new ArgumentNullException(nameof(scheduleId));
             }
+
+            Schedule schedule = await GetScheduleByIdAsync(scheduleId);
 
             _dbContext.Schedules.Remove(schedule);
         }
@@ -60,6 +62,13 @@ namespace Almostengr.PetFeeder.Api.Data
         public void UpdateSchedule(Schedule schedule)
         {
             _dbContext.Schedules.Update(schedule);
+        }
+
+        public async Task<List<Schedule>> GetOldOneTimeSchedulesAsync()
+        {
+            return await _dbContext.Schedules
+                .Where(s => s.ScheduledTime <= DateTime.Now && s.Frequency == Enums.DayFrequency.Once)
+                .ToListAsync();
         }
     }
 }

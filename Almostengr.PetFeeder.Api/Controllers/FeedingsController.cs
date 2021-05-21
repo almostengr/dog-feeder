@@ -43,7 +43,7 @@ namespace Almostengr.PetFeeder.Api.Controllers
         {
             _logger.LogInformation("Getting single feeding"); 
 
-            var feeding = await _repository.GetFeedingAsync(id);
+            var feeding = await _repository.GetFeedingByIdAsync(id);
 
             if (feeding != null)
             {
@@ -53,23 +53,5 @@ namespace Almostengr.PetFeeder.Api.Controllers
             return NotFound();
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Feeding>> PostAsync(Feeding model)
-        {
-            _logger.LogInformation("Posting feeding");
-
-            try
-            {
-                await _repository.CreateFeeding(model);
-                await _repository.SaveChangesAsync();
-
-                return CreatedAtRoute(nameof(GetAsync), new { Id = model.Id, model });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return NotFound();
-            }
-        }
     }
 }

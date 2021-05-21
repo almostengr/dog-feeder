@@ -1,26 +1,36 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Almostengr.PetFeeder.Api.Data;
+using Almostengr.PetFeeder.Api.Models;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Almostengr.PetFeeder.Api.Worker
 {
-    public class MaintenanceWorker : BackgroundService
+    public class MaintenanceWorker : BaseWorker
     {
+        private readonly ILogger<MaintenanceWorker> _logger;
+        private readonly IFeedingRepository _feedingRepository;
+        private readonly IScheduleRepository _scheduleRepository;
+
+        public MaintenanceWorker(ILogger<MaintenanceWorker> logger, IFeedingRepository feedingRepository,
+            IScheduleRepository scheduleRepository) :
+            base(logger)
+        {
+            _logger = logger;
+            _feedingRepository = feedingRepository;
+            _scheduleRepository = scheduleRepository;
+        }
+
         public override void Dispose()
         {
             base.Dispose();
-        }
-
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
@@ -33,18 +43,30 @@ namespace Almostengr.PetFeeder.Api.Worker
             return base.StopAsync(cancellationToken);
         }
 
-        public override string ToString()
-        {
-            return base.ToString();
-        }
-
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while(!stoppingToken.IsCancellationRequested)
-            {
-                // delete one time schedules that are in the past 
+            await Task.Delay(TimeSpan.FromMinutes(5));
 
-                // clean up feedings that are older than specified setting (or 90 days)
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                _logger.LogInformation("Deleting old one time schedules");
+
+                List<Schedule> schedules = await _scheduleRepository.GetOldOneTimeSchedulesAsync();
+                foreach (var schedule in schedules)
+                {
+                    _scheduleRepository.DeleteSchedule(schedule);
+                }
+
+                await _scheduleRepository.SaveChangesAsync();
+
+                _logger.LogInformation("Deleting old feedings");
+
+                List<Feeding> feedings = await _feedingRepository.FindOldFeedings();
+                foreach (var feeding in feedings)
+                {
+                    _feedingRepository.DeleteFeeding(feeding.Id);
+                }
+                await _feedingRepository.SaveChangesAsync();
 
                 await Task.Delay(TimeSpan.FromDays(1));
             }
