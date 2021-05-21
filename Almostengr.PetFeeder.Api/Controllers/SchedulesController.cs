@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.Api.Data;
 using Almostengr.PetFeeder.Api.Models;
+using Almostengr.PetFeeder.Api.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -85,7 +85,7 @@ namespace Almostengr.PetFeeder.Api.Controllers
                 return NotFound();
             }
 
-            _repository.DeleteSchedule(existingSchedule);
+            _repository.DeleteSchedule(existingSchedule.Id);
             await _repository.SaveChangesAsync();
 
             return NoContent();

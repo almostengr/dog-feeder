@@ -1,7 +1,7 @@
 using Almostengr.PetFeeder.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Almostengr.PetFeeder.Models
+namespace Almostengr.PetFeeder.Api.Data
 {
     public class DogFeederDbContext : DbContext
     {

@@ -5,8 +5,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.Api.Data;
 using Almostengr.PetFeeder.Api.Models;
+using Almostengr.PetFeeder.Api.Repository;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -54,7 +54,7 @@ namespace Almostengr.PetFeeder.Api.Worker
                 List<Schedule> schedules = await _scheduleRepository.GetOldOneTimeSchedulesAsync();
                 foreach (var schedule in schedules)
                 {
-                    _scheduleRepository.DeleteSchedule(schedule);
+                    _scheduleRepository.DeleteSchedule(schedule.Id);
                 }
 
                 await _scheduleRepository.SaveChangesAsync();

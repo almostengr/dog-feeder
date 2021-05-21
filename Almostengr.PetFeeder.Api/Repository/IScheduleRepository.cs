@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Models;
-using Almostengr.PetFeeder.Models;
 
 namespace Almostengr.PetFeeder.Api.Repository
 {

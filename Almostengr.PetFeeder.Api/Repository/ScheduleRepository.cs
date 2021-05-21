@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Almostengr.PetFeeder.Api.Data;
 using Almostengr.PetFeeder.Api.Models;
-using Almostengr.PetFeeder.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Almostengr.PetFeeder.Api.Repository

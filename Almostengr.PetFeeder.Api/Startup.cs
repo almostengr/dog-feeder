@@ -1,5 +1,5 @@
 using Almostengr.PetFeeder.Api.Data;
-using Almostengr.PetFeeder.Models;
+using Almostengr.PetFeeder.Api.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;

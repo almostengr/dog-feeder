@@ -26,9 +26,9 @@ namespace Almostengr.PetFeeder.Api.Worker
             return base.StartAsync(cancellationToken);
         }
 
-        public override Task StopAsync(CancellationToken cancellationToken)
+        public override async Task StopAsync(CancellationToken cancellationToken)
         {
-            CloseWaterValve();
+            await CloseWaterValve();
 
             // release GPIO pins
 
@@ -74,11 +74,11 @@ namespace Almostengr.PetFeeder.Api.Worker
                     // open water valve
                 }
 
-                CloseWaterValve();
+                await CloseWaterValve();
             }
             catch (Exception ex)
             {
-                CloseWaterValve();
+                await CloseWaterValve();
                 _logger.LogError(ex.Message);
             }
 
