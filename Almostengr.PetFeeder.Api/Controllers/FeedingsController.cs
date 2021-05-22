@@ -30,7 +30,7 @@ namespace Almostengr.PetFeeder.Api.Controllers
         }
         
         [HttpGet, Route("all")]
-        public async Task<ActionResult<IList<Feeding>>> GetAsync()
+        public async Task<ActionResult<IList<Feeding>>> GetAllFeedingsAsync()
         {
             _logger.LogInformation("Getting all feedings");
             
@@ -39,7 +39,7 @@ namespace Almostengr.PetFeeder.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Feeding>> GetAsync(int id)
+        public async Task<ActionResult<Feeding>> GetFeedingByIdAsync(int? id)
         {
             _logger.LogInformation("Getting single feeding"); 
 

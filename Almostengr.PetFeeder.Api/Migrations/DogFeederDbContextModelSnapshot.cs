@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Almostengr.PetFeeder.Api.Migrations
 {
-    [DbContext(typeof(DogFeederDbContext))]
+    [DbContext(typeof(PetFeederDbContext))]
     partial class DogFeederDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

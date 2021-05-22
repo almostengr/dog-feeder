@@ -21,8 +21,10 @@ namespace Almostengr.PetFeeder.Api
                 })
                 .ConfigureServices(services => 
                 {
-                    services.AddHostedService<ScheduleFeedWorker>();
-                    services.AddHostedService<WaterBowlWorker>();
+                    // services.AddHostedService<FoodBowlWorker>();
+                    // services.AddHostedService<WaterBowlWorker>();
+                    services.AddScoped<IFoodBowlWorker, FoodBowlWorker>();
+                    services.AddScoped<IWaterBowlWorker, WaterBowlWorker>();
                 });
     }
 }

@@ -1,9 +1,9 @@
 @model List<FeedingViewModel>
-@* @ViewBag["Title"] = "Feedings"; *@
+@ViewData["Title"] = "All Feedings";
+
 <h1>All Feedings</h1>
 
 <div class="row">
-    @* <div class="col-2 bg-dark text-white">Feeding ID</div> *@
     <div class="col-2 bg-dark text-white">Date/Time</div>
     <div class="col-2 bg-dark text-white">Scheduled?</div>
 </div>
@@ -13,7 +13,6 @@
     string wasScheduled = item.ScheduleId > 0 ? "Yes" : "No";
 
     <div class="row">
-    @* <div class="col-2 px-1">@item.Id</div> *@
     <div class="col-2 px-1">@item.Timestamp</div>
     <div class="col-2 px-1">@wasScheduled</div>
 </div>

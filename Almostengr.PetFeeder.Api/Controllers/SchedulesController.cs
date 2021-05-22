@@ -13,14 +13,14 @@ namespace Almostengr.PetFeeder.Api.Controllers
         private readonly IScheduleRepository _repository;
 
         public SchedulesController(ILogger<SchedulesController> logger, IScheduleRepository repository)
-            :base(logger)
+            : base(logger)
         {
             _logger = logger;
             _repository = repository;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IList<Schedule>>> GetAsync()
+        public async Task<ActionResult<IList<Schedule>>> GetAllSchedulesAsync()
         {
             _logger.LogInformation("Getting all schedules");
 
@@ -47,7 +47,7 @@ namespace Almostengr.PetFeeder.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Schedule>> GetAsync(int id)
+        public async Task<ActionResult<Schedule>> GetScheduleByIdAsync(int id)
         {
             _logger.LogInformation("Getting single schedule");
 
@@ -61,38 +61,41 @@ namespace Almostengr.PetFeeder.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Schedule>> PostAsync(Schedule model)
+        public async Task<ActionResult<Schedule>> CreateScheduleAsync(Schedule model)
         {
             _logger.LogInformation("Creating schedule");
 
-            await _repository.CreateSchedule(model);
-            // var schedule = await _repository.CreateSchedule(model);
+            if (ModelState.IsValid == false)
+            {
+                return BadRequest(ModelState);
+            }
+
+            await _repository.CreateScheduleAsync(model);
             await _repository.SaveChangesAsync();
 
             // return CreatedAtRoute(nameof(schedule), new {Id = schedule.Id}, schedule);
-            // return CreatedAtRoute(nameof(GetAsync), new { Id = model.Id, model });
-            return NoContent();
+            return StatusCode(201);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteAsync(int id)
+        public async Task<ActionResult> DeleteScheduleAsync(int id)
         {
             _logger.LogInformation("Deleting schedule");
-            
+
             var existingSchedule = await _repository.GetScheduleByIdAsync(id);
             if (existingSchedule == null)
             {
                 return NotFound();
             }
 
-            _repository.DeleteSchedule(existingSchedule.Id);
+            _repository.DeleteSchedule(existingSchedule);
             await _repository.SaveChangesAsync();
 
             return NoContent();
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateAsync(int id, Schedule schedule)
+        public async Task<ActionResult> UpdateScheduleAsync(int id, Schedule schedule)
         {
             _logger.LogInformation("Updating schedule");
 

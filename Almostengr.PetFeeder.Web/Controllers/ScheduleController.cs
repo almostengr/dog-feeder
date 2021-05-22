@@ -8,12 +8,12 @@ using Newtonsoft.Json;
 
 namespace Almostengr.PetFeeder.Web.Controllers
 {
-    public class ScheduleController : Controller
+    public class ScheduleController : BaseController
     {
         private readonly ILogger<ScheduleController> _logger;
         private readonly AppSettings _appSettings;
 
-        public ScheduleController(ILogger<ScheduleController> logger, AppSettings appSettings)
+        public ScheduleController(ILogger<ScheduleController> logger, AppSettings appSettings) : base(logger, appSettings)
         {
             _logger = logger;
             _appSettings = appSettings;
@@ -25,14 +25,12 @@ namespace Almostengr.PetFeeder.Web.Controllers
 
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new System.Uri(_appSettings.ApiBaseUrl);
-
+                client.BaseAddress = _appSettings.ApiBaseUrl;
                 var response = await client.GetAsync("schedules");
 
                 if (response.IsSuccessStatusCode)
                 {
                     schedules = JsonConvert.DeserializeObject<List<ScheduleViewModel>>(response.Content.ReadAsStringAsync().Result);
-
                 }
                 else
                 {

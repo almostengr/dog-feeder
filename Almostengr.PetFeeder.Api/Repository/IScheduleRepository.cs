@@ -4,14 +4,13 @@ using Almostengr.PetFeeder.Api.Models;
 
 namespace Almostengr.PetFeeder.Api.Repository
 {
-    public interface IScheduleRepository
+    public interface IScheduleRepository : IBaseRepository
     {
-        Task CreateSchedule(Schedule schedule);
+        Task CreateScheduleAsync(Schedule schedule);
         void UpdateSchedule(Schedule schedule);
-        Task DeleteSchedule(int scheduleId);
+        void DeleteSchedule(Schedule schedule);
         Task<List<Schedule>> GetAllSchedulesAsync();
-        Task<Schedule> GetScheduleByIdAsync(int id);
-        Task SaveChangesAsync();
+        Task<Schedule> GetScheduleByIdAsync(int? scheduleId);
         Task<List<Schedule>> GetAllActiveSchedulesAsync();
         Task<List<Schedule>> GetAllInactiveSchedulesAsync();
         Task<List<Schedule>> GetOldOneTimeSchedulesAsync();

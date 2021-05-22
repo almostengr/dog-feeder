@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Web.Models;
@@ -9,12 +8,12 @@ using Newtonsoft.Json;
 
 namespace Almostengr.PetFeeder.Web.Controllers
 {
-    public class FeedingController : BaseController
+    public class WateringController : BaseController
     {
-        private readonly ILogger<FeedingController> _logger;
+        private readonly ILogger<WateringController> _logger;
         private readonly AppSettings _appSettings;
 
-        public FeedingController(ILogger<FeedingController> logger, AppSettings appSettings) :
+        public WateringController(ILogger<WateringController> logger, AppSettings appSettings) :
             base(logger, appSettings)
         {
             _logger = logger;
@@ -23,20 +22,21 @@ namespace Almostengr.PetFeeder.Web.Controllers
 
         public async Task<IActionResult> All()
         {
-            List<FeedingViewModel> feedings = null;
+            List<WateringViewModel> feedings = null;
 
             using (var client = new HttpClient())
             {
                 client.BaseAddress = _appSettings.ApiBaseUrl;
-                var response = await client.GetAsync("feedings/all");
+
+                var response = await client.GetAsync("waterings/all");
 
                 if (response.IsSuccessStatusCode)
                 {
-                    feedings = JsonConvert.DeserializeObject<List<FeedingViewModel>>(response.Content.ReadAsStringAsync().Result);
+                    feedings = JsonConvert.DeserializeObject<List<WateringViewModel>>(response.Content.ReadAsStringAsync().Result);
                 }
                 else
                 {
-                    feedings = new List<FeedingViewModel>();
+                    feedings = new List<WateringViewModel>();
                 }
             }
 
@@ -45,20 +45,20 @@ namespace Almostengr.PetFeeder.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            List<FeedingViewModel> feedings = null;
+            List<WateringViewModel> feedings = null;
 
             using (var client = new HttpClient())
             {
                 client.BaseAddress = _appSettings.ApiBaseUrl;
-                var response = await client.GetAsync("feedings");
+                var response = await client.GetAsync("waterings");
 
                 if (response.IsSuccessStatusCode)
                 {
-                    feedings = JsonConvert.DeserializeObject<List<FeedingViewModel>>(response.Content.ReadAsStringAsync().Result);
+                    feedings = JsonConvert.DeserializeObject<List<WateringViewModel>>(response.Content.ReadAsStringAsync().Result);
                 }
                 else
                 {
-                    feedings = new List<FeedingViewModel>();
+                    feedings = new List<WateringViewModel>();
                 }
             }
 

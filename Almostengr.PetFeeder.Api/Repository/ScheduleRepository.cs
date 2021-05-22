@@ -5,15 +5,16 @@ using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Data;
 using Almostengr.PetFeeder.Api.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.Api.Repository
 {
     public class ScheduleRepository : BaseRepository, IScheduleRepository
     {
-        private readonly DogFeederDbContext _dbContext;
+        private readonly PetFeederDbContext _dbContext;
 
-        public ScheduleRepository(DogFeederDbContext dbContext) :
-            base(dbContext)
+        public ScheduleRepository(PetFeederDbContext dbContext, ILogger<ScheduleRepository> logger) :
+            base(dbContext, logger)
         {
             _dbContext = dbContext;
         }
@@ -28,30 +29,29 @@ namespace Almostengr.PetFeeder.Api.Repository
             return await _dbContext.Schedules.Where(s => s.IsActive == true).ToListAsync();
         }
 
-        public async Task<Schedule> GetScheduleByIdAsync(int id)
-        {
-            return await _dbContext.Schedules.FirstOrDefaultAsync(s => s.Id == id);
-        }
-
-        public async Task CreateSchedule(Schedule entity)
-        {
-            await _dbContext.Schedules.AddAsync(entity);
-        }
-
-        public async Task DeleteSchedule(int scheduleId)
+        public async Task<Schedule> GetScheduleByIdAsync(int? scheduleId)
         {
             if (scheduleId == null)
             {
                 throw new ArgumentNullException(nameof(scheduleId));
             }
 
-            Schedule schedule = await GetScheduleByIdAsync(scheduleId);
-
-            _dbContext.Schedules.Remove(schedule);
+            return await _dbContext.Schedules.FirstOrDefaultAsync(s => s.Id == scheduleId);
         }
 
-        public async Task SaveChangesAsync(){
-            await _dbContext.SaveChangesAsync();
+        public async Task CreateScheduleAsync(Schedule entity)
+        {
+            await _dbContext.Schedules.AddAsync(entity);
+        }
+
+        public void DeleteSchedule(Schedule schedule)
+        {
+            if (schedule == null)
+            {
+                throw new ArgumentNullException(nameof(schedule));
+            }
+
+            _dbContext.Schedules.Remove(schedule);
         }
 
         public async Task<List<Schedule>> GetAllInactiveSchedulesAsync()

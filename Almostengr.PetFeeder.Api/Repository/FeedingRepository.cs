@@ -5,15 +5,16 @@ using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Data;
 using Almostengr.PetFeeder.Api.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.Api.Repository
 {
     public class FeedingRepository : BaseRepository, IFeedingRepository
     {
-        private readonly DogFeederDbContext _dbContext;
+        private readonly PetFeederDbContext _dbContext;
 
-        public FeedingRepository(DogFeederDbContext dbContext) :
-            base(dbContext)
+        public FeedingRepository(PetFeederDbContext dbContext, ILogger<FeedingRepository> logger) :
+            base(dbContext, logger)
         {
             _dbContext = dbContext;
         }
@@ -27,45 +28,50 @@ namespace Almostengr.PetFeeder.Api.Repository
 
         public async Task<List<Feeding>> GetRecentFeedingsAsync()
         {
-            DateTime currentDate = DateTime.Now; 
+            DateTime currentDate = DateTime.Now;
 
             return await _dbContext.Feedings
+                .Where(f => f.Timestamp == DateTime.Now.AddDays(-7))
                 .OrderByDescending(f => f.Timestamp)
-                .Take(10)
                 .ToListAsync();
         }
 
-        public async Task<Feeding> GetFeedingByIdAsync(int id)
+        public async Task<Feeding> GetFeedingByIdAsync(int? id)
         {
             return await _dbContext.Feedings.FirstOrDefaultAsync(f => f.Id == id);
         }
 
-        public async Task CreateFeeding(Feeding entity)
+        public async Task CreateFeedingAsync(Feeding entity)
         {
             await _dbContext.Feedings.AddAsync(entity);
         }
 
-        public async Task<List<Feeding>> FindOldFeedings(){
+        public async Task<List<Feeding>> FindOldFeedings()
+        {
             DateTime currentDateTime = DateTime.Now;
             return await _dbContext.Feedings
                 .Where(f => f.Timestamp <= currentDateTime.AddDays(-90))
                 .ToListAsync();
         }
 
-        public async Task SaveChangesAsync(){
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task DeleteFeeding(int feedingId)
+        public void DeleteFeeding(Feeding feeding)
         {
-            if (feedingId == null)
+            if (feeding == null)
             {
-                throw new ArgumentNullException(nameof(feedingId));
+                throw new ArgumentNullException(nameof(feeding));
             }
 
-            Feeding feeding = await GetFeedingByIdAsync(feedingId);
-
             _dbContext.Feedings.Remove(feeding);
+        }
+
+        public void DeleteFeedings(List<Feeding> entities)
+        {
+            if (entities == null)
+            {
+                throw new ArgumentNullException(nameof(entities));
+            }
+
+            _dbContext.Feedings.RemoveRange(entities);
         }
 
     }

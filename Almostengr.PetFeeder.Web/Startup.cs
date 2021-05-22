@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,6 +21,11 @@ namespace Almostengr.PetFeeder.Web
             AppSettings appSettings = Configuration.GetSection(nameof(appSettings)).Get<AppSettings>();
             services.AddSingleton(appSettings);
 
+            services.AddRouting(options =>
+            {
+                options.LowercaseUrls = true;
+                options.AppendTrailingSlash = false;
+            });
             services.AddControllersWithViews();
 
             // services.AddTransient<IHttpClientFactory, httpclie

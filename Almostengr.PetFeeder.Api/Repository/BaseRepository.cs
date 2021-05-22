@@ -1,30 +1,30 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Data;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.Api.Repository
 {
-    public abstract class BaseRepository
+    public abstract class BaseRepository : IBaseRepository
     {
-        private readonly DogFeederDbContext _dbContext;
+        private readonly PetFeederDbContext _dbContext;
+        private readonly ILogger<BaseRepository> _logger;
 
-        public BaseRepository(DogFeederDbContext dbContext)
+        public BaseRepository(PetFeederDbContext dbContext, ILogger<BaseRepository> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
-        public async Task<string> SaveChangesAsync()
+        public async Task SaveChangesAsync()
         {
             try
             {
                 await _dbContext.SaveChangesAsync();
-                return string.Empty;
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                _logger.LogError(ex.Message);
             }
         }
     }

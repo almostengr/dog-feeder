@@ -1,25 +1,20 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Models;
 using Almostengr.PetFeeder.Api.Repository;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace Almostengr.PetFeeder.Api.Worker
 {
-    public class MaintenanceWorker : BaseWorker
+    public class DbMaintenanceWorker : BaseWorker
     {
-        private readonly ILogger<MaintenanceWorker> _logger;
+        private readonly ILogger<DbMaintenanceWorker> _logger;
         private readonly IFeedingRepository _feedingRepository;
         private readonly IScheduleRepository _scheduleRepository;
 
-        public MaintenanceWorker(ILogger<MaintenanceWorker> logger, IFeedingRepository feedingRepository,
+        public DbMaintenanceWorker(ILogger<DbMaintenanceWorker> logger, IFeedingRepository feedingRepository,
             IScheduleRepository scheduleRepository) :
             base(logger)
         {
@@ -54,7 +49,7 @@ namespace Almostengr.PetFeeder.Api.Worker
                 List<Schedule> schedules = await _scheduleRepository.GetOldOneTimeSchedulesAsync();
                 foreach (var schedule in schedules)
                 {
-                    _scheduleRepository.DeleteSchedule(schedule.Id);
+                    _scheduleRepository.DeleteSchedule(schedule);
                 }
 
                 await _scheduleRepository.SaveChangesAsync();
@@ -64,7 +59,7 @@ namespace Almostengr.PetFeeder.Api.Worker
                 List<Feeding> feedings = await _feedingRepository.FindOldFeedings();
                 foreach (var feeding in feedings)
                 {
-                    _feedingRepository.DeleteFeeding(feeding.Id);
+                    _feedingRepository.DeleteFeeding(feeding);
                 }
                 await _feedingRepository.SaveChangesAsync();
 

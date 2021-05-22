@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Almostengr.PetFeeder.Api.Migrations
 {
-    [DbContext(typeof(DogFeederDbContext))]
+    [DbContext(typeof(PetFeederDbContext))]
     [Migration("20210521000626_initialMigration")]
     partial class initialMigration
     {

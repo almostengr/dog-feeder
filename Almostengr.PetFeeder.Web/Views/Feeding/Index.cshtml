@@ -1,5 +1,5 @@
 @model List<FeedingViewModel>
-@* @ViewBag["Title"] = "Feedings"; *@
+@ViewData["Title"] = "Feedings";
 
 <h1>Latest Feedings</h1>
 
@@ -12,7 +12,6 @@
     string wasScheduled = item.ScheduleId > 0 ? "Yes" : "No";
 
     <div class="row">
-    @* <div class="col-2 px-1">@item.Id</div> *@
     <div class="col-2 px-1">@item.Timestamp</div>
     <div class="col-2 px-1">@wasScheduled</div>
 </div>

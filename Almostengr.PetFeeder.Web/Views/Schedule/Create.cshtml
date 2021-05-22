@@ -1,0 +1,19 @@
+@inject DayFrequency DayFrequency
+@model ScheduleViewModel
+@ViewData["Title"] = "Create Scheduled Feeding";
+<form> 
+    <input type="hidden" name="id" id="id"/>
+    <div>
+        <label for="frequency">Frequency</label>
+        @* <input name="frequency" id="frequency" asp-for="@Model.Frequency" class="form-control" *@
+        <select asp-for="@Model.Frequency" name="frequency" id="frequency" class="form-control" asp-items="@DayFrequency">
+        </select>
+    </div>
+    <div>
+        <label for="isActive">Enabled</label>
+        <input type="checkbox" name="isActive" asp-for="@Model.IsActive" />
+    </div>
+    <div>
+        <button type="submit">Save</button>
+    </div>
+</form>
