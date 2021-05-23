@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Device.Gpio;
 using System.Threading;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Enums;
@@ -14,26 +15,32 @@ namespace Almostengr.PetFeeder.Api.Worker
         private readonly ILogger<FoodBowlWorker> _logger;
         private readonly IFeedingRepository _feedingRepository;
         private readonly IScheduleRepository _scheduleRepository;
+        private readonly GpioController _gpio;
+
+        private const int FoodForwardRelay = 14;
+        private const int FoodBackwardRelay = 15;
 
         public FoodBowlWorker(ILogger<FoodBowlWorker> logger, IFeedingRepository feedingRepository,
-            IScheduleRepository scheduleRepository)
-            : base(logger)
+            IScheduleRepository scheduleRepository, GpioController gpio)
+            : base(logger, gpio)
         {
             _logger = logger;
             _feedingRepository = feedingRepository;
             _scheduleRepository = scheduleRepository;
+            _gpio = gpio;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            // initialize GPIO pins 
+            _gpio.OpenPin(FoodForwardRelay, PinMode.Output); // initialize GPIO pins
+            _gpio.OpenPin(FoodBackwardRelay, PinMode.Output);
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            // release GPIO pins
-            
+            _gpio.ClosePin(FoodForwardRelay); // release GPIO pins
+            _gpio.ClosePin(FoodBackwardRelay);
             return base.StopAsync(cancellationToken);
         }
 
@@ -58,8 +65,7 @@ namespace Almostengr.PetFeeder.Api.Worker
                     _logger.LogError(ex.Message);
                 }
 
-                // await Task.Delay(TimeSpan.FromSeconds(60), stoppingToken);
-                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(60), stoppingToken);
             }
         }
 
@@ -142,13 +148,37 @@ namespace Almostengr.PetFeeder.Api.Worker
             feeding.ScheduleId = schedule.Id;
 
             // run the motor to dispense food
-
-            await Task.Delay(TimeSpan.FromSeconds(feeding.Amount));
-
-            // turn off motor
+            await RunMotor(MotorDirection.Backward, 0.5);
+            await RunMotor(MotorDirection.Forward, 0.5);
+            await RunMotor(MotorDirection.Backward, 0.5);
+            await RunMotor(MotorDirection.Forward, feeding.Amount);
 
             await _feedingRepository.CreateFeedingAsync(feeding);
             await _feedingRepository.SaveChangesAsync();
+        }
+
+        private async Task RunMotor(MotorDirection direction, double onTime)
+        {
+            switch (direction)
+            {
+                case MotorDirection.Forward:
+                    _gpio.Write(FoodForwardRelay, GpioOn);
+                    _gpio.Write(FoodBackwardRelay, GpioOff);
+                    break;
+
+                case MotorDirection.Backward:
+                    _gpio.Write(FoodForwardRelay, GpioOff);
+                    _gpio.Write(FoodBackwardRelay, GpioOn);
+                    break;
+
+                default:
+                    break;
+            }
+
+            await Task.Delay(TimeSpan.FromSeconds(onTime));
+
+            _gpio.Write(FoodForwardRelay, GpioOff);
+            _gpio.Write(FoodBackwardRelay, GpioOff);
         }
 
     }

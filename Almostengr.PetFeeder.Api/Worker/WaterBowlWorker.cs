@@ -1,4 +1,5 @@
 using System;
+using System.Device.Gpio;
 using System.Threading;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Models;
@@ -11,16 +12,26 @@ namespace Almostengr.PetFeeder.Api.Worker
     {
         private readonly ILogger<WaterBowlWorker> _logger;
         private readonly IWateringRepository _wateringRepository;
+        private readonly GpioController _gpio;
+        
+        private const int WaterBowlVcc = 20;
+        private const int WaterBowlGnd = 21;
+        private const int WaterRelay = 25;
 
-        public WaterBowlWorker(ILogger<WaterBowlWorker> logger, IWateringRepository wateringRepository) : base(logger)
+        public WaterBowlWorker(ILogger<WaterBowlWorker> logger, IWateringRepository wateringRepository,
+            GpioController gpio) : base(logger, gpio)
         {
             _logger = logger;
             _wateringRepository = wateringRepository;
+            _gpio = gpio;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            // initialize GPIO pins 
+            // initialize GPIO pins
+            _gpio.OpenPin(WaterBowlVcc, PinMode.Output);
+            _gpio.OpenPin(WaterBowlGnd, PinMode.Input);
+            _gpio.OpenPin(WaterRelay, PinMode.Output);
 
             return base.StartAsync(cancellationToken);
         }
@@ -30,6 +41,9 @@ namespace Almostengr.PetFeeder.Api.Worker
             CloseWaterValve();
 
             // release GPIO pins
+            _gpio.ClosePin(WaterBowlVcc);
+            _gpio.ClosePin(WaterBowlGnd);
+            _gpio.ClosePin(WaterRelay);
 
             return base.StopAsync(cancellationToken);
         }
@@ -49,7 +63,7 @@ namespace Almostengr.PetFeeder.Api.Worker
                     {
                         await DoOpenWaterValve();
                     }
-                    
+
                     CloseWaterValve();
                 }
                 catch (Exception ex)
@@ -62,17 +76,10 @@ namespace Almostengr.PetFeeder.Api.Worker
             }
         }
 
-        public bool IsWaterBowlFull()
-        {
-            // check if GPIO has continunity
-
-            return true;
-        }
-
         public async Task DoOpenWaterValve()
         {
             bool isWaterLow = false;
-            isWaterLow = IsWaterBowlFull();
+            isWaterLow = IsWaterLevelLow();
 
             Watering watering = null;
 
@@ -87,12 +94,12 @@ namespace Almostengr.PetFeeder.Api.Worker
             }
 
             int counter = 0;
-            while (isWaterLow && counter <= 20)
+            while (isWaterLow && counter <= 10)
             {
-                // open water valve
+                _gpio.Write(WaterRelay, GpioOn); // open water valve
 
                 await Task.Delay(TimeSpan.FromSeconds(0.5));
-                isWaterLow = IsWaterBowlFull();
+                isWaterLow = IsWaterLevelLow();
                 counter++;
             }
 
@@ -102,8 +109,13 @@ namespace Almostengr.PetFeeder.Api.Worker
 
         public void CloseWaterValve()
         {
-            // turn off water
             _logger.LogInformation("Turning off water");
+            _gpio.Write(WaterRelay, GpioOff); // turn off water
+        }
+
+        public bool IsWaterLevelLow()
+        {
+            return base.IsWaterLevelLow(WaterBowlVcc, WaterBowlGnd);
         }
 
     }

@@ -26,7 +26,7 @@ namespace Almostengr.PetFeeder.Api.Worker
         public async Task DoOpenWaterValve()
         {
             bool isWaterLow = false; // set default value in case exception occurs
-            isWaterLow = IsWaterBowlFull();
+            isWaterLow = IsWaterLevelLow();
 
             if (isWaterLow)
             {
@@ -43,14 +43,14 @@ namespace Almostengr.PetFeeder.Api.Worker
                 _logger.LogInformation("Opening water valve");
 
                 await Task.Delay(TimeSpan.FromSeconds(0.5));
-                isWaterLow = IsWaterBowlFull();
+                isWaterLow = IsWaterLevelLow();
                 counter++;
             }
 
             CloseWaterValve();
         }
 
-        public bool IsWaterBowlFull()
+        public bool IsWaterLevelLow()
         {
             _logger.LogInformation("Checking if water bowl is full");
 

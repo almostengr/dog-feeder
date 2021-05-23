@@ -1,3 +1,4 @@
+using System.Device.Gpio;
 using Almostengr.PetFeeder.Api.Worker;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,8 +22,11 @@ namespace Almostengr.PetFeeder.Api
                 })
                 .ConfigureServices(services => 
                 {
+                    services.AddScoped<IFoodStorageWorker, FoodStorageWorker>();
+                    services.AddScoped<IWaterStorageWorker, WaterStorageWorker>();
                     services.AddScoped<IFoodBowlWorker, FoodBowlWorker>();
                     services.AddScoped<IWaterBowlWorker, WaterBowlWorker>();
+                    services.AddSingleton<GpioController>();
                 });
     }
 }

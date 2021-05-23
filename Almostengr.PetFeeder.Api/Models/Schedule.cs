@@ -14,6 +14,6 @@ namespace Almostengr.PetFeeder.Api.Models
         public bool IsActive { get; set; } = true;
         public double FeedingAmount { get; set; }
         public DayFrequency Frequency { get; set; }
-        public string? IpAddress { get; set; }
+        public string IpAddress { get; set; }
     }
 }

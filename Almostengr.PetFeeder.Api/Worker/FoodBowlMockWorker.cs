@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Device.Gpio;
 using System.Threading;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Enums;
@@ -13,7 +14,8 @@ namespace Almostengr.PetFeeder.Api.Worker
         private readonly ILogger<FoodBowlMockWorker> _logger;
         private Random _random;
 
-        public FoodBowlMockWorker(ILogger<FoodBowlMockWorker> logger) : base(logger)
+        public FoodBowlMockWorker(ILogger<FoodBowlMockWorker> logger, GpioController gpio)
+            : base(logger, gpio)
         {
             _logger = logger;
             _random = new Random();

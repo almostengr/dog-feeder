@@ -8,6 +8,6 @@ namespace Almostengr.PetFeeder.Api.Worker
     {
         void CloseWaterValve();
         Task DoOpenWaterValve();
-        bool IsWaterBowlFull();
+        bool IsWaterLevelLow();
     }
 }
