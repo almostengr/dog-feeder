@@ -19,6 +19,41 @@
                 "reveal": "silent"
             },
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Add database migration",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "ef",
+                "migrations",
+                "add",
+                "-p",
+                "Almostengr.PetFeeder.Api/",
+                "'$(date)'",
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Update database",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "ef",
+                "database",
+                "update",
+                "-p",
+                "Almostengr.PetFeeder.Api/",
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile"
         }
     ]
 }
