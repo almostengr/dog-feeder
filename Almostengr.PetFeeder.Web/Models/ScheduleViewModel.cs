@@ -9,6 +9,6 @@ namespace Almostengr.PetFeeder.Web.Models
         public DateTime ScheduledTime { get; set; }
         public bool IsActive { get; set; }
         public DayFrequency Frequency { get; set; }
-        public string? IpAddress { get; set; }
+        public string IpAddress { get; set; }
     }
 }
