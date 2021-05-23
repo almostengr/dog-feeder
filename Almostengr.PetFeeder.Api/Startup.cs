@@ -21,14 +21,12 @@ namespace Almostengr.PetFeeder.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // AppSettings appSettings = Configuration.GetSection(nameof(appSettings)).Get<AppSettings>();
-            // services.AddSingleton(appSettings);
-
             services.AddDbContext<PetFeederDbContext>(options => 
                 options.UseMySQL(Configuration.GetConnectionString("DbConnection")));
 
             services.AddScoped<IFeedingRepository, FeedingRepository>();
             services.AddScoped<IScheduleRepository, ScheduleRepository>();
+            services.AddScoped<ISettingRepository, SettingRepository>();
             services.AddScoped<IWateringRepository, WateringRepository>();
 
             services.AddControllers();

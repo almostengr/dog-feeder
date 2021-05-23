@@ -9,8 +9,6 @@ namespace Almostengr.PetFeeder.Api.Repository
         Task CreateWateringAsync(Watering watering);
         Task<List<Watering>> GetAllWateringsAsync();
         Task<Watering> GetWateringByIdAsync(int? id);
-        void DeleteWatering(Watering watering);
-        void DeleteWaterings(List<Watering> waterings);
         Task<List<Watering>> GetRecentWateringsAsync();
         void UpdateWatering(Watering watering);
     }

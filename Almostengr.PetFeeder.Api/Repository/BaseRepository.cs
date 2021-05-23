@@ -27,5 +27,6 @@ namespace Almostengr.PetFeeder.Api.Repository
                 _logger.LogError(ex.Message);
             }
         }
+        
     }
 }

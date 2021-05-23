@@ -11,7 +11,5 @@ namespace Almostengr.PetFeeder.Api.Repository
         Task<Feeding> GetFeedingByIdAsync(int? id);
         Task<List<Feeding>> GetRecentFeedingsAsync();
         Task<List<Feeding>> FindOldFeedings();
-        void DeleteFeeding(Feeding feeding);
-        void DeleteFeedings(List<Feeding> feedings);
     }
 }

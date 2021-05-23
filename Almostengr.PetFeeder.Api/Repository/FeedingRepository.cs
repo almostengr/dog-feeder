@@ -54,25 +54,5 @@ namespace Almostengr.PetFeeder.Api.Repository
                 .ToListAsync();
         }
 
-        public void DeleteFeeding(Feeding feeding)
-        {
-            if (feeding == null)
-            {
-                throw new ArgumentNullException(nameof(feeding));
-            }
-
-            _dbContext.Feedings.Remove(feeding);
-        }
-
-        public void DeleteFeedings(List<Feeding> entities)
-        {
-            if (entities == null)
-            {
-                throw new ArgumentNullException(nameof(entities));
-            }
-
-            _dbContext.Feedings.RemoveRange(entities);
-        }
-
     }
 }

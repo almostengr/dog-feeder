@@ -54,14 +54,14 @@ namespace Almostengr.PetFeeder.Api.Worker
 
                 await _scheduleRepository.SaveChangesAsync();
 
-                _logger.LogInformation("Deleting old feedings");
+                // _logger.LogInformation("Deleting old feedings");
 
-                List<Feeding> feedings = await _feedingRepository.FindOldFeedings();
-                foreach (var feeding in feedings)
-                {
-                    _feedingRepository.DeleteFeeding(feeding);
-                }
-                await _feedingRepository.SaveChangesAsync();
+                // List<Feeding> feedings = await _feedingRepository.FindOldFeedings();
+                // foreach (var feeding in feedings)
+                // {
+                //     _feedingRepository.DeleteFeeding(feeding);
+                // }
+                // await _feedingRepository.SaveChangesAsync();
 
                 await Task.Delay(TimeSpan.FromDays(1));
             }

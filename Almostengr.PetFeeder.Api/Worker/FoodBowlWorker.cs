@@ -26,13 +26,14 @@ namespace Almostengr.PetFeeder.Api.Worker
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Starting food bowl worker");
+            // initialize GPIO pins 
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Stopping food bowl worker");
+            // release GPIO pins
+            
             return base.StopAsync(cancellationToken);
         }
 

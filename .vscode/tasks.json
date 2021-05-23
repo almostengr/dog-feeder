@@ -30,6 +30,8 @@
                 "add",
                 "-p",
                 "Almostengr.PetFeeder.Api/",
+                "-o",
+                "${workspaceFolder}/Almostengr.PetFeeder.Api/Migrations",
                 "'$(date)'",
             ],
             "group": "build",

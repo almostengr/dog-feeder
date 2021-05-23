@@ -11,13 +11,13 @@ namespace Almostengr.PetFeeder.Api.Repository
 {
     public class WateringRepository : BaseRepository, IWateringRepository
     {
-        private readonly ILogger<WateringRepository> _logger;
+        // private readonly ILogger<WateringRepository> _logger;
         private readonly PetFeederDbContext _dbContext;
 
         public WateringRepository(ILogger<WateringRepository> logger, PetFeederDbContext dbContext) :
             base(dbContext, logger)
         {
-            _logger = logger;
+            // _logger = logger;
             _dbContext = dbContext;
         }
 
@@ -38,16 +38,6 @@ namespace Almostengr.PetFeeder.Api.Repository
             return await _dbContext.Waterings
                 .Where(w => w.Id == wateringId)
                 .FirstOrDefaultAsync();
-        }
-
-        public void DeleteWatering(Watering watering)
-        {
-            _dbContext.Waterings.Remove(watering);
-        }
-
-        public void DeleteWaterings(List<Watering> waterings)
-        {
-            _dbContext.Waterings.RemoveRange(waterings);
         }
 
         public async Task<List<Watering>> GetRecentWateringsAsync()

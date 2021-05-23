@@ -20,8 +20,6 @@ namespace Almostengr.PetFeeder.Api.Worker
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Starting water bowl worker");
-
             // initialize GPIO pins 
 
             return base.StartAsync(cancellationToken);
@@ -29,8 +27,6 @@ namespace Almostengr.PetFeeder.Api.Worker
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Stopping water bowl worker");
-
             CloseWaterValve();
 
             // release GPIO pins
