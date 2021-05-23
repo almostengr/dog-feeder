@@ -10,7 +10,7 @@ Automatic pet feeder powered by a Raspberry PI and .NET Core C#
 * https://www.yogihosting.com/aspnet-core-consume-api/#create
 * https://www.codeproject.com/Articles/5291291/Interface-with-Raspberry-Pi-I2C-Sensors-Using-NET
 * https://docs.microsoft.com/en-us/ef/core/cli/dotnet#update-the-tools
-
+* https://www.tomshardware.com/how-to/raspberry-pi-pico-ultrasonic-sensor
 
 ## EF CLI Commands
 
