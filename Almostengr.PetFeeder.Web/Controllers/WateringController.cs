@@ -22,6 +22,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
 
         public async Task<IActionResult> All()
         {
+            ViewData["Title"] = "All Waterings";
             List<WateringViewModel> feedings = null;
 
             using (var client = new HttpClient())
@@ -45,6 +46,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
+            ViewData["Title"] = "Latest Waterings";
             List<WateringViewModel> feedings = null;
 
             using (var client = new HttpClient())

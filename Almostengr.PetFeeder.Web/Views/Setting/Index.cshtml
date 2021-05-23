@@ -1,5 +1,4 @@
 @model List<SettingViewModel>
-@ViewData["Title"] = "Settings";
 
 <div class="row bg-dark text-white">
     <div class="col-2">Key</div>
@@ -10,7 +9,8 @@
     <div class="row">
     <div class="col-2">@item.key</div>
     <div class="col-2">@item.Value</div>
-    @* <div class="col-2"><a class="nav-link text-dark" asp-area="" asp-controller="settings" asp-action="edit">Settings</a></div> *@
-    <div class="col-2"><a class="nav-link text-dark" href="/settings/edit/@item.key">Edit</a></div>
+    <div class="col-2">
+        <a class="nav-link text-dark" href="/settings/edit/@item.key">Edit</a>
+    </div>
 </div>
 }

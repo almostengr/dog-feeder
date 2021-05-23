@@ -27,10 +27,6 @@ namespace Almostengr.PetFeeder.Web
                 options.AppendTrailingSlash = false;
             });
             services.AddControllersWithViews();
-
-            // services.AddTransient<IHttpClientFactory, httpclie
-
-            // services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

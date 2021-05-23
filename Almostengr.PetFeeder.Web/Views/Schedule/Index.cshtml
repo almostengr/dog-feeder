@@ -1,5 +1,4 @@
 @model List<ScheduleViewModel>
-@ViewData["Title"] = "Scheduled Feeding";
 
 <div class="row bg-dark text-white">
     <div class="col-2">Schedule Time</div>
@@ -12,5 +11,9 @@
     <div class="col-2">@item.ScheduledTime</div>
     <div class="col-2">@item.Frequency</div>
     <div class="col-2">@item.IsActive</div>
+    <div class="col-2">
+        <a class="nav-link text-dark" href="/schedules/edit/@item.Id">Edit</a>
+        <a class="nav-link text-dark" href="/schedule/delete/@item.Id">Delete</a>
+    </div>
 </div>
 }
