@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Almostengr.PetFeeder.Api.Migrations
 {
     [DbContext(typeof(PetFeederDbContext))]
-    [Migration("20210523185642_AlarmTable")]
-    partial class AlarmTable
+    [Migration("20210523191403_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,7 +42,7 @@ namespace Almostengr.PetFeeder.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Alarms");
+                    b.ToTable("alarm");
                 });
 
             modelBuilder.Entity("Almostengr.PetFeeder.Api.Models.Feeding", b =>

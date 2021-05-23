@@ -16,6 +16,7 @@ namespace Almostengr.PetFeeder.Api.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Alarm>().ToTable(nameof(Alarm).ToLower());
             modelBuilder.Entity<Feeding>().ToTable(nameof(Feeding).ToLower());
             modelBuilder.Entity<Schedule>().ToTable(nameof(Schedule).ToLower());
             modelBuilder.Entity<Setting>().ToTable(nameof(Setting).ToLower());
