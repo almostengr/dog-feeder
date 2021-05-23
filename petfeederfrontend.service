@@ -1,0 +1,13 @@
+[Unit]
+Description=Pet Feeder Frontend by almostengr
+After=network.target
+Documentation=https://thealmostengineer.com/petfeeder
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/home/pi/petfeeder/Almostengr.PetFeeder.Web/Almostengr.PetFeeder.Web
+User=pi
+
+[Install]
+WantedBy=multi-user.target
