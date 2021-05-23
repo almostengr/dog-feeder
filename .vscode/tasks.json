@@ -32,9 +32,9 @@
                 "Almostengr.PetFeeder.Api/",
                 "-o",
                 "${workspaceFolder}/Almostengr.PetFeeder.Api/Migrations",
-                "'$(date)'",
+                "${input:migrationName}"
             ],
-            "group": "build",
+            "group": "none",
             "presentation": {
                 "reveal": "silent"
             },
@@ -51,11 +51,73 @@
                 "-p",
                 "Almostengr.PetFeeder.Api/",
             ],
-            "group": "build",
+            "group": "none",
             "presentation": {
                 "reveal": "silent"
             },
-            "problemMatcher": "$msCompile"
+            "problemMatcher": "$msCompile",
+            "dependsOn": ["Add database migration"]
+        },
+        {
+            "label": "Remove migration",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "ef",
+                "migrations",
+                "remove",
+                "${input:migrationName}",
+                "-p",
+                "Almostengr.PetFeeder.Api/",
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile",
+        },
+        {
+            "label": "watch run API",
+            "command": "dotnet",
+            "type" : "shell",
+            "args": [
+                "watch",
+                "-p",
+                "Almostengr.PetFeeder.Api/",
+                "run"
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile",
+        },
+        {
+            "label": "watch run WEB",
+            "command": "dotnet",
+            "type" : "shell",
+            "args": [
+                "watch",
+                "-p",
+                "Almostengr.PetFeeder.Web/",
+                "run"
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile",
+        },
+        {
+            "label": "Launch solution",
+            "dependsOn": ["watch run API", "watch run WEB"]
+        }
+    ],
+    "inputs": [
+        {
+            "id": "migrationName",
+            "type": "promptString",
+            "description": "Enter the name for the database migration"
         }
     ]
 }
