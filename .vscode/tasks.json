@@ -56,7 +56,6 @@
                 "reveal": "silent"
             },
             "problemMatcher": "$msCompile",
-            "dependsOn": ["Add database migration"]
         },
         {
             "label": "Remove migration",
