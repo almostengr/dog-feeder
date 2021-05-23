@@ -3,14 +3,16 @@ using System;
 using Almostengr.PetFeeder.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Almostengr.PetFeeder.Api.Migrations
 {
     [DbContext(typeof(PetFeederDbContext))]
-    partial class DogFeederDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210523121000_AddSettings")]
+    partial class AddSettings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
