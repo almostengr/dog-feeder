@@ -2,7 +2,8 @@ namespace Almostengr.PetFeeder.Api.Enums
 {
     public enum DayFrequency
     {
-        None (Off),
+        [Display(Name = "None (Off)")]
+        None,
         Once,
         Daily,
         Weekday,
