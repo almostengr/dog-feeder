@@ -7,6 +7,7 @@ namespace Almostengr.PetFeeder.Api.Repository
     public interface IAlarmRepository : IBaseRepository
     {
         Task CreateAlarmAsync(Alarm alarm);
+        Task<bool> GetActiveAlarmsExistByTypeAsync(string type);
         Task<List<Alarm>> GetActiveAlarmsAsync();
         Task<Alarm> GetAlarmByIdAsync(int id);
         Task<List<Alarm>> GetAllAlarmsAsync();

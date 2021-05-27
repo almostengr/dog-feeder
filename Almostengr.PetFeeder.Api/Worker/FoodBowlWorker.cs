@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Device.Gpio;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Enums;
 using Almostengr.PetFeeder.Api.Models;
 using Almostengr.PetFeeder.Api.Repository;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Almostengr.PetFeeder.Api.Worker
 {
@@ -15,32 +17,32 @@ namespace Almostengr.PetFeeder.Api.Worker
         private readonly ILogger<FoodBowlWorker> _logger;
         private readonly IFeedingRepository _feedingRepository;
         private readonly IScheduleRepository _scheduleRepository;
+        private readonly IAlarmRepository _alarmRepository;
         private readonly GpioController _gpio;
 
-        private const int FoodForwardRelay = 14;
-        private const int FoodBackwardRelay = 15;
 
         public FoodBowlWorker(ILogger<FoodBowlWorker> logger, IFeedingRepository feedingRepository,
-            IScheduleRepository scheduleRepository, GpioController gpio)
+            IScheduleRepository scheduleRepository, IAlarmRepository alarmRepository, GpioController gpio)
             : base(logger, gpio)
         {
             _logger = logger;
             _feedingRepository = feedingRepository;
             _scheduleRepository = scheduleRepository;
+            _alarmRepository = alarmRepository;
             _gpio = gpio;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _gpio.OpenPin(FoodForwardRelay, PinMode.Output); // initialize GPIO pins
-            _gpio.OpenPin(FoodBackwardRelay, PinMode.Output);
+            // _gpio.OpenPin(FoodForwardRelay, PinMode.Output); // initialize GPIO pins
+            // _gpio.OpenPin(FoodBackwardRelay, PinMode.Output);
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _gpio.ClosePin(FoodForwardRelay); // release GPIO pins
-            _gpio.ClosePin(FoodBackwardRelay);
+            // _gpio.ClosePin(FoodForwardRelay); // release GPIO pins
+            // _gpio.ClosePin(FoodBackwardRelay);
             return base.StopAsync(cancellationToken);
         }
 
@@ -55,10 +57,13 @@ namespace Almostengr.PetFeeder.Api.Worker
 
                     Schedule schedule = IsTimeToFeed(schedules);
 
-                    if (schedule != null)
-                    {
-                        await PerformFeeding(schedule);
-                    }
+                    // bool doAlarmsExist = await _alarmRepository.GetActiveAlarmsExistByTypeAsync(nameof(FoodStorageWorker));
+
+                    // if (schedule != null && doAlarmsExist == false)
+                    // {
+                    //     await PerformFeeding(schedule);
+                    // }
+
                 }
                 catch (Exception ex)
                 {
@@ -79,7 +84,29 @@ namespace Almostengr.PetFeeder.Api.Worker
                 if (schedule.ScheduledTime.Hour == currentTime.Hour &&
                     schedule.ScheduledTime.Minute == currentTime.Minute && frequencyMatch)
                 {
-                    return schedule;
+                    // return schedule;
+
+
+                    using (var httpClient = new HttpClient())
+                    {
+                        httpClient.BaseAddress = ApiUri;
+
+                        Feeding feeding = new Feeding();
+                        feeding.Amount = schedule.FeedingAmount;
+                        feeding.ScheduleId = schedule.Id;
+                        feeding.Timestamp = DateTime.Now;
+
+                        HttpResponseMessage response = httpClient.PostAsync("/feedings", feeding);
+
+                        // if (response.IsSuccessStatusCode)
+                        // {
+                        //     schedules = JsonConvert.DeserializeObject<List<>>(response.Content.ReadAsStringAsync().Result);
+                        // }
+                        // else
+                        // {
+                        //     schedules = new List<ScheduleViewModel>();
+                        // }
+                    }
                 }
             }
 
@@ -140,46 +167,6 @@ namespace Almostengr.PetFeeder.Api.Worker
             return value;
         }
 
-        public async Task PerformFeeding(Schedule schedule)
-        {
-            Feeding feeding = new Feeding();
-            feeding.Timestamp = DateTime.Now;
-            feeding.Amount = schedule.FeedingAmount;
-            feeding.ScheduleId = schedule.Id;
-
-            // run the motor to dispense food
-            await RunMotor(MotorDirection.Backward, 0.5);
-            await RunMotor(MotorDirection.Forward, 0.5);
-            await RunMotor(MotorDirection.Backward, 0.5);
-            await RunMotor(MotorDirection.Forward, feeding.Amount);
-
-            await _feedingRepository.CreateFeedingAsync(feeding);
-            await _feedingRepository.SaveChangesAsync();
-        }
-
-        private async Task RunMotor(MotorDirection direction, double onTime)
-        {
-            switch (direction)
-            {
-                case MotorDirection.Forward:
-                    _gpio.Write(FoodForwardRelay, GpioOn);
-                    _gpio.Write(FoodBackwardRelay, GpioOff);
-                    break;
-
-                case MotorDirection.Backward:
-                    _gpio.Write(FoodForwardRelay, GpioOff);
-                    _gpio.Write(FoodBackwardRelay, GpioOn);
-                    break;
-
-                default:
-                    break;
-            }
-
-            await Task.Delay(TimeSpan.FromSeconds(onTime));
-
-            _gpio.Write(FoodForwardRelay, GpioOff);
-            _gpio.Write(FoodBackwardRelay, GpioOff);
-        }
 
     }
 }

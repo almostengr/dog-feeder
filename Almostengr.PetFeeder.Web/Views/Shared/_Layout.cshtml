@@ -7,7 +7,7 @@
     <title>@ViewData["Title"] - Dog Feeder</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/almostengr.min.css" />
+    @* <link rel="stylesheet" href="~/css/almostengr.min.css" /> *@
 </head>
 
 <body>
@@ -44,9 +44,19 @@
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
+        <div class="row">
+
+        <main role="main" class="col-9 pb-3">
             @RenderBody()
         </main>
+        <sidebar class="col-3">
+            @* <partial name="_AlarmNavigation"> *@
+            <partial name="_FeedingNavigation">
+            <partial name="_ScheduleNavigation">
+            <partial name="_SettingNavigation">
+            <partial name="_WateringNavigation">
+        </sidebar>
+        </div>
     </div>
 
     <footer class="border-top footer text-muted">

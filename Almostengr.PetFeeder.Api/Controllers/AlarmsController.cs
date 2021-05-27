@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Models;
@@ -9,32 +10,32 @@ namespace Almostengr.PetFeeder.Api.Controllers
 {
     public class AlarmsController : BaseController
     {
-        private readonly IAlarmRepository _repository;
+        private readonly IAlarmRepository _alarmRepo;
 
-        public AlarmsController(ILogger<AlarmsController> logger, IAlarmRepository repository) : base(logger)
+        public AlarmsController(ILogger<AlarmsController> logger, IAlarmRepository alarmRepo) : base(logger)
         {
-            _repository = repository;
+            _alarmRepo = alarmRepo;
         }
 
         [HttpGet]
         public async Task<ActionResult<IList<Alarm>>> GetActiveAlarmsAsync()
         {
-            var alarms = await _repository.GetActiveAlarmsAsync();
+            var alarms = await _alarmRepo.GetActiveAlarmsAsync();
             return Ok(alarms);
         }
 
         [HttpGet("dismiss")]
         public async Task<ActionResult<Alarm>> DismissActiveAlarmsAsync()
         {
-            var alarms = await _repository.GetActiveAlarmsAsync();
+            var alarms = await _alarmRepo.GetActiveAlarmsAsync();
 
             foreach (var alarm in alarms)
             {
                 alarm.IsActive = false;
             }
 
-            _repository.UpdateAlarms(alarms);
-            await _repository.SaveChangesAsync();
+            _alarmRepo.UpdateAlarms(alarms);
+            await _alarmRepo.SaveChangesAsync();
 
             return NoContent();
         }
@@ -42,7 +43,7 @@ namespace Almostengr.PetFeeder.Api.Controllers
         [HttpGet("all")]
         public async Task<ActionResult<IList<Alarm>>> GetAllAlarmsAsync()
         {
-            var alarms = await _repository.GetAllAlarmsAsync();
+            var alarms = await _alarmRepo.GetAllAlarmsAsync();
             return Ok(alarms);
         }
 
@@ -54,8 +55,26 @@ namespace Almostengr.PetFeeder.Api.Controllers
                 return BadRequest();
             }
 
-            var alarm = await _repository.GetAlarmByIdAsync(id);
+            var alarm = await _alarmRepo.GetAlarmByIdAsync(id);
             return Ok(alarm);
         }
+
+        [HttpPost]
+        public async Task<ActionResult<Alarm>> CreateAlarmAsync(Alarm alarm)
+        {
+            if (ModelState.IsValid == false)
+            {
+                return BadRequest(ModelState);
+            }
+
+            alarm.Created = DateTime.Now;
+
+            await _alarmRepo.CreateAlarmAsync(alarm);
+            await _alarmRepo.SaveChangesAsync();
+
+            // return Ok(alarm);
+            return StatusCode(201);
+        }
+
     }
 }

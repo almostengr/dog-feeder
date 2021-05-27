@@ -12,6 +12,7 @@ namespace Almostengr.PetFeeder.Api.Worker
         private readonly GpioController _gpio;
         internal PinValue GpioOn = PinValue.High;
         internal PinValue GpioOff = PinValue.Low;
+        internal Uri ApiUri = new Uri("https://localhost:5000");
 
         protected BaseWorker(ILogger<BaseWorker> logger, GpioController gpio)
         {

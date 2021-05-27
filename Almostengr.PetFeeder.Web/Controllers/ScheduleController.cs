@@ -45,7 +45,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
         public async Task<IActionResult> Delete()
         {
             ViewData["Title"] = "Delete Scheduled Feeding";
-            
+
             using (var client = new HttpClient())
             {
                 client.BaseAddress = _appSettings.ApiBaseUrl;
@@ -60,18 +60,11 @@ namespace Almostengr.PetFeeder.Web.Controllers
             return RedirectToAction("index");
         }
 
-        // public async Task<IActionResult> Create()
-        // {
-        // //     @ViewData["Title"] = "Create Scheduled Feeding";
+        public async Task<IActionResult> Create()
+        {
+            @ViewData["Title"] = "Create Scheduled Feeding";
 
-        // //     using(var client = new HttpClient())
-        // //     {
-        // //         client.BaseAddress = _appSettings.ApiBaseUrl
-        // //         var response = 
-        // //     }
-
-        // string route = "schedules";
-        // PostAsync<ScheduleViewModel>(route, )
-        // }
+            return View();
+        }
     }
 }

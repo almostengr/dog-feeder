@@ -10,7 +10,7 @@ namespace Almostengr.PetFeeder.Api.Worker
     {
         bool DoesScheduleFrequencyMatchDayOfWeek(DayFrequency frequency);
         Schedule IsTimeToFeed(List<Schedule> schedules);
-        Task PerformFeeding(Schedule schedule);
+        // Task PerformFeeding(Schedule schedule);
         Task StartAsync(CancellationToken cancellationToken);
         Task StopAsync(CancellationToken cancellationToken);
     }

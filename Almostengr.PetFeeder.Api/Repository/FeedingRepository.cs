@@ -31,8 +31,8 @@ namespace Almostengr.PetFeeder.Api.Repository
             DateTime currentDate = DateTime.Now;
 
             return await _dbContext.Feedings
-                .Where(f => f.Timestamp == DateTime.Now.AddDays(-7))
                 .OrderByDescending(f => f.Timestamp)
+                .Take(5)
                 .ToListAsync();
         }
 
@@ -41,9 +41,9 @@ namespace Almostengr.PetFeeder.Api.Repository
             return await _dbContext.Feedings.FirstOrDefaultAsync(f => f.Id == id);
         }
 
-        public async Task CreateFeedingAsync(Feeding entity)
+        public async Task CreateFeedingAsync(Feeding feeding)
         {
-            await _dbContext.Feedings.AddAsync(entity);
+            await _dbContext.Feedings.AddAsync(feeding);
         }
 
         public async Task<List<Feeding>> FindOldFeedings()

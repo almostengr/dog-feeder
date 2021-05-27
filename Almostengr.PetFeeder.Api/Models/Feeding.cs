@@ -10,9 +10,9 @@ namespace Almostengr.PetFeeder.Api.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        public DateTime Timestamp { get; set; }
+        public DateTime? Timestamp { get; set; }
         public int ScheduleId { get; set; }
-        public double Amount { get; set; }
+        // public double Amount { get; set; }
+        public int Amount { get; set; }
     }
 }
