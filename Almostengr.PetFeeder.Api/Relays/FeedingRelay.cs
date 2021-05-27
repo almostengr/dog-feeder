@@ -1,6 +1,6 @@
-namespace Almostengr.PetFeeder.Api.Signals
+namespace Almostengr.PetFeeder.Api.Relay
 {
-  public class FeedingSignal : SignalBase, IFeedingSignal
+  public class FeedingRelay : RelayBase, IFeedingRelay
   {
     private readonly ILogger<FeedingRelay> _logger;
     private readonly GpioController _gpio;
