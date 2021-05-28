@@ -11,10 +11,12 @@ namespace Almostengr.PetFeeder.Api.Controllers
     public class AlarmsController : BaseController
     {
         private readonly IAlarmRepository _alarmRepo;
+        private readonly ILogger<AlarmsController> _logger;
 
         public AlarmsController(ILogger<AlarmsController> logger, IAlarmRepository alarmRepo) : base(logger)
         {
             _alarmRepo = alarmRepo;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -24,39 +26,47 @@ namespace Almostengr.PetFeeder.Api.Controllers
             return Ok(alarms);
         }
 
-        [HttpGet("dismiss")]
-        public async Task<ActionResult<Alarm>> DismissActiveAlarmsAsync()
-        {
-            var alarms = await _alarmRepo.GetActiveAlarmsAsync();
-
-            foreach (var alarm in alarms)
-            {
-                alarm.IsActive = false;
-            }
-
-            _alarmRepo.UpdateAlarms(alarms);
-            await _alarmRepo.SaveChangesAsync();
-
-            return NoContent();
-        }
-
         [HttpGet("all")]
         public async Task<ActionResult<IList<Alarm>>> GetAllAlarmsAsync()
         {
-            var alarms = await _alarmRepo.GetAllAlarmsAsync();
+            var alarms = await _alarmRepo.GetAllAsync();
             return Ok(alarms);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Alarm>> GetAlarmByIdAsync(int id)
         {
-            if (id <= 0)
+            Alarm alarm = await _alarmRepo.GetByIdAsync(id);
+            if (alarm == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            var alarm = await _alarmRepo.GetAlarmByIdAsync(id);
             return Ok(alarm);
+        }
+
+        [HttpGet("{id}/dismiss")]
+        public async Task<ActionResult<Alarm>> DismissActiveAlarmAsync(int id)
+        {
+            var alarm = await _alarmRepo.GetByIdAsync(id);
+
+            if (alarm == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                _alarmRepo.DismissAlarm(alarm);
+                await _alarmRepo.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500);
+            }
+
+            return NoContent();
         }
 
         [HttpPost]
@@ -67,12 +77,17 @@ namespace Almostengr.PetFeeder.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            alarm.Created = DateTime.Now;
+            try
+            {
+                await _alarmRepo.CreateAsync(alarm);
+                await _alarmRepo.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500);
+            }
 
-            await _alarmRepo.CreateAlarmAsync(alarm);
-            await _alarmRepo.SaveChangesAsync();
-
-            // return Ok(alarm);
             return StatusCode(201);
         }
 

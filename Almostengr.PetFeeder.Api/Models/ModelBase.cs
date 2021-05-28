@@ -1,10 +1,10 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Almostengr.PetFeeder.Api.Models
 {
-    public class Watering : ModelBase
+    public abstract class ModelBase
     {
-        public DateTime Timestamp { get; set; }
+        [Key]
+        public int Id { get; set; }
     }
 }

@@ -4,32 +4,39 @@ using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Data;
 using Almostengr.PetFeeder.Api.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.Api.Repository
 {
-    public class AlarmRepository : IAlarmRepository
+    public class AlarmRepository : RepositoryBase<Alarm>, IAlarmRepository
     {
         private readonly PetFeederDbContext _dbContext;
 
-        public AlarmRepository(PetFeederDbContext dbContext)
+        public AlarmRepository(PetFeederDbContext dbContext, ILogger<RepositoryBase<Alarm>> logger) : base(dbContext, logger)
         {
             _dbContext = dbContext;
         }
 
-        public async Task CreateAlarmAsync(Alarm alarm)
-        {
-            await _dbContext.Alarms.AddAsync(alarm);
-        }
+        // public async Task CreateAlarmAsync(Alarm alarm)
+        // {
+        //     await _dbContext.Alarms.AddAsync(alarm);
+        // }
 
-        public void UpdateAlarm(Alarm alarm)
+        public void DismissAlarm(Alarm alarm)
         {
+            alarm.IsActive = false;
             _dbContext.Alarms.Update(alarm);
         }
 
-        public void UpdateAlarms(List<Alarm> alarms)
-        {
-            _dbContext.Alarms.UpdateRange(alarms);
-        }
+        // public void UpdateAlarm(Alarm alarm)
+        // {
+        //     _dbContext.Alarms.Update(alarm);
+        // }
+
+        // public void UpdateAlarms(List<Alarm> alarms)
+        // {
+        //     _dbContext.Alarms.UpdateRange(alarms);
+        // }
 
         public async Task<bool> GetActiveAlarmsExistByTypeAsync(string type)
         {
@@ -50,19 +57,19 @@ namespace Almostengr.PetFeeder.Api.Repository
             return await _dbContext.Alarms.Where(a => a.IsActive == true).OrderByDescending(a => a.Created).ToListAsync();
         }
 
-        public async Task<Alarm> GetAlarmByIdAsync(int id)
-        {
-            return await _dbContext.Alarms.FirstOrDefaultAsync(a => a.Id == id);
-        }
+        // public async Task<Alarm> GetAlarmByIdAsync(int id)
+        // {
+        //     return await _dbContext.Alarms.FirstOrDefaultAsync(a => a.Id == id);
+        // }
 
-        public async Task<List<Alarm>> GetAllAlarmsAsync()
-        {
-            return await _dbContext.Alarms.OrderByDescending(a => a.Created).ToListAsync();
-        }
+        // public async Task<List<Alarm>> GetAllAlarmsAsync()
+        // {
+        //     return await _dbContext.Alarms.OrderByDescending(a => a.Created).ToListAsync();
+        // }
 
-        public async Task SaveChangesAsync()
-        {
-            await _dbContext.SaveChangesAsync();
-        }
+        // public async Task SaveChangesAsync()
+        // {
+        //     await _dbContext.SaveChangesAsync();
+        // }
     }
 }

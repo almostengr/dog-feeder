@@ -5,9 +5,6 @@ namespace Almostengr.PetFeeder.Api.Data
 {
     public class PetFeederDbContext : DbContext
     {
-        public PetFeederDbContext(DbContextOptions<PetFeederDbContext> options) : base(options)
-        { }
-
         public virtual DbSet<Alarm> Alarms { get; set; }
         public virtual DbSet<Feeding> Feedings { get; set; }
         public virtual DbSet<Schedule> Schedules { get; set; }

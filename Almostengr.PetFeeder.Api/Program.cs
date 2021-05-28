@@ -27,7 +27,7 @@ namespace Almostengr.PetFeeder.Api
                     // services.AddScoped<IWaterStorageWorker, WaterStorageWorker>();
                     services.AddScoped<IFoodBowlWorker, FoodBowlWorker>();
                     services.AddScoped<IWaterBowlWorker, WaterBowlWorker>();
-                    services.AddScoped<INightLightWorker, NightLightWorker>();
+                    // services.AddScoped<INightLightWorker, NightLightWorker>();
                 });
     }
 }

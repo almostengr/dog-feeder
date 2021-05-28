@@ -6,8 +6,5 @@ namespace Almostengr.PetFeeder.Api.Worker
 {
     public interface IWaterBowlWorker
     {
-        void CloseWaterValve();
-        Task DoOpenWaterValve();
-        bool IsWaterLevelLow();
     }
 }

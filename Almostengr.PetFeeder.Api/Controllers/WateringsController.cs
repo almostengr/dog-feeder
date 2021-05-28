@@ -23,7 +23,7 @@ namespace Almostengr.PetFeeder.Api.Controllers
         {
             _logger.LogInformation("Getting all waterings");
 
-            var waterings = await _repository.GetAllWateringsAsync();
+            var waterings = await _repository.GetAllAsync();
             return Ok(waterings);
         }
 
@@ -37,11 +37,17 @@ namespace Almostengr.PetFeeder.Api.Controllers
         }
 
         [HttpGet, Route("{id}")]
-        public async Task<ActionResult<Watering>> GetWateringByIdAsync(int? id)
+        public async Task<ActionResult<Watering>> GetWateringByIdAsync(int id)
         {
             _logger.LogInformation("Getting single watering");
 
-            Watering watering = await _repository.GetWateringByIdAsync(id);
+            Watering watering = await _repository.GetByIdAsync(id);
+
+            if (watering == null)
+            {
+                return NotFound();
+            }
+
             return Ok(watering);
         }
     }

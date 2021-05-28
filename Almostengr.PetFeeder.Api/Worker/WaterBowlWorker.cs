@@ -3,7 +3,9 @@ using System.Device.Gpio;
 using System.Threading;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Models;
+using Almostengr.PetFeeder.Api.Relays;
 using Almostengr.PetFeeder.Api.Repository;
+using Almostengr.PetFeeder.Api.InputSensor;
 using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.Api.Worker
@@ -11,42 +13,44 @@ namespace Almostengr.PetFeeder.Api.Worker
     public class WaterBowlWorker : BaseWorker, IWaterBowlWorker
     {
         private readonly ILogger<WaterBowlWorker> _logger;
-        private readonly IWateringRepository _wateringRepository;
-        private readonly GpioController _gpio;
-        
-        private const int WaterBowlVcc = 20;
-        private const int WaterBowlGnd = 21;
-        private const int WaterRelay = 25;
+        private readonly IWaterBowlRelay _relay;
+        private readonly IWaterInputSensor _sensor;
+        private readonly IWateringRepository _repository;
 
-        public WaterBowlWorker(ILogger<WaterBowlWorker> logger, IWateringRepository wateringRepository,
-            GpioController gpio) : base(logger, gpio)
+        // private const int WaterBowlVcc = 20;
+        // private const int WaterBowlGnd = 21;
+        // private const int WaterRelay = 25;
+
+        public WaterBowlWorker(ILogger<WaterBowlWorker> logger, IWateringRepository repository,
+            IWaterBowlRelay relay, IWaterInputSensor sensor) : base(logger)
         {
             _logger = logger;
-            _wateringRepository = wateringRepository;
-            _gpio = gpio;
+            _repository = repository;
+            _relay = relay;
+            _sensor = sensor;
         }
 
-        public override Task StartAsync(CancellationToken cancellationToken)
-        {
-            // initialize GPIO pins
-            _gpio.OpenPin(WaterBowlVcc, PinMode.Output);
-            _gpio.OpenPin(WaterBowlGnd, PinMode.Input);
-            _gpio.OpenPin(WaterRelay, PinMode.Output);
+        // public override Task StartAsync(CancellationToken cancellationToken)
+        // {
+        //     // initialize GPIO pins
+        //     _gpio.OpenPin(WaterBowlVcc, PinMode.Output);
+        //     _gpio.OpenPin(WaterBowlGnd, PinMode.Input);
+        //     _gpio.OpenPin(WaterRelay, PinMode.Output);
 
-            return base.StartAsync(cancellationToken);
-        }
+        //     return base.StartAsync(cancellationToken);
+        // }
 
-        public override Task StopAsync(CancellationToken cancellationToken)
-        {
-            CloseWaterValve();
+        // public override Task StopAsync(CancellationToken cancellationToken)
+        // {
+        //     CloseWaterValve();
 
-            // release GPIO pins
-            _gpio.ClosePin(WaterBowlVcc);
-            _gpio.ClosePin(WaterBowlGnd);
-            _gpio.ClosePin(WaterRelay);
+        //     // release GPIO pins
+        //     _gpio.ClosePin(WaterBowlVcc);
+        //     _gpio.ClosePin(WaterBowlGnd);
+        //     _gpio.ClosePin(WaterRelay);
 
-            return base.StopAsync(cancellationToken);
-        }
+        //     return base.StopAsync(cancellationToken);
+        // }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -58,17 +62,21 @@ namespace Almostengr.PetFeeder.Api.Worker
                 try
                 {
                     TimeSpan currentTime = DateTime.Now.TimeOfDay;
+                    Watering watering = null;
+                    bool isWaterLow = _sensor.IsWaterLevelLow();
 
-                    if (currentTime >= earliestTime && currentTime <= latestTime)
+                    if (currentTime >= earliestTime && currentTime <= latestTime && isWaterLow == true)
                     {
-                        await DoOpenWaterValve();
+                        watering = RefillWaterBowl();
                     }
 
-                    CloseWaterValve();
+                    _relay.CloseWaterValve();
+                    await _repository.CreateAsync(watering);
+                    await _repository.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {
-                    CloseWaterValve();
+                    _relay.CloseWaterValve();
                     _logger.LogError(ex.Message);
                 }
 
@@ -76,46 +84,28 @@ namespace Almostengr.PetFeeder.Api.Worker
             }
         }
 
-        public async Task DoOpenWaterValve()
+        private Watering RefillWaterBowl()
         {
-            bool isWaterLow = false;
-            isWaterLow = IsWaterLevelLow();
-
-            Watering watering = null;
-
-            if (isWaterLow)
-            {
-                _logger.LogInformation("Turning on water");
-
-                watering = new Watering();
-                watering.Timestamp = DateTime.Now;
-                await _wateringRepository.CreateWateringAsync(watering);
-                await _wateringRepository.SaveChangesAsync();
-            }
-
+            bool isWaterLow = _sensor.IsWaterLevelLow();
+            Watering watering = new Watering();
             int counter = 0;
-            while (isWaterLow && counter <= 10)
-            {
-                _gpio.Write(WaterRelay, GpioOn); // open water valve
 
-                await Task.Delay(TimeSpan.FromSeconds(0.5));
-                isWaterLow = IsWaterLevelLow();
-                counter++;
+            while (isWaterLow && counter <= 16)
+            {
+                watering.Timestamp = DateTime.Now;
+
+                _relay.OpenWaterValve();
+
+                Task.Delay(TimeSpan.FromMilliseconds(250));
+
+                isWaterLow = _sensor.IsWaterLevelLow();
+
+                counter++; // to prevent bowl from overflowing
             }
 
-            _wateringRepository.UpdateWatering(watering);
-            await _wateringRepository.SaveChangesAsync();
-        }
+            _relay.CloseWaterValve();
 
-        public void CloseWaterValve()
-        {
-            _logger.LogInformation("Turning off water");
-            _gpio.Write(WaterRelay, GpioOff); // turn off water
-        }
-
-        public bool IsWaterLevelLow()
-        {
-            return base.IsWaterLevelLow(WaterBowlVcc, WaterBowlGnd);
+            return watering;
         }
 
     }

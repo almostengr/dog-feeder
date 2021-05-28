@@ -1,49 +1,24 @@
 using System;
 using System.Collections.Generic;
-using System.Device.Gpio;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Enums;
 using Almostengr.PetFeeder.Api.Models;
 using Almostengr.PetFeeder.Api.Repository;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace Almostengr.PetFeeder.Api.Worker
 {
     public class FoodBowlWorker : BaseWorker, IFoodBowlWorker
     {
         private readonly ILogger<FoodBowlWorker> _logger;
-        private readonly IFeedingRepository _feedingRepository;
         private readonly IScheduleRepository _scheduleRepository;
-        private readonly IAlarmRepository _alarmRepository;
-        private readonly GpioController _gpio;
 
-
-        public FoodBowlWorker(ILogger<FoodBowlWorker> logger, IFeedingRepository feedingRepository,
-            IScheduleRepository scheduleRepository, IAlarmRepository alarmRepository, GpioController gpio)
-            : base(logger, gpio)
+        public FoodBowlWorker(ILogger<FoodBowlWorker> logger,
+            IScheduleRepository scheduleRepository) : base(logger)
         {
             _logger = logger;
-            _feedingRepository = feedingRepository;
             _scheduleRepository = scheduleRepository;
-            _alarmRepository = alarmRepository;
-            _gpio = gpio;
-        }
-
-        public override Task StartAsync(CancellationToken cancellationToken)
-        {
-            // _gpio.OpenPin(FoodForwardRelay, PinMode.Output); // initialize GPIO pins
-            // _gpio.OpenPin(FoodBackwardRelay, PinMode.Output);
-            return base.StartAsync(cancellationToken);
-        }
-
-        public override Task StopAsync(CancellationToken cancellationToken)
-        {
-            // _gpio.ClosePin(FoodForwardRelay); // release GPIO pins
-            // _gpio.ClosePin(FoodBackwardRelay);
-            return base.StopAsync(cancellationToken);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -57,56 +32,43 @@ namespace Almostengr.PetFeeder.Api.Worker
 
                     Schedule schedule = IsTimeToFeed(schedules);
 
-                    // bool doAlarmsExist = await _alarmRepository.GetActiveAlarmsExistByTypeAsync(nameof(FoodStorageWorker));
-
-                    // if (schedule != null && doAlarmsExist == false)
-                    // {
-                    //     await PerformFeeding(schedule);
-                    // }
-
+                    // if time to feed, then call feeding api
+                    if (schedule != null)
+                    {
+                        await DoFeedPetAsync(schedule);
+                    }
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex.Message);
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(60), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
             }
+        }
+
+        public async Task DoFeedPetAsync(Schedule schedule)
+        {
+            Feeding feeding = new Feeding();
+            feeding.Amount = schedule.FeedingAmount;
+            feeding.ScheduleId = schedule.Id;
+
+            await PostAsync<Feeding>("/feedings", feeding);
         }
 
         public Schedule IsTimeToFeed(List<Schedule> schedules)
         {
-            DateTime currentTime = DateTime.Now;
+            DateTime currentDateTime = DateTime.Now;
+            currentDateTime = currentDateTime.AddMilliseconds(-currentDateTime.Millisecond)
+                .AddSeconds(-currentDateTime.Second);
+            TimeSpan currentTime = currentDateTime.TimeOfDay;
 
             foreach (var schedule in schedules)
             {
-                bool frequencyMatch = DoesScheduleFrequencyMatchDayOfWeek(schedule.Frequency);
-                if (schedule.ScheduledTime.Hour == currentTime.Hour &&
-                    schedule.ScheduledTime.Minute == currentTime.Minute && frequencyMatch)
+                bool doesFrequencyMatch = DoesScheduleFrequencyMatchDayOfWeek(schedule.Frequency);
+                if (doesFrequencyMatch && currentTime == schedule.ScheduledTime.TimeOfDay)
                 {
-                    // return schedule;
-
-
-                    using (var httpClient = new HttpClient())
-                    {
-                        httpClient.BaseAddress = ApiUri;
-
-                        Feeding feeding = new Feeding();
-                        feeding.Amount = schedule.FeedingAmount;
-                        feeding.ScheduleId = schedule.Id;
-                        feeding.Timestamp = DateTime.Now;
-
-                        HttpResponseMessage response = httpClient.PostAsync("/feedings", feeding);
-
-                        // if (response.IsSuccessStatusCode)
-                        // {
-                        //     schedules = JsonConvert.DeserializeObject<List<>>(response.Content.ReadAsStringAsync().Result);
-                        // }
-                        // else
-                        // {
-                        //     schedules = new List<ScheduleViewModel>();
-                        // }
-                    }
+                    return schedule;
                 }
             }
 
@@ -121,9 +83,6 @@ namespace Almostengr.PetFeeder.Api.Worker
             switch (frequency)
             {
                 case DayFrequency.Once:
-                    value = true;
-                    break;
-
                 case DayFrequency.Daily:
                     value = true;
                     break;

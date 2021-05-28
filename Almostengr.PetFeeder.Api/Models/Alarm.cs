@@ -3,11 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Almostengr.PetFeeder.Api.Models
 {
-    public class Alarm
+    public class Alarm : ModelBase
     {
-        [Key]
-        public int Id { get; set; }
-        public DateTime Created { get; set; }
+        public DateTime Created { get; set; } = DateTime.Now;
         public string Type { get; set; }
         public string Message { get; set; }
         public bool IsActive { get; set; } = true;

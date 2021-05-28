@@ -4,10 +4,10 @@ using Almostengr.PetFeeder.Api.Models;
 
 namespace Almostengr.PetFeeder.Api.Repository
 {
-    public interface ISettingRepository : IBaseRepository
+    public interface ISettingRepository : IRepositoryBase<Setting>
     {
-        Task<List<Setting>> GetAllSettingsAsync();
+        // Task<List<Setting>> GetAllSettingsAsync();
         Task<Setting> GetSettingByKeyAsync(string key);
-        void UpdateSetting(Setting setting);
+        // void UpdateSetting(Setting setting);
     }
 }

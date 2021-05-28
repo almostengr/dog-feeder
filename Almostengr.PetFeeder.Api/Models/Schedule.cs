@@ -4,11 +4,8 @@ using Almostengr.PetFeeder.Api.Enums;
 
 namespace Almostengr.PetFeeder.Api.Models
 {
-    public class Schedule
+    public class Schedule : ModelBase
     {
-        [Key]
-        public int Id { get; set; }
-
         [Required]
         public DateTime ScheduledTime { get; set; }
         public bool IsActive { get; set; } = true;

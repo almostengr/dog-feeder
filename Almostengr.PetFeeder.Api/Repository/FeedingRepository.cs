@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.Api.Repository
 {
-    public class FeedingRepository : BaseRepository, IFeedingRepository
+    public class FeedingRepository : RepositoryBase<Feeding>, IFeedingRepository
     {
         private readonly PetFeederDbContext _dbContext;
 
@@ -19,12 +19,12 @@ namespace Almostengr.PetFeeder.Api.Repository
             _dbContext = dbContext;
         }
 
-        public async Task<List<Feeding>> GetAllFeedingsAsync()
-        {
-            return await _dbContext.Feedings
-                .OrderByDescending(f => f.Timestamp)
-                .ToListAsync();
-        }
+        // public async Task<List<Feeding>> GetAllFeedingsAsync()
+        // {
+        //     return await _dbContext.Feedings
+        //         .OrderByDescending(f => f.Timestamp)
+        //         .ToListAsync();
+        // }
 
         public async Task<List<Feeding>> GetRecentFeedingsAsync()
         {
@@ -36,23 +36,23 @@ namespace Almostengr.PetFeeder.Api.Repository
                 .ToListAsync();
         }
 
-        public async Task<Feeding> GetFeedingByIdAsync(int? id)
-        {
-            return await _dbContext.Feedings.FirstOrDefaultAsync(f => f.Id == id);
-        }
+        // public async Task<Feeding> GetFeedingByIdAsync(int? id)
+        // {
+        //     return await _dbContext.Feedings.FirstOrDefaultAsync(f => f.Id == id);
+        // }
 
-        public async Task CreateFeedingAsync(Feeding feeding)
-        {
-            await _dbContext.Feedings.AddAsync(feeding);
-        }
+        // public async Task CreateFeedingAsync(Feeding feeding)
+        // {
+        //     await _dbContext.Feedings.AddAsync(feeding);
+        // }
 
-        public async Task<List<Feeding>> FindOldFeedings()
-        {
-            DateTime currentDateTime = DateTime.Now;
-            return await _dbContext.Feedings
-                .Where(f => f.Timestamp <= currentDateTime.AddDays(-90))
-                .ToListAsync();
-        }
+        // public async Task<List<Feeding>> FindOldFeedings()
+        // {
+        //     DateTime currentDateTime = DateTime.Now;
+        //     return await _dbContext.Feedings
+        //         .Where(f => f.Timestamp <= currentDateTime.AddDays(-90))
+        //         .ToListAsync();
+        // }
 
     }
 }

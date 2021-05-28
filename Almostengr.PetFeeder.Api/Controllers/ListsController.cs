@@ -11,7 +11,6 @@ namespace Almostengr.PetFeeder.Api.Controllers
     {
         public ListsController(ILogger<BaseController> logger) : base(logger)
         {
-
         }
 
         [HttpGet]

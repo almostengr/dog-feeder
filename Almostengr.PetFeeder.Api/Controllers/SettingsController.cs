@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Models;
@@ -24,7 +25,7 @@ namespace Almostengr.PetFeeder.Api.Controllers
         {
             _logger.LogInformation("Getting all settings");
 
-            IList<Setting> settings = await _repository.GetAllSettingsAsync();
+            IList<Setting> settings = await _repository.GetAllAsync();
             return Ok(settings);
         }
 
@@ -53,8 +54,28 @@ namespace Almostengr.PetFeeder.Api.Controllers
 
             setting.Type = existingSetting.Type;
 
-            _repository.UpdateSetting(setting);
+            _repository.Update(setting);
             await _repository.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<IList<Setting>>> UpdateAllSettingsAsync(IList<Setting> settings)
+        {
+            try
+            {
+                foreach (Setting setting in settings)
+                {
+                    _repository.Update(setting);
+                }
+                await _repository.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                StatusCode(500);
+            }
 
             return NoContent();
         }

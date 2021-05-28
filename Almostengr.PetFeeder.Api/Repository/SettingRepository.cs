@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.Api.Repository
 {
-    public class SettingRepository : BaseRepository, ISettingRepository
+    public class SettingRepository : RepositoryBase<Setting>, ISettingRepository
     {
         private readonly PetFeederDbContext _dbContext;
         private readonly ILogger<SettingRepository> _logger;
@@ -18,11 +18,11 @@ namespace Almostengr.PetFeeder.Api.Repository
             _logger = logger;
         }
 
-        public async Task<List<Setting>> GetAllSettingsAsync()
-        {
-            _logger.LogInformation("Getting all setings");
-            return await _dbContext.Settings.ToListAsync();
-        }
+        // public async Task<List<Setting>> GetAllSettingsAsync()
+        // {
+        //     _logger.LogInformation("Getting all setings");
+        //     return await _dbContext.Settings.ToListAsync();
+        // }
 
         public async Task<Setting> GetSettingByKeyAsync(string key)
         {
@@ -30,11 +30,11 @@ namespace Almostengr.PetFeeder.Api.Repository
             return await _dbContext.Settings.FirstOrDefaultAsync(s => s.Key == key);
         }
 
-        public void UpdateSetting(Setting setting)
-        {
-            _logger.LogInformation("Updating setting " + setting.Key);
-            _dbContext.Settings.Update(setting);
-        }
+        // public void UpdateSetting(Setting setting)
+        // {
+        //     _logger.LogInformation("Updating setting " + setting.Key);
+        //     _dbContext.Settings.Update(setting);
+        // }
 
     }
 }

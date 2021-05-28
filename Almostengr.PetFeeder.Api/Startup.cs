@@ -1,5 +1,7 @@
 using Almostengr.PetFeeder.Api.Data;
+using Almostengr.PetFeeder.Api.Relays;
 using Almostengr.PetFeeder.Api.Repository;
+using Almostengr.PetFeeder.Api.InputSensor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +35,12 @@ namespace Almostengr.PetFeeder.Api
             services.AddScoped<IScheduleRepository, ScheduleRepository>();
             services.AddScoped<ISettingRepository, SettingRepository>();
             services.AddScoped<IWateringRepository, WateringRepository>();
+            
+            services.AddSingleton<IFoodBowlRelay, FoodBowlRelay>();
+            services.AddSingleton<IWaterBowlRelay, WaterBowlRelay>();
+            services.AddSingleton<INightLightRelay, NightLightRelay>();
+
+            services.AddSingleton<IWaterInputSensor, WaterSignalInput>();
 
             services.AddControllers();
         }

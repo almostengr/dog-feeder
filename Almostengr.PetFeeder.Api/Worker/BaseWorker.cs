@@ -1,52 +1,58 @@
 using System;
-using System.Device.Gpio;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Models;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Almostengr.PetFeeder.Api.Worker
 {
     public abstract class BaseWorker : BackgroundService
     {
         private readonly ILogger<BaseWorker> _logger;
-        private readonly GpioController _gpio;
-        internal PinValue GpioOn = PinValue.High;
-        internal PinValue GpioOff = PinValue.Low;
         internal Uri ApiUri = new Uri("https://localhost:5000");
 
-        protected BaseWorker(ILogger<BaseWorker> logger, GpioController gpio)
+        protected BaseWorker(ILogger<BaseWorker> logger)
         {
             _logger = logger;
-            _gpio = gpio;
         }
 
-        internal bool IsWaterLevelLow(int vccPinNumber, int gndPinNumber)
+
+        internal async Task PostAsync<Entity>(string route, Entity entity) where Entity : ModelBase
         {
-            _gpio.Write(vccPinNumber, GpioOn);
-
-            var sensorResult = _gpio.Read(gndPinNumber);
-
-            _gpio.Write(vccPinNumber, GpioOff);
-
-            if (sensorResult == GpioOff)
+            try
             {
-                return true;
-            }
+                // SensorState sensorState = new SensorState()
+                var jsonSerialized = JsonConvert.SerializeObject(entity);
+                // StringContent stringContent = new StringContent(jsonSerialized, Encoding.ASCII, "application/json");
 
-            return false;
+                using (var stringContent = new StringContent(jsonSerialized, Encoding.ASCII, "application/json"))
+                {
+                    using (var httpClient = new HttpClient())
+                    {
+                        httpClient.BaseAddress = ApiUri;
+
+                        HttpResponseMessage response = await httpClient.PostAsync(route, stringContent);
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            Entity entityResponse = JsonConvert.DeserializeObject<Entity>(response.Content.ReadAsStringAsync().Result);
+                            _logger.LogInformation(response.StatusCode.ToString());
+                        }
+                        else
+                        {
+                            _logger.LogError(response.StatusCode.ToString());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
         }
         
-        public Alarm AlarmTriggered(string type, string message)
-        {
-            Alarm alarm = new Alarm();
-            alarm.Created = DateTime.Now;
-            alarm.IsActive = true;
-            alarm.Message = message;
-            alarm.Type = type;
-
-            _logger.LogWarning(message);
-
-            return alarm;
-        }
     }
 }

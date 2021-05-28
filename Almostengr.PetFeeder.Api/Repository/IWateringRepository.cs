@@ -4,12 +4,12 @@ using Almostengr.PetFeeder.Api.Models;
 
 namespace Almostengr.PetFeeder.Api.Repository
 {
-    public interface IWateringRepository : IBaseRepository
+    public interface IWateringRepository : IRepositoryBase<Watering>
     {
-        Task CreateWateringAsync(Watering watering);
-        Task<List<Watering>> GetAllWateringsAsync();
-        Task<Watering> GetWateringByIdAsync(int? id);
+        // Task CreateWateringAsync(Watering watering);
+        // Task<List<Watering>> GetAllWateringsAsync();
+        // Task<Watering> GetWateringByIdAsync(int? id);
         Task<List<Watering>> GetRecentWateringsAsync();
-        void UpdateWatering(Watering watering);
+        // void UpdateWatering(Watering watering);
     }
 }

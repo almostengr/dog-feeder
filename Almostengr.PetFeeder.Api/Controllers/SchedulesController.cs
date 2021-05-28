@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Models;
@@ -24,7 +25,7 @@ namespace Almostengr.PetFeeder.Api.Controllers
         {
             _logger.LogInformation("Getting all schedules");
 
-            var schedules = await _repository.GetAllSchedulesAsync();
+            var schedules = await _repository.GetAllAsync();
             return Ok(schedules);
         }
 
@@ -51,17 +52,18 @@ namespace Almostengr.PetFeeder.Api.Controllers
         {
             _logger.LogInformation("Getting single schedule");
 
-            var schedule = await _repository.GetScheduleByIdAsync(id);
+            var schedule = await _repository.GetByIdAsync(id);
 
             if (schedule == null)
             {
                 return NotFound();
             }
+            
             return Ok(schedule);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Schedule>> CreateScheduleAsync(Schedule model)
+        public async Task<ActionResult<Schedule>> CreateScheduleAsync(Schedule schedule)
         {
             _logger.LogInformation("Creating schedule");
 
@@ -70,10 +72,17 @@ namespace Almostengr.PetFeeder.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _repository.CreateScheduleAsync(model);
-            await _repository.SaveChangesAsync();
+            try
+            {
+                await _repository.CreateAsync(schedule);
+                await _repository.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500);
+            }
 
-            // return CreatedAtRoute(nameof(schedule), new {Id = schedule.Id}, schedule);
             return StatusCode(201);
         }
 
@@ -82,14 +91,22 @@ namespace Almostengr.PetFeeder.Api.Controllers
         {
             _logger.LogInformation("Deleting schedule");
 
-            var existingSchedule = await _repository.GetScheduleByIdAsync(id);
+            Schedule existingSchedule = await _repository.GetByIdAsync(id);
             if (existingSchedule == null)
             {
                 return NotFound();
             }
 
-            _repository.DeleteSchedule(existingSchedule);
-            await _repository.SaveChangesAsync();
+            try
+            {
+                _repository.Delete(existingSchedule);
+                await _repository.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500);
+            }
 
             return NoContent();
         }
@@ -99,14 +116,28 @@ namespace Almostengr.PetFeeder.Api.Controllers
         {
             _logger.LogInformation("Updating schedule");
 
-            var existingSchedule = await _repository.GetScheduleByIdAsync(id);
+            if (ModelState.IsValid == false)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Schedule existingSchedule = await _repository.GetByIdAsync(id);
+
             if (existingSchedule == null)
             {
                 return NotFound();
             }
 
-            _repository.UpdateSchedule(schedule);
-            await _repository.SaveChangesAsync();
+            try
+            {
+                _repository.Update(schedule);
+                await _repository.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500);
+            }
 
             return NoContent();
         }
