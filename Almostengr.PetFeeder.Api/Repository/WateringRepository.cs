@@ -11,34 +11,13 @@ namespace Almostengr.PetFeeder.Api.Repository
 {
     public class WateringRepository : RepositoryBase<Watering>, IWateringRepository
     {
-        // private readonly ILogger<WateringRepository> _logger;
         private readonly PetFeederDbContext _dbContext;
 
         public WateringRepository(ILogger<WateringRepository> logger, PetFeederDbContext dbContext) :
             base(dbContext, logger)
         {
-            // _logger = logger;
             _dbContext = dbContext;
         }
-
-        // public async Task CreateWateringAsync(Watering watering)
-        // {
-        //     await _dbContext.Waterings.AddAsync(watering);
-        // }
-
-        // public async Task<List<Watering>> GetAllWateringsAsync()
-        // {
-        //     return await _dbContext.Waterings
-        //         .OrderByDescending(w => w.Timestamp)
-        //         .ToListAsync();
-        // }
-
-        // public async Task<Watering> GetWateringByIdAsync(int? wateringId)
-        // {
-        //     return await _dbContext.Waterings
-        //         .Where(w => w.Id == wateringId)
-        //         .FirstOrDefaultAsync();
-        // }
 
         public async Task<List<Watering>> GetRecentWateringsAsync()
         {
@@ -50,9 +29,5 @@ namespace Almostengr.PetFeeder.Api.Repository
                 .ToListAsync();
         }
 
-        // public void UpdateWatering(Watering watering)
-        // {
-        //     _dbContext.Waterings.Update(watering);
-        // }
     }
 }

@@ -43,13 +43,13 @@ namespace Almostengr.PetFeeder.Api.Relays
             switch (direction)
             {
                 case MotorDirection.Forward:
-                    _gpio.Write(FoodForwardRelay, GpioPin.On);
-                    _gpio.Write(FoodBackwardRelay, GpioPin.Off);
+                    _gpio.Write(FoodForwardRelay, GpioOutput.On);
+                    _gpio.Write(FoodBackwardRelay, GpioOutput.Off);
                     break;
 
                 case MotorDirection.Backward:
-                    _gpio.Write(FoodForwardRelay, GpioPin.Off);
-                    _gpio.Write(FoodBackwardRelay, GpioPin.On);
+                    _gpio.Write(FoodForwardRelay, GpioOutput.Off);
+                    _gpio.Write(FoodBackwardRelay, GpioOutput.On);
                     break;
 
                 default:
@@ -58,8 +58,8 @@ namespace Almostengr.PetFeeder.Api.Relays
 
             await Task.Delay(TimeSpan.FromSeconds(onTime));
 
-            _gpio.Write(FoodForwardRelay, GpioPin.Off);
-            _gpio.Write(FoodBackwardRelay, GpioPin.Off);
+            _gpio.Write(FoodForwardRelay, GpioOutput.Off);
+            _gpio.Write(FoodBackwardRelay, GpioOutput.Off);
         }
     }
 }

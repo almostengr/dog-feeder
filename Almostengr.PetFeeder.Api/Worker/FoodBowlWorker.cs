@@ -32,8 +32,7 @@ namespace Almostengr.PetFeeder.Api.Worker
 
                     Schedule schedule = IsTimeToFeed(schedules);
 
-                    // if time to feed, then call feeding api
-                    if (schedule != null)
+                    if (schedule != null) // if time to feed, then call feeding api
                     {
                         await DoFeedPetAsync(schedule);
                     }

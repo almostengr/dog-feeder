@@ -81,7 +81,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
             }
         }
 
-        public async Task<T> UpdateAsync<T>(string route, HttpContent content) where T : class
+        public async Task<T> PutAsync<T>(string route, HttpContent content) where T : class
         {
             T entity = null;
 

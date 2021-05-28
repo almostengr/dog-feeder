@@ -3,17 +3,17 @@
 <h1>All Feedings</h1>
 <partial name="_FeedingNavigation">
 
-<div class="row">
-    <div class="col-2 bg-dark text-white">Date/Time</div>
-    <div class="col-2 bg-dark text-white">Scheduled?</div>
-</div>
-
-@foreach (var item in Model)
-{
-    string wasScheduled = item.ScheduleId > 0 ? "Yes" : "No";
-
     <div class="row">
-    <div class="col-2 px-1">@item.Timestamp</div>
-    <div class="col-2 px-1">@wasScheduled</div>
-</div>
-}
+        <div class="col-2 bg-dark text-white">Date/Time</div>
+        <div class="col-2 bg-dark text-white">Scheduled?</div>
+    </div>
+
+    @foreach (var item in Model)
+    {
+        string wasScheduled = item.ScheduleId > 0 ? "Yes" : "No";
+
+        <div class="row">
+            <div class="col-2 px-1">@item.Timestamp</div>
+            <div class="col-2 px-1">@wasScheduled</div>
+        </div>
+    }

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Web.Models;
@@ -26,20 +25,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
             ViewData["Title"] = "All Feedings";
             List<FeedingViewModel> feedings = null;
 
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = _appSettings.ApiBaseUrl;
-                var response = await client.GetAsync("feedings/all");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    feedings = JsonConvert.DeserializeObject<List<FeedingViewModel>>(response.Content.ReadAsStringAsync().Result);
-                }
-                else
-                {
-                    feedings = new List<FeedingViewModel>();
-                }
-            }
+            feedings = await GetAsync<List<FeedingViewModel>>("feedings/all");
 
             return View(feedings);
         }
@@ -49,22 +35,15 @@ namespace Almostengr.PetFeeder.Web.Controllers
             ViewData["Title"] = "Feedings";
             List<FeedingViewModel> feedings = null;
 
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = _appSettings.ApiBaseUrl;
-                var response = await client.GetAsync("feedings");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    feedings = JsonConvert.DeserializeObject<List<FeedingViewModel>>(response.Content.ReadAsStringAsync().Result);
-                }
-                else
-                {
-                    feedings = new List<FeedingViewModel>();
-                }
-            }
+            feedings = await GetAsync<List<FeedingViewModel>>("feedings");
 
             return View(feedings);
+        }
+
+        public async Task<IActionResult> Create(FeedingViewModel feeding)
+        {
+            // await PostAsync<FeedingViewModel>("feeding", );
+            return View();
         }
 
     }

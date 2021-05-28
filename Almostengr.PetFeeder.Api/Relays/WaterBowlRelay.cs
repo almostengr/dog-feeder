@@ -22,13 +22,13 @@ namespace Almostengr.PetFeeder.Api.Relays
         public void OpenWaterValve()
         {
             _logger.LogInformation("Turning on water");
-            _gpio.Write(WaterValveRelay, GpioPin.On);
+            _gpio.Write(WaterValveRelay, GpioOutput.On);
         }
 
         public void CloseWaterValve()
         {
             _logger.LogInformation("Turning off water");
-            _gpio.Write(WaterValveRelay, GpioPin.Off); // turn off water
+            _gpio.Write(WaterValveRelay, GpioOutput.Off); // turn off water
         }
 
     }

@@ -17,10 +17,6 @@ namespace Almostengr.PetFeeder.Api.Worker
         private readonly IWaterInputSensor _sensor;
         private readonly IWateringRepository _repository;
 
-        // private const int WaterBowlVcc = 20;
-        // private const int WaterBowlGnd = 21;
-        // private const int WaterRelay = 25;
-
         public WaterBowlWorker(ILogger<WaterBowlWorker> logger, IWateringRepository repository,
             IWaterBowlRelay relay, IWaterInputSensor sensor) : base(logger)
         {
@@ -29,28 +25,6 @@ namespace Almostengr.PetFeeder.Api.Worker
             _relay = relay;
             _sensor = sensor;
         }
-
-        // public override Task StartAsync(CancellationToken cancellationToken)
-        // {
-        //     // initialize GPIO pins
-        //     _gpio.OpenPin(WaterBowlVcc, PinMode.Output);
-        //     _gpio.OpenPin(WaterBowlGnd, PinMode.Input);
-        //     _gpio.OpenPin(WaterRelay, PinMode.Output);
-
-        //     return base.StartAsync(cancellationToken);
-        // }
-
-        // public override Task StopAsync(CancellationToken cancellationToken)
-        // {
-        //     CloseWaterValve();
-
-        //     // release GPIO pins
-        //     _gpio.ClosePin(WaterBowlVcc);
-        //     _gpio.ClosePin(WaterBowlGnd);
-        //     _gpio.ClosePin(WaterRelay);
-
-        //     return base.StopAsync(cancellationToken);
-        // }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -63,7 +37,7 @@ namespace Almostengr.PetFeeder.Api.Worker
                 {
                     TimeSpan currentTime = DateTime.Now.TimeOfDay;
                     Watering watering = null;
-                    bool isWaterLow = _sensor.IsWaterLevelLow();
+                    bool isWaterLow = _sensor.IsWaterBowlLow();
 
                     if (currentTime >= earliestTime && currentTime <= latestTime && isWaterLow == true)
                     {
@@ -80,13 +54,13 @@ namespace Almostengr.PetFeeder.Api.Worker
                     _logger.LogError(ex.Message);
                 }
 
-                await Task.Delay(TimeSpan.FromHours(1));
+                await Task.Delay(TimeSpan.FromMinutes(MonitorWorkerDelayMins), stoppingToken);
             }
         }
 
-        private Watering RefillWaterBowl()
+        public Watering RefillWaterBowl()
         {
-            bool isWaterLow = _sensor.IsWaterLevelLow();
+            bool isWaterLow = _sensor.IsWaterBowlLow();
             Watering watering = new Watering();
             int counter = 0;
 
@@ -98,7 +72,7 @@ namespace Almostengr.PetFeeder.Api.Worker
 
                 Task.Delay(TimeSpan.FromMilliseconds(250));
 
-                isWaterLow = _sensor.IsWaterLevelLow();
+                isWaterLow = _sensor.IsWaterBowlLow();
 
                 counter++; // to prevent bowl from overflowing
             }

@@ -22,13 +22,13 @@ namespace Almostengr.PetFeeder.Api.Relays
 
         public async Task NightLightOnAsync()
         {
-            _gpio.Write(LightRelay, GpioPin.On);
+            _gpio.Write(LightRelay, GpioOutput.On);
             await Task.Delay(TimeSpan.FromMilliseconds(100));
         }
 
         public async Task NightLightOffAsync()
         {
-            _gpio.Write(LightRelay, GpioPin.Off);
+            _gpio.Write(LightRelay, GpioOutput.Off);
             await Task.Delay(TimeSpan.FromMilliseconds(100));
         }
     }

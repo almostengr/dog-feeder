@@ -19,50 +19,15 @@ namespace Almostengr.PetFeeder.Api.Repository
             _dbContext = dbContext;
         }
 
-        // public async Task<List<Schedule>> GetAllSchedulesAsync()
-        // {
-        //     return await _dbContext.Schedules.ToListAsync();
-        // }
-
         public async Task<List<Schedule>> GetAllActiveSchedulesAsync()
         {
             return await _dbContext.Schedules.Where(s => s.IsActive == true).ToListAsync();
         }
 
-        // public async Task<Schedule> GetScheduleByIdAsync(int? scheduleId)
-        // {
-        //     if (scheduleId == null)
-        //     {
-        //         throw new ArgumentNullException(nameof(scheduleId));
-        //     }
-
-        //     return await _dbContext.Schedules.FirstOrDefaultAsync(s => s.Id == scheduleId);
-        // }
-
-        // public async Task CreateScheduleAsync(Schedule entity)
-        // {
-        //     await _dbContext.Schedules.AddAsync(entity);
-        // }
-
-        // public void DeleteSchedule(Schedule schedule)
-        // {
-        //     if (schedule == null)
-        //     {
-        //         throw new ArgumentNullException(nameof(schedule));
-        //     }
-
-        //     _dbContext.Schedules.Remove(schedule);
-        // }
-
         public async Task<List<Schedule>> GetAllInactiveSchedulesAsync()
         {
             return await _dbContext.Schedules.Where(s => s.IsActive == false).ToListAsync();
         }
-
-        // public void UpdateSchedule(Schedule schedule)
-        // {
-        //     _dbContext.Schedules.Update(schedule);
-        // }
 
         public async Task<List<Schedule>> GetOldOneTimeSchedulesAsync()
         {

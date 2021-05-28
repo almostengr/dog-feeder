@@ -5,7 +5,7 @@ using Almostengr.PetFeeder.Api.Models;
 
 namespace Almostengr.PetFeeder.Api.Worker
 {
-    public interface IFoodBowlWorker
+    public interface IFoodBowlWorker : IBaseWorker
     {
         bool DoesScheduleFrequencyMatchDayOfWeek(DayFrequency frequency);
         Schedule IsTimeToFeed(List<Schedule> schedules);

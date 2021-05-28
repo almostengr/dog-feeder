@@ -23,11 +23,12 @@ namespace Almostengr.PetFeeder.Api
                 .ConfigureServices(services => 
                 {
                     services.AddSingleton<GpioController>();
-                    // services.AddScoped<IFoodStorageWorker, FoodStorageWorker>();
-                    // services.AddScoped<IWaterStorageWorker, WaterStorageWorker>();
+
+                    services.AddScoped<IFoodStorageWorker, FoodStorageWorker>();
+                    services.AddScoped<IWaterStorageWorker, WaterStorageWorker>();
+                    
                     services.AddScoped<IFoodBowlWorker, FoodBowlWorker>();
                     services.AddScoped<IWaterBowlWorker, WaterBowlWorker>();
-                    // services.AddScoped<INightLightWorker, NightLightWorker>();
                 });
     }
 }

@@ -1,12 +1,6 @@
-using System.Threading;
-using System.Threading.Tasks;
-
 namespace Almostengr.PetFeeder.Api.Worker
 {
-    public interface IFoodStorageWorker
+    public interface IFoodStorageWorker : IBaseWorker
     {
-        void Dispose();
-        Task StartAsync(CancellationToken cancellationToken);
-        Task StopAsync(CancellationToken cancellationToken);
     }
 }

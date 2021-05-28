@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.Api.InputSensor
 {
-    public class InputSensorBase
+    public class InputSensorBase : IInputSensorBase
     {
         private readonly GpioController _gpio;
         private readonly ILogger<InputSensorBase> _logger;
@@ -18,24 +18,23 @@ namespace Almostengr.PetFeeder.Api.InputSensor
             _logger = logger;
         }
 
-        internal bool IsWaterLevelLow(int vccPinNumber, int gndPinNumber)
+        public bool IsWaterLevelLow(int vccPinNumber, int gndPinNumber)
         {
-            _gpio.Write(vccPinNumber, GpioPin.On);
+            _gpio.Write(vccPinNumber, GpioOutput.On);
 
             Task.Delay(TimeSpan.FromMilliseconds(250));
 
             var sensorResult = _gpio.Read(gndPinNumber);
 
-            _gpio.Write(vccPinNumber, GpioPin.Off);
+            _gpio.Write(vccPinNumber, GpioOutput.Off);
 
-            if (sensorResult == GpioPin.Off)
+            if (sensorResult == GpioOutput.Off)
             {
                 return true;
             }
 
             return false;
         }
-
 
         public Alarm AlarmTriggered(string type, string message)
         {

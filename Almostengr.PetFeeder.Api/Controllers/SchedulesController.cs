@@ -79,8 +79,8 @@ namespace Almostengr.PetFeeder.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
-                return StatusCode(500);
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(500, "A problem occurred when handling your request");
             }
 
             return StatusCode(201);
@@ -104,8 +104,8 @@ namespace Almostengr.PetFeeder.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
-                return StatusCode(500);
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(500, "A problem occurred when handling your request");
             }
 
             return NoContent();
@@ -135,8 +135,8 @@ namespace Almostengr.PetFeeder.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
-                return StatusCode(500);
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(500, "A problem occurred when handling your request");
             }
 
             return NoContent();

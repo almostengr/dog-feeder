@@ -2,8 +2,16 @@
 
 <h1>Latest Feedings</h1>
 
-<div>
-    <a class="nav-link text-dark" asp-area="" asp-controller="feeding" asp-action="all">All Feedings</a>
+<div class="row">
+    <div class="col-10">
+        <a class="nav-link text-dark" asp-area="" asp-controller="feeding" asp-action="all">All Feedings</a>
+    </div>
+    <div class="col-2">
+        <form method="POST" action="/feedings">
+            <input type="hidden" name="ScheduleId" id="ScheduleId" value="0" />
+            <button type="submit" id="submit" class="btn btn-primary">Feed Now</button>
+        </form>
+    </div>
 </div>
 
 <div class="row">

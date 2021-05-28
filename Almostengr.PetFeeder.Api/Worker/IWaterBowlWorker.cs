@@ -1,10 +1,9 @@
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
+using Almostengr.PetFeeder.Api.Models;
 
 namespace Almostengr.PetFeeder.Api.Worker
 {
-    public interface IWaterBowlWorker
+    public interface IWaterBowlWorker : IBaseWorker
     {
+        Watering RefillWaterBowl();
     }
 }

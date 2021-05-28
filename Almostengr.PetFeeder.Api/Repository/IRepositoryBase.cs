@@ -6,7 +6,6 @@ namespace Almostengr.PetFeeder.Api.Repository
 {
     public interface IRepositoryBase<Entity> where Entity : ModelBase
     {
-        // public async Task Delete(int id)
         void Delete(Entity entity);
         Task<IList<Entity>> GetAllAsync();
         Task<Entity> GetByIdAsync(int id);

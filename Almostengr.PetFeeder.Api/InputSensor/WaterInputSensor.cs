@@ -12,7 +12,7 @@ namespace Almostengr.PetFeeder.Api.InputSensor
         {
         }
 
-        public bool IsWaterLevelLow()
+        public bool IsWaterBowlLow()
         {
             return base.IsWaterLevelLow(WaterBowlVcc, WaterBowlGnd);
         }

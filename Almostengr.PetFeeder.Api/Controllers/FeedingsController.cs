@@ -59,7 +59,7 @@ namespace Almostengr.PetFeeder.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Feeding>> CreateFeedingAsync(Feeding feeding)
+        public async Task<ActionResult<Feeding>> CreateFeedingAsync([FromBody] Feeding feeding)
         {
             if (ModelState.IsValid == false)
             {
@@ -75,13 +75,13 @@ namespace Almostengr.PetFeeder.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
-                return StatusCode(500);
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(500, "A problem occurred when handling your request");
             }
 
             return StatusCode(201);
+            // return CreatedAtRoute(feeding, )
         }
-
 
     }
 }

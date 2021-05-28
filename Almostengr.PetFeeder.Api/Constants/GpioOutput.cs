@@ -2,12 +2,12 @@ using System.Device.Gpio;
 
 namespace Almostengr.PetFeeder.Api.Constants
 {
-    public static class GpioPin
+    public static class GpioOutput
     {
         public readonly static PinValue On ;
         public readonly static PinValue Off ;
 
-        static GpioPin(){
+        static GpioOutput(){
             On = PinValue.High;
             Off = PinValue.Low;
         }

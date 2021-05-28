@@ -1,7 +1,7 @@
 namespace Almostengr.PetFeeder.Api.InputSensor
 {
-    public interface IWaterInputSensor
+    public interface IWaterInputSensor : IInputSensorBase
     {
-        bool IsWaterLevelLow();
+        bool IsWaterBowlLow();
     }
 }

@@ -18,23 +18,11 @@ namespace Almostengr.PetFeeder.Api.Repository
             _logger = logger;
         }
 
-        // public async Task<List<Setting>> GetAllSettingsAsync()
-        // {
-        //     _logger.LogInformation("Getting all setings");
-        //     return await _dbContext.Settings.ToListAsync();
-        // }
-
         public async Task<Setting> GetSettingByKeyAsync(string key)
         {
             _logger.LogInformation("Getting single setting");
             return await _dbContext.Settings.FirstOrDefaultAsync(s => s.Key == key);
         }
-
-        // public void UpdateSetting(Setting setting)
-        // {
-        //     _logger.LogInformation("Updating setting " + setting.Key);
-        //     _dbContext.Settings.Update(setting);
-        // }
 
     }
 }

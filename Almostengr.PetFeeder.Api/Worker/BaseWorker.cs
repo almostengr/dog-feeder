@@ -9,10 +9,11 @@ using Newtonsoft.Json;
 
 namespace Almostengr.PetFeeder.Api.Worker
 {
-    public abstract class BaseWorker : BackgroundService
+    public abstract class BaseWorker : BackgroundService, IBaseWorker
     {
         private readonly ILogger<BaseWorker> _logger;
         internal Uri ApiUri = new Uri("https://localhost:5000");
+        internal int MonitorWorkerDelayMins = 60;
 
         protected BaseWorker(ILogger<BaseWorker> logger)
         {
@@ -20,13 +21,11 @@ namespace Almostengr.PetFeeder.Api.Worker
         }
 
 
-        internal async Task PostAsync<Entity>(string route, Entity entity) where Entity : ModelBase
+        public async Task PostAsync<Entity>(string route, Entity entity) where Entity : ModelBase
         {
             try
             {
-                // SensorState sensorState = new SensorState()
                 var jsonSerialized = JsonConvert.SerializeObject(entity);
-                // StringContent stringContent = new StringContent(jsonSerialized, Encoding.ASCII, "application/json");
 
                 using (var stringContent = new StringContent(jsonSerialized, Encoding.ASCII, "application/json"))
                 {
@@ -53,6 +52,6 @@ namespace Almostengr.PetFeeder.Api.Worker
                 _logger.LogError(ex.Message);
             }
         }
-        
+
     }
 }
