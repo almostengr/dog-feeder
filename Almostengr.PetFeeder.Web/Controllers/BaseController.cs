@@ -1,103 +1,86 @@
+using System.Net.Http.Headers;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace Almostengr.PetFeeder.Web.Controllers
 {
     public abstract class BaseController : Controller
     {
+        internal readonly HttpClient _httpClient = new HttpClient();
         private readonly ILogger<BaseController> _logger;
-        private readonly AppSettings _appSettings;
+        private readonly Encoding _encoding;
         public Uri BackEndUrl;
 
-        public BaseController(ILogger<BaseController> logger, AppSettings appSettings)
+        public BaseController(ILogger<BaseController> logger)
         {
             _logger = logger;
-            _appSettings = appSettings;
+
+            _httpClient.BaseAddress = new Uri("http://localhost:5000");
+            _httpClient.DefaultRequestHeaders.Accept.Clear();
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            // _encoding = Encoding.ASCII;
+            _encoding = Encoding.UTF8;
         }
 
-        public async Task<T> GetAsync<T>(string route) where T : class
+        public async Task<Entity> GetAsync<Entity>(string route) where Entity : class
         {
-            T entity = null;
+            Entity entity = null;
 
-            using (var client = new HttpClient())
+            var response = await _httpClient.GetAsync(route);
+
+            if (response.IsSuccessStatusCode)
             {
-                client.BaseAddress = _appSettings.ApiBaseUrl;
-
-                var response = await client.GetAsync(route);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    entity = JsonConvert.DeserializeObject<T>(response.Content.ReadAsStringAsync().Result);
-                }
-                else
-                {
-                    // entity = new T();
-                    entity = default(T);
-                }
-
-                return entity;
+                entity = JsonConvert.DeserializeObject<Entity>(response.Content.ReadAsStringAsync().Result);
             }
+
+            return entity;
         }
 
-        public async Task<T> DeleteAsync<T>(string route) where T : class
+        public async Task<Entity> DeleteAsync<Entity>(string route) where Entity : class
         {
-            T entity = null;
+            Entity entity = null;
 
-            using (var client = new HttpClient())
+            var response = await _httpClient.DeleteAsync(route);
+
+            if (response.IsSuccessStatusCode)
             {
-                client.BaseAddress = _appSettings.ApiBaseUrl;
-
-                var response = await client.DeleteAsync(route);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    entity = JsonConvert.DeserializeObject<T>(response.Content.ReadAsStringAsync().Result);
-                }
-
-                return entity;
+                entity = JsonConvert.DeserializeObject<Entity>(response.Content.ReadAsStringAsync().Result);
             }
+
+            return entity;
         }
 
-        public async Task<T> PostAsync<T>(string route, HttpContent content) where T : class
+        public async Task<Entity> CreateAsync<Entity>(string route, Entity entity) where Entity : class
         {
-            T entity = null;
+            StringContent stringContent = new StringContent(JsonConvert.SerializeObject(entity), _encoding, "application/json");
+            var response = await _httpClient.PostAsync(route, stringContent);
 
-            using (var client = new HttpClient())
+            if (response.IsSuccessStatusCode)
             {
-                client.BaseAddress = _appSettings.ApiBaseUrl;
-
-                var response = await client.PostAsync(route, content);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    entity = JsonConvert.DeserializeObject<T>(response.Content.ReadAsStringAsync().Result);
-                }
-
-                return entity;
+                entity = JsonConvert.DeserializeObject<Entity>(response.Content.ReadAsStringAsync().Result);
             }
+
+            return entity;
         }
 
-        public async Task<T> PutAsync<T>(string route, HttpContent content) where T : class
+        public async Task<Entity> UpdateAsync<Entity>(string route, Entity entity) where Entity : class
         {
-            T entity = null;
+            StringContent stringContent = new StringContent(JsonConvert.SerializeObject(entity), _encoding, "application/json");
+            var response = await _httpClient.PutAsync(route, stringContent);
+            // var response = await httpClient.PutAsync(route, content);
 
-            using (var client = new HttpClient())
+            if (response.IsSuccessStatusCode)
             {
-                client.BaseAddress = _appSettings.ApiBaseUrl;
-
-                var response = await client.PutAsync(route, content);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    entity = JsonConvert.DeserializeObject<T>(response.Content.ReadAsStringAsync().Result);
-                }
-
-                return entity;
+                entity = JsonConvert.DeserializeObject<Entity>(response.Content.ReadAsStringAsync().Result);
             }
+
+            return entity;
         }
 
     }

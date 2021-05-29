@@ -1,22 +1,18 @@
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace Almostengr.PetFeeder.Web.Controllers
 {
     public class ScheduleController : BaseController
     {
         private readonly ILogger<ScheduleController> _logger;
-        private readonly AppSettings _appSettings;
 
-        public ScheduleController(ILogger<ScheduleController> logger, AppSettings appSettings) : base(logger, appSettings)
+        public ScheduleController(ILogger<ScheduleController> logger) : base(logger)
         {
             _logger = logger;
-            _appSettings = appSettings;
         }
 
         public async Task<IActionResult> Index()
@@ -24,47 +20,49 @@ namespace Almostengr.PetFeeder.Web.Controllers
             ViewData["Title"] = "Scheduled Feeding";
             List<ScheduleViewModel> schedules = null;
 
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = _appSettings.ApiBaseUrl;
-                var response = await client.GetAsync("schedules");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    schedules = JsonConvert.DeserializeObject<List<ScheduleViewModel>>(response.Content.ReadAsStringAsync().Result);
-                }
-                else
-                {
-                    schedules = new List<ScheduleViewModel>();
-                }
-            }
+            schedules = await GetAsync<List<ScheduleViewModel>>("schedules");
 
             return View(schedules);
         }
 
-        public async Task<IActionResult> Delete()
+        [HttpPost]
+        public async Task<IActionResult> DeleteSchedule(int id)
         {
             ViewData["Title"] = "Delete Scheduled Feeding";
 
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = _appSettings.ApiBaseUrl;
-                var response = await client.DeleteAsync("schedules/delete");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    // s
-                }
-            }
+            ScheduleViewModel schedule = null;
+            schedule = await DeleteAsync<ScheduleViewModel>($"schedules/{id}");
 
             return RedirectToAction("index");
         }
 
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> CreateSchedule()
         {
-            @ViewData["Title"] = "Create Scheduled Feeding";
-
+            ViewData["Title"] = "Create Scheduled Feeding";
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateSchedule(ScheduleViewModel schedule)
+        {
+            ScheduleViewModel responseSchedule = null;
+            responseSchedule = await CreateAsync<ScheduleViewModel>("schedules", schedule);
+            return View(responseSchedule);
+        }
+
+        public async Task<IActionResult> UpdateSchedule(int id)
+        {
+            ScheduleViewModel schedule = null;
+            schedule = await GetAsync<ScheduleViewModel>($"schedules/{id}");
+            return View(schedule);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateSchedule(ScheduleViewModel schedule)
+        {
+            ScheduleViewModel responseSchedule = new ScheduleViewModel();
+            responseSchedule = await UpdateAsync<ScheduleViewModel>($"schedule/${schedule.Id}", schedule);
+            return View(responseSchedule);
         }
     }
 }

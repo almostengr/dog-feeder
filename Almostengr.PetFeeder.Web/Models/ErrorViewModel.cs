@@ -1,5 +1,3 @@
-using System;
-
 namespace Almostengr.PetFeeder.Web.Models
 {
     public class ErrorViewModel

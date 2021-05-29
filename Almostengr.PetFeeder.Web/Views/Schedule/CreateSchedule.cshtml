@@ -11,10 +11,8 @@
     <input type="hidden" name="id" id="id"/>
     <div>
         <label for="frequency">Frequency</label>
-        @* <input name="frequency" id="frequency" asp-for="@Model.Frequency" class="form-control" *@
         <select asp-for="@Model.Frequency" name="frequency" id="frequency" class="form-control" asp-items="Html.GetEnumSelectList<DayFrequency>()">
         </select>
-        
     </div>
     <div>
         <label for="isActive">Enabled</label>

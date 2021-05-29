@@ -33,6 +33,9 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="watering"
                                 asp-action="Index">Waterings</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="nightlight"
+                                asp-action="Index">Light</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="setting"
@@ -46,10 +49,10 @@
     <div class="container">
         <div class="row">
 
-        <main role="main" class="col-9 pb-3">
+        <main role="main" class="col-10 pb-3">
             @RenderBody()
         </main>
-        <sidebar class="col-3">
+        <sidebar class="col-2">
             @* <partial name="_AlarmNavigation"> *@
             <partial name="_FeedingNavigation">
             <partial name="_ScheduleNavigation">

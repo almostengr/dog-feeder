@@ -1,16 +1,16 @@
 @model List<SettingViewModel>
 
 <div class="row bg-dark text-white">
-    <div class="col-2">Key</div>
-    <div class="col-2">Value</div>
+    <div class="col">Key</div>
+    <div class="col">Value</div>
 </div>
 @foreach (var item in Model)
 {
     <div class="row">
-    <div class="col-2">@item.key</div>
-    <div class="col-2">@item.Value</div>
-    <div class="col-2">
-        <a class="nav-link text-dark" href="/settings/edit/@item.key">Edit</a>
+    <div class="col">@item.Key</div>
+    <div class="col">@item.Value</div>
+    <div class="col">
+        <a class="nav-link text-dark" href="/settings/edit/@item.Key">Edit</a>
     </div>
 </div>
 }

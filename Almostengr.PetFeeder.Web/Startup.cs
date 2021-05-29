@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -18,14 +19,21 @@ namespace Almostengr.PetFeeder.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            AppSettings appSettings = Configuration.GetSection(nameof(appSettings)).Get<AppSettings>();
-            services.AddSingleton(appSettings);
-
             services.AddRouting(options =>
             {
                 options.LowercaseUrls = true;
                 options.AppendTrailingSlash = false;
             });
+
+            // services.AddScoped<IHttpClientFactory, HttpClientFactory>();
+            services.AddHttpClient("backend", config => {
+
+                config.BaseAddress = new System.Uri("http://localhost:5000");
+                config.Timeout = new System.TimeSpan(0,0,15);
+                config.DefaultRequestHeaders.Accept.Clear();
+                config.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            });
+            
             services.AddControllersWithViews();
         }
 
