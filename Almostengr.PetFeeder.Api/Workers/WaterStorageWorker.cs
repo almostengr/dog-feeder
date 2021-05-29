@@ -6,17 +6,16 @@ using Almostengr.PetFeeder.Api.Models;
 using Almostengr.PetFeeder.Api.Repository;
 using Microsoft.Extensions.Logging;
 
-namespace Almostengr.PetFeeder.Api.Worker
+namespace Almostengr.PetFeeder.Api.Workers
 {
-
-    public class FoodStorageWorker : BaseWorker, IFoodStorageWorker
+    public class WaterStorageWorker : BaseWorker, IWaterStorageWorker
     {
-        private readonly ILogger<FoodStorageWorker> _logger;
+        private readonly ILogger<WaterStorageWorker> _logger;
         private readonly IAlarmRepository _alarmRepo;
-        private readonly IFoodStorageInputSensor _sensor;
+        private readonly IWaterInputSensor _sensor;
 
-        public FoodStorageWorker(ILogger<FoodStorageWorker> logger, IAlarmRepository alarmRepo, 
-            IFoodStorageInputSensor sensor) : base(logger)
+        public WaterStorageWorker(ILogger<WaterStorageWorker> logger, IAlarmRepository alarmRepo,
+            IWaterInputSensor sensor) : base(logger)
         {
             _logger = logger;
             _alarmRepo = alarmRepo;
@@ -27,23 +26,23 @@ namespace Almostengr.PetFeeder.Api.Worker
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                bool activeFoodAlarms = await _alarmRepo.GetActiveAlarmsExistByTypeAsync(nameof(Feeding));
+                bool activeWaterAlarms = await _alarmRepo.GetActiveAlarmsExistByTypeAsync(nameof(Feeding));
 
-                bool foodLevelLow = _sensor.IsFoodStorageLevelLow();
+                bool waterLevelLow = _sensor.IsWaterBowlLow();
 
-                if (foodLevelLow)
+                if (waterLevelLow)
                 {
                     Alarm alarm = new Alarm();
-                    alarm.Type = nameof(Feeding).ToString();
-                    alarm.Message = "Food storage is low. Please refill.";
-
+                    alarm.Type = nameof(Watering);
+                    alarm.Message = "Water storage level is low. Please refill.";
+                    
                     await _alarmRepo.CreateAsync(alarm);
                     await _alarmRepo.SaveChangesAsync();
                 }
 
-                if (activeFoodAlarms == true && foodLevelLow == false)
+                if (activeWaterAlarms == true && waterLevelLow == false)
                 {
-                    var alarms = await _alarmRepo.GetActiveAlarmsByTypeAsync(nameof(Feeding));
+                    var alarms = await _alarmRepo.GetActiveAlarmsByTypeAsync(nameof(Watering));
                     _alarmRepo.DismissAlarms(alarms);
                     await _alarmRepo.SaveChangesAsync();
                 }

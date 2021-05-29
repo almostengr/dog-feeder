@@ -23,20 +23,36 @@ namespace Almostengr.PetFeeder.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<PetFeederDbContext>(options => 
+            services.AddDbContext<PetFeederDbContext>(options =>
                 options.UseMySQL(Configuration.GetConnectionString("DbConnection")));
+
+            // repositories
 
             services.AddScoped<IAlarmRepository, AlarmRepository>();
             services.AddScoped<IFeedingRepository, FeedingRepository>();
             services.AddScoped<IScheduleRepository, ScheduleRepository>();
             services.AddScoped<ISettingRepository, SettingRepository>();
             services.AddScoped<IWateringRepository, WateringRepository>();
-            
-            services.AddSingleton<IFoodBowlRelay, FoodBowlRelay>();
-            services.AddSingleton<IWaterBowlRelay, WaterBowlRelay>();
-            services.AddSingleton<INightLightRelay, NightLightRelay>();
 
-            services.AddSingleton<IWaterInputSensor, WaterSignalInput>();
+            // relays
+
+            // services.AddSingleton<IFoodBowlRelay, FoodBowlRelay>();
+            // services.AddSingleton<IWaterBowlRelay, WaterBowlRelay>();
+            // services.AddSingleton<INightLightRelay, NightLightRelay>();
+
+            services.AddSingleton<IFoodBowlRelay, MockFoodBowlRelay>();
+            services.AddSingleton<IWaterBowlRelay, MockWaterBowlRelay>();
+            services.AddSingleton<INightLightRelay, MockNightLightRelay>();
+
+            // input sensors
+
+            // services.AddSingleton<IWaterInputSensor, WaterSignalInput>();
+            // services.AddSingleton<IFoodStorageInputSensor, FoodStorageInputSensor>();
+            // services.AddSingleton<IWaterStorageInputSensor, WaterStorageInputSensor>();
+
+            services.AddSingleton<IWaterInputSensor, MockWaterInputSensor>();
+            services.AddSingleton<IFoodStorageInputSensor, MockFoodStorageInputSensor>();
+            services.AddSingleton<IWaterStorageInputSensor, MockWaterStorageInputSensor>();
 
             services.AddControllers();
         }

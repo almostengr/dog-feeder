@@ -1,6 +1,6 @@
 using Almostengr.PetFeeder.Api.Models;
 
-namespace Almostengr.PetFeeder.Api.Worker
+namespace Almostengr.PetFeeder.Api.Workers
 {
     public interface IWaterBowlWorker : IBaseWorker
     {

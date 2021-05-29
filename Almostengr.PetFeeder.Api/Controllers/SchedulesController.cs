@@ -63,7 +63,7 @@ namespace Almostengr.PetFeeder.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Schedule>> CreateScheduleAsync(Schedule schedule)
+        public async Task<ActionResult<Schedule>> CreateScheduleAsync([FromBody] Schedule schedule)
         {
             _logger.LogInformation("Creating schedule");
 
@@ -112,7 +112,7 @@ namespace Almostengr.PetFeeder.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateScheduleAsync(int id, Schedule schedule)
+        public async Task<ActionResult> UpdateScheduleAsync(int id, [FromBody] Schedule schedule)
         {
             _logger.LogInformation("Updating schedule");
 

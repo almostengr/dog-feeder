@@ -43,7 +43,7 @@ namespace Almostengr.PetFeeder.Api.Controllers
         }
 
         [HttpPut("{key}")]
-        public async Task<ActionResult> UpdateSettingAsync(string key, Setting setting)
+        public async Task<ActionResult> UpdateSettingAsync(string key, [FromBody] Setting setting)
         {
             Setting existingSetting = await _repository.GetSettingByKeyAsync(key);
 
@@ -61,14 +61,11 @@ namespace Almostengr.PetFeeder.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<IList<Setting>>> UpdateAllSettingsAsync(IList<Setting> settings)
+        public async Task<ActionResult<IList<Setting>>> UpdateAllSettingsAsync([FromBody] IList<Setting> settings)
         {
             try
             {
-                foreach (Setting setting in settings)
-                {
-                    _repository.Update(setting);
-                }
+                _repository.UpdateRange(settings);
                 await _repository.SaveChangesAsync();
             }
             catch (Exception ex)

@@ -14,8 +14,7 @@ namespace Almostengr.PetFeeder.Api.InputSensor
 
         public bool IsWaterBowlLow()
         {
-            Random random = new Random();
-            return random.Next(0,10) > 5 ? true : false;
+            return _random.Next(0,10) > 5 ? true : false;
         }
     }
 }

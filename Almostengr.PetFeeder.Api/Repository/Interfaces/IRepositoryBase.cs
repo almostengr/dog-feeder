@@ -11,6 +11,7 @@ namespace Almostengr.PetFeeder.Api.Repository
         Task<Entity> GetByIdAsync(int id);
         Task CreateAsync(Entity entity);
         void Update(Entity entity);
+        void UpdateRange(IList<Entity> entities);
         Task SaveChangesAsync();
     }
 }

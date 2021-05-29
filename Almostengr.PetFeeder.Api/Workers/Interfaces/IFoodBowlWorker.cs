@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Enums;
 using Almostengr.PetFeeder.Api.Models;
 
-namespace Almostengr.PetFeeder.Api.Worker
+namespace Almostengr.PetFeeder.Api.Workers
 {
     public interface IFoodBowlWorker : IBaseWorker
     {

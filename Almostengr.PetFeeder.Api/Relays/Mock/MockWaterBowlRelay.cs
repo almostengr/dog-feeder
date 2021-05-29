@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.Api.Relays
@@ -14,11 +16,13 @@ namespace Almostengr.PetFeeder.Api.Relays
         public void CloseWaterValve()
         {
             _logger.LogInformation("Closing water valve");
+            Task.Delay(TimeSpan.FromSeconds(1));
         }
 
         public void OpenWaterValve()
         {
             _logger.LogInformation("Opening water valve");
+            Task.Delay(TimeSpan.FromSeconds(1));
         }
     }
 }

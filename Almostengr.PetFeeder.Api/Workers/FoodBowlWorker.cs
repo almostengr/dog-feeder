@@ -7,7 +7,7 @@ using Almostengr.PetFeeder.Api.Models;
 using Almostengr.PetFeeder.Api.Repository;
 using Microsoft.Extensions.Logging;
 
-namespace Almostengr.PetFeeder.Api.Worker
+namespace Almostengr.PetFeeder.Api.Workers
 {
     public class FoodBowlWorker : BaseWorker, IFoodBowlWorker
     {

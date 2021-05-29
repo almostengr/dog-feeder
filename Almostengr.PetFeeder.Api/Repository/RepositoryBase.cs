@@ -12,37 +12,43 @@ namespace Almostengr.PetFeeder.Api.Repository
     {
         private readonly PetFeederDbContext _dbContext;
         private readonly ILogger<RepositoryBase<Entity>> _logger;
-        private DbSet<Entity> table = null;
+        private DbSet<Entity> _table = null;
 
         public RepositoryBase(PetFeederDbContext dbContext, ILogger<RepositoryBase<Entity>> logger)
         {
             _dbContext = dbContext;
             _logger = logger;
+            _table = _dbContext.Set<Entity>();
         }
 
         public void Delete(Entity entity)
         {
-            table.Remove(entity);
+            _table.Remove(entity);
         }
 
         public async Task<IList<Entity>> GetAllAsync()
         {
-            return await table.ToListAsync();
+            return await _table.ToListAsync();
         }
 
         public async Task<Entity> GetByIdAsync(int id)
         {
-            return await table.FindAsync(id);
+            return await _table.FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task CreateAsync(Entity entity)
         {
-            await table.AddAsync(entity);
+            await _table.AddAsync(entity);
         }
 
         public void Update(Entity entity)
         {
-            _dbContext.Update(entity);
+            _table.Update(entity);
+        }
+
+        public void UpdateRange(IList<Entity> entities)
+        {
+            _table.UpdateRange(entities);
         }
 
         public async Task SaveChangesAsync()

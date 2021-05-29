@@ -18,7 +18,7 @@ namespace Almostengr.PetFeeder.Api.Relays
         public async Task<Feeding> PerformFeeding(Feeding feeding)
         {
             _logger.LogInformation("Performing feeding");
-            await Task.Delay(TimeSpan.FromSeconds(10));
+            await Task.Delay(TimeSpan.FromSeconds(5));
 
             return feeding;
         }

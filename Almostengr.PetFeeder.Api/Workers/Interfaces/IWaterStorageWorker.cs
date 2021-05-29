@@ -1,4 +1,4 @@
-namespace Almostengr.PetFeeder.Api.Worker
+namespace Almostengr.PetFeeder.Api.Workers
 {
     public interface IWaterStorageWorker : IBaseWorker
     {
