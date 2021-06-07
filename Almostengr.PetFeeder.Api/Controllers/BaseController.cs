@@ -1,5 +1,3 @@
-
-using System.Device.Gpio;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
