@@ -1,0 +1,38 @@
+@model List<ScheduleViewModel>
+
+<div class="row">
+    <div class="col-8">
+        <h1>Schedules</h1>
+    </div>
+    <div class="col-4 text-right">
+        <a href="/schedule/CreateSchedule"><button id="submit" class="btn btn-secondary">Create</button></a>
+    </div>
+</div>
+
+
+@if (Model.Count > 0)
+{
+    <div class="row bg-dark text-white">
+    <div class="col">Schedule Time</div>
+    <div class="col">Occurrence</div>
+    <div class="col">Active</div>
+    <div class="col">Actions</div>
+    </div>
+
+    @foreach (var item in Model)
+    {
+    <div class="row">
+        <div class="col">@item.ScheduledTime</div>
+        <div class="col">@item.Frequency</div>
+        <div class="col">@item.IsActive</div>
+        <div class="col">
+            <a class="nav-link text-dark" href="/schedules/edit/@item.Id">Edit</a>
+            <a class="nav-link text-dark" href="/schedule/delete/@item.Id">Delete</a>
+        </div>
+    </div>
+    }
+}
+else
+{
+    <h2 class="text-center my-2">No schedules have been created.</h2>
+}

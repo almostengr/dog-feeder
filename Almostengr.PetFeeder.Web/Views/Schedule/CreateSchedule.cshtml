@@ -1,0 +1,24 @@
+@inject DayFrequency DayFrequency
+@model ScheduleViewModel
+
+<h1>All Feedings</h1>
+
+<div>
+    <a class="nav-link text-dark" asp-area="" asp-controller="feeding" asp-action="all">All Feedings</a>
+</div>
+
+<form> 
+    <input type="hidden" name="id" id="id"/>
+    <div>
+        <label for="frequency">Frequency</label>
+        <select asp-for="@Model.Frequency" name="frequency" id="frequency" class="form-control" asp-items="Html.GetEnumSelectList<DayFrequency>()">
+        </select>
+    </div>
+    <div>
+        <label for="isActive">Enabled</label>
+        <input type="checkbox" name="isActive" asp-for="@Model.IsActive" />
+    </div>
+    <div>
+        <button type="submit">Save</button>
+    </div>
+</form>

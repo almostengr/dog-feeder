@@ -1,0 +1,122 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "build",
+                // Ask dotnet build to generate full paths for file names.
+                "/property:GenerateFullPaths=true",
+                // Do not generate summary otherwise it leads to duplicate errors in Problems panel
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Add database migration",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "ef",
+                "migrations",
+                "add",
+                "-p",
+                "Almostengr.PetFeeder.Api/",
+                "-o",
+                "${workspaceFolder}/Almostengr.PetFeeder.Api/Migrations",
+                "${input:migrationName}"
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Update database",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "ef",
+                "database",
+                "update",
+                "-p",
+                "Almostengr.PetFeeder.Api/",
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile",
+        },
+        {
+            "label": "Remove migration",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "ef",
+                "migrations",
+                "remove",
+                "${input:migrationName}",
+                "-p",
+                "Almostengr.PetFeeder.Api/",
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile",
+        },
+        {
+            "label": "watch run API",
+            "command": "dotnet",
+            "type" : "shell",
+            "args": [
+                "watch",
+                "-p",
+                "Almostengr.PetFeeder.Api/",
+                "run"
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile",
+        },
+        {
+            "label": "watch run WEB",
+            "command": "dotnet",
+            "type" : "shell",
+            "args": [
+                "watch",
+                "-p",
+                "Almostengr.PetFeeder.Web/",
+                "run"
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile",
+        },
+        {
+            "label": "Launch solution",
+            "dependsOn": ["watch run API", "watch run WEB"]
+        }
+    ],
+    "inputs": [
+        {
+            "id": "migrationName",
+            "type": "promptString",
+            "description": "Enter the name for the database migration"
+        }
+    ]
+}
