@@ -1,3 +1,4 @@
+using System;
 using System.Device.Gpio;
 using Almostengr.PetFeeder.Api.Workers;
 using Microsoft.AspNetCore.Hosting;
@@ -10,7 +11,19 @@ namespace Almostengr.PetFeeder.Api
     {
         public static void Main(string[] args)
         {
+            ShowHelp();
             CreateHostBuilder(args).Build().Run();
+        }
+
+        private static void ShowHelp()
+        {
+            Console.WriteLine("Pet Feeder Help");
+            Console.WriteLine();
+            Console.WriteLine("For more information about this Pet Feeder,");
+            Console.WriteLine("visit https://thealmostengineer.com/petfeeder");
+            Console.WriteLine();
+            Console.WriteLine(typeof(Program).Assembly.ToString());
+            Console.WriteLine();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
