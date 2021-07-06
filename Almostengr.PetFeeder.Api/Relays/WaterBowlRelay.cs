@@ -9,7 +9,6 @@ namespace Almostengr.PetFeeder.Api.Relays
 
         private readonly ILogger<WaterBowlRelay> _logger;
         private readonly GpioController _gpio;
-        private const int WaterValveRelay = 25;
 
         public WaterBowlRelay(ILogger<WaterBowlRelay> logger, GpioController gpio) : base()
         {

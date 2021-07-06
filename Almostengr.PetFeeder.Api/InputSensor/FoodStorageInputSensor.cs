@@ -11,8 +11,6 @@ namespace Almostengr.PetFeeder.Api.InputSensor
         private readonly ILogger<FoodStorageInputSensor> _logger;
         private readonly GpioController _gpio;
 
-        private const int TriggerPin = 4;
-        private const int EchoPin = 5;
 
         public FoodStorageInputSensor(ILogger<FoodStorageInputSensor> logger, GpioController gpio) : base(logger, gpio)
         {

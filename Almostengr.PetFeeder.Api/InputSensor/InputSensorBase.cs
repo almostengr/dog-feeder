@@ -12,6 +12,13 @@ namespace Almostengr.PetFeeder.Api.InputSensor
         private readonly GpioController _gpio;
         private readonly ILogger<InputSensorBase> _logger;
 
+        internal const int TriggerPin = 3;
+        internal const int EchoPin = 2;
+        internal const int WaterBowlVcc = 4;
+        internal const int WaterBowlGnd = 5;
+        internal const int WaterStorageVcc = 6;
+        internal const int WaterStorageGnd = 7;
+
         public InputSensorBase(ILogger<InputSensorBase> logger, GpioController gpio)
         {
             _gpio = gpio;

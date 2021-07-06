@@ -5,8 +5,6 @@ namespace Almostengr.PetFeeder.Api.InputSensor
 {
     public class WaterStorageInputSensor : InputSensorBase, IWaterStorageInputSensor
     {
-        private const int WaterStorageVcc = 4;
-        private const int WaterStorageGnd = 5;
 
         private readonly ILogger<WaterStorageInputSensor> _logger;
         private readonly GpioController _gpio;

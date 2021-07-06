@@ -13,9 +13,7 @@ namespace Almostengr.PetFeeder.Api.Relays
     {
         private readonly ILogger<FoodBowlRelay> _logger;
         private readonly GpioController _gpio;
-        private const int FoodForwardRelay = 14;
-        private const int FoodBackwardRelay = 15;
-
+        
         public FoodBowlRelay(ILogger<FoodBowlRelay> logger, GpioController gpio) : base()
         {
             _logger = logger;

@@ -3,8 +3,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Company>Robinson Handy and Technology Services LLC</Company>
     <Authors>Kenny Robinson</Authors>
-    <AssemblyName>Almostengr.PetFeeder.Api</AssemblyName>
-    <RootNamespace>Almostengr.PetFeeder.Api</RootNamespace>
+    <AssemblyName>Almostengr.PetFeeder.Web</AssemblyName>
+    <RootNamespace>Almostengr.PetFeeder.Web</RootNamespace>
     <VersionSuffix>$([System.DateTime]::UtcNow.ToString(yyyy.MM.dd.hhmm))</VersionSuffix>
     <AssemblyVersion Condition=" '$(VersionSuffix)' == '' ">0.0.0.1</AssemblyVersion>
     <AssemblyVersion Condition=" '$(VersionSuffix)' != '' ">$(VersionSuffix)</AssemblyVersion>

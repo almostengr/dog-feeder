@@ -8,7 +8,6 @@ namespace Almostengr.PetFeeder.Api.Relays
 {
     public class NightLightRelay : RelayBase, INightLightRelay
     {
-        private const int LightRelay = 25;
         private readonly ILogger<NightLightRelay> _logger;
         private readonly GpioController _gpio;
 
