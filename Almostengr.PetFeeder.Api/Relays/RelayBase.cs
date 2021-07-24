@@ -4,10 +4,10 @@ namespace Almostengr.PetFeeder.Api.Relays
 {
     public abstract class RelayBase : IRelayBase
     {
-        internal const int LightRelay = 11;
+        internal const int LightRelay = 23;
         internal const int FoodForwardRelay = 14;
         internal const int FoodBackwardRelay = 15;
-        internal const int WaterValveRelay = 12;
+        internal const int WaterValveRelay = 18;
 
 
         public void OpenPins(GpioController gpio, PinMode pinMode, int[] pins)

@@ -51,7 +51,7 @@ namespace Almostengr.PetFeeder.Api.Workers
                 catch (Exception ex)
                 {
                     _relay.CloseWaterValve();
-                    _logger.LogError(ex.Message);
+                    _logger.LogError(ex, ex.Message);
                 }
 
                 await Task.Delay(TimeSpan.FromMinutes(MonitorWorkerDelayMins), stoppingToken);

@@ -39,7 +39,7 @@ namespace Almostengr.PetFeeder.Api.Workers
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex.Message);
+                    _logger.LogError(ex, ex.Message);
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
@@ -124,7 +124,6 @@ namespace Almostengr.PetFeeder.Api.Workers
 
             return value;
         }
-
 
     }
 }

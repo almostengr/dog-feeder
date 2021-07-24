@@ -18,7 +18,7 @@ namespace Almostengr.PetFeeder.Api.InputSensor
 
         public bool IsWaterStorageLow()
         {
-            return IsWaterLevelLow(WaterStorageVcc, WaterStorageGnd);
+            return base.IsWaterLevelLow(WaterStorageVcc, WaterStorageGnd);
         }
     }
 }
