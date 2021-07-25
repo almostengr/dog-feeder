@@ -13,7 +13,7 @@ namespace Almostengr.PetFeeder.Api.Controllers
         {
         }
 
-        [HttpGet]
+        [HttpGet("dayfrequency")]
         public ActionResult<IList<DayFrequency>> DayFrequency()
         {
             return Enum.GetValues(typeof(DayFrequency)).Cast<DayFrequency>().ToList();

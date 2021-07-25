@@ -57,11 +57,8 @@ namespace Almostengr.PetFeeder.Api
 
             // services.AddSingleton<IWaterInputSensor, WaterSignalInput>();
             // services.AddSingleton<IFoodStorageInputSensor, FoodStorageInputSensor>();
-            // services.AddSingleton<IWaterStorageInputSensor, WaterStorageInputSensor>();
 
-            services.AddSingleton<IWaterInputSensor, MockWaterInputSensor>();
-            // services.AddSingleton<IFoodStorageInputSensor, MockFoodStorageInputSensor>();
-            services.AddSingleton<IWaterStorageInputSensor, MockWaterStorageInputSensor>();
+            services.AddSingleton<IWaterBowlInputSensor, MockWaterBowlInputSensor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -8,6 +8,7 @@ namespace Almostengr.PetFeeder.Api.Models
     {
         [Required]
         public DateTime ScheduledTime { get; set; }
+        
         public bool IsActive { get; set; } = true;
         public int FeedingAmount { get; set; }
         // public double FeedingAmount { get; set; }

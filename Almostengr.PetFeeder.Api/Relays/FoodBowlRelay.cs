@@ -8,7 +8,6 @@ using Almostengr.PetFeeder.Api.Constants;
 
 namespace Almostengr.PetFeeder.Api.Relays
 {
-
     public class FoodBowlRelay : RelayBase, IFoodBowlRelay
     {
         private readonly ILogger<FoodBowlRelay> _logger;

@@ -45,6 +45,13 @@ namespace Almostengr.PetFeeder.Api.Controllers
             return Ok(alarm);
         }
 
+        [HttpGet("type/{alarmType}")]
+        public async Task<ActionResult<IList<Alarm>>> GetAlarmsByTypeAsync(string alarmType)
+        {
+            var alarms = await _alarmRepo.GetAlarmsByTypeAsync(alarmType);
+            return Ok(alarms);
+        }
+
         [HttpGet("{id}/dismiss")]
         public async Task<ActionResult<Alarm>> DismissActiveAlarmAsync(int id)
         {

@@ -2,7 +2,6 @@ using System;
 using System.Device.Gpio;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Constants;
-using Almostengr.PetFeeder.Api.Models;
 using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.Api.InputSensor
@@ -11,13 +10,6 @@ namespace Almostengr.PetFeeder.Api.InputSensor
     {
         private readonly GpioController _gpio;
         private readonly ILogger<InputSensorBase> _logger;
-
-        internal const int TriggerPin = 3;
-        internal const int EchoPin = 2;
-        internal const int WaterBowlVcc = 4;
-        internal const int WaterBowlGnd = 5;
-        internal const int WaterStorageVcc = 6;
-        internal const int WaterStorageGnd = 7;
 
         public InputSensorBase(ILogger<InputSensorBase> logger, GpioController gpio)
         {
@@ -43,17 +35,5 @@ namespace Almostengr.PetFeeder.Api.InputSensor
             return false;
         }
 
-        public Alarm AlarmTriggered(string type, string message)
-        {
-            Alarm alarm = new Alarm();
-            alarm.Created = DateTime.Now;
-            alarm.IsActive = true;
-            alarm.Message = message;
-            alarm.Type = type;
-
-            _logger.LogWarning(message);
-
-            return alarm;
-        }
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Device.Gpio;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Models;
 using Microsoft.Extensions.Logging;

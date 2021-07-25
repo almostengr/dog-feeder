@@ -1,13 +1,12 @@
-using System;
 using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.Api.InputSensor
 {
-    public class MockWaterInputSensor : MockInputSensorBase, IWaterInputSensor
+    public class MockWaterBowlInputSensor : MockInputSensorBase, IWaterBowlInputSensor
     {
-        private readonly ILogger<MockWaterInputSensor> _logger;
+        private readonly ILogger<MockWaterBowlInputSensor> _logger;
 
-        public MockWaterInputSensor(ILogger<MockWaterInputSensor> logger) : base(logger)
+        public MockWaterBowlInputSensor(ILogger<MockWaterBowlInputSensor> logger) : base(logger)
         {
             _logger = logger;
         }

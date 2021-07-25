@@ -13,7 +13,7 @@ namespace Almostengr.PetFeeder.Api.Controllers
             _logger = logger;
         }
 
-        [HttpPost]
+        [HttpPost("shutdown")]
         public ActionResult ShutDown()
         {
             _logger.LogInformation("System shutdown requested");
@@ -36,7 +36,7 @@ namespace Almostengr.PetFeeder.Api.Controllers
             return Ok();
         }
 
-        [HttpPost]
+        [HttpPost("restart")]
         public ActionResult Restart()
         {
             _logger.LogInformation("System restart requested");

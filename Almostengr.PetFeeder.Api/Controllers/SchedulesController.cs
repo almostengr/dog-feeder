@@ -20,15 +20,15 @@ namespace Almostengr.PetFeeder.Api.Controllers
             _scheduleRepository = scheduleRepository;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<ActionResult<IList<Schedule>>> GetAllSchedulesAsync()
         {
             var schedules = await _scheduleRepository.GetAllAsync();
             return Ok(schedules);
         }
 
-        [HttpGet, Route("active")]
-        public async Task<ActionResult<IList<Schedule>>> GetActiveAsync()
+        [HttpGet]
+        public async Task<ActionResult<IList<Schedule>>> GetActiveSchedulesAsync()
         {
             var schedules = await _scheduleRepository.GetAllActiveSchedulesAsync();
             return Ok(schedules);

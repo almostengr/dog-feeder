@@ -11,5 +11,6 @@ namespace Almostengr.PetFeeder.Api.Repository
         Task<List<Alarm>> GetActiveAlarmsAsync();
         void DismissAlarms(List<Alarm> alarms);
         void DismissAlarm(Alarm alarm);
+        Task<List<Alarm>> GetAlarmsByTypeAsync(string alarmType);
     }
 }

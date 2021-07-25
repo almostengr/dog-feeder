@@ -6,7 +6,6 @@ namespace Almostengr.PetFeeder.Api.Relays
 {
     public class WaterBowlRelay : RelayBase, IWaterBowlRelay
     {
-
         private readonly ILogger<WaterBowlRelay> _logger;
         private readonly GpioController _gpio;
 
