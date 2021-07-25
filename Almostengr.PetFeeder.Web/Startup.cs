@@ -27,15 +27,6 @@ namespace Almostengr.PetFeeder.Web
                 options.AppendTrailingSlash = false;
             });
 
-            // services.AddScoped<IHttpClientFactory, HttpClientFactory>();
-            services.AddHttpClient("backend", config => {
-
-                config.BaseAddress = new System.Uri("http://localhost:5000");
-                config.Timeout = new System.TimeSpan(0,0,15);
-                config.DefaultRequestHeaders.Accept.Clear();
-                config.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            });
-
             services.AddSingleton<IFeedingClient, FeedingClient>();
             services.AddSingleton<INightLightClient, NightLightClient>();
             services.AddSingleton<IPowerClient, PowerClient>();
