@@ -5,7 +5,7 @@ using Almostengr.PetFeeder.Api.Models;
 using Microsoft.Extensions.Logging;
 using Almostengr.PetFeeder.Common.Client.Interface;
 
-namespace Almostengr.PetFeeder.Worker.Workers
+namespace Almostengr.PetFeeder.Monitor.Workers
 {
     public class NightLightWorker : BaseWorker
     {

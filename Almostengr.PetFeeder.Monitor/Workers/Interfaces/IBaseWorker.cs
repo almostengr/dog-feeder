@@ -1,4 +1,4 @@
-namespace Almostengr.PetFeeder.Worker.Workers
+namespace Almostengr.PetFeeder.Monitor.Workers
 {
     public interface IBaseWorker
     {

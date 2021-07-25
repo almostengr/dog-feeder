@@ -1,11 +1,11 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Almostengr.PetFeeder.Worker.Workers;
 using Almostengr.PetFeeder.Common.Client.Interface;
 using Almostengr.PetFeeder.Common.Client;
+using Almostengr.PetFeeder.Monitor.Workers;
 
-namespace Almostengr.PetFeeder.Worker
+namespace Almostengr.PetFeeder.Monitor
 {
     public class Program
     {

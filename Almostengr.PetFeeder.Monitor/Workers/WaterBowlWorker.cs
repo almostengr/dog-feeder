@@ -6,7 +6,7 @@ using Almostengr.PetFeeder.Api.Repository;
 using Microsoft.Extensions.Logging;
 using Almostengr.PetFeeder.Common.Client.Interface;
 
-namespace Almostengr.PetFeeder.Worker.Workers
+namespace Almostengr.PetFeeder.Monitor.Workers
 {
     public class WaterBowlWorker : BaseWorker, IWaterBowlWorker
     {
