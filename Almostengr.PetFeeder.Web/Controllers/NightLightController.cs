@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Almostengr.PetFeeder.Common.Client.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -6,8 +7,11 @@ namespace Almostengr.PetFeeder.Web.Controllers
 {
     public class NightLightController : BaseController
     {
-        public NightLightController(ILogger<BaseController> logger) : base(logger)
+        private readonly INightLightClient _nightLightClient;
+
+        public NightLightController(ILogger<BaseController> logger, INightLightClient nightLightClient) : base(logger)
         {
+            _nightLightClient = nightLightClient;
         }
 
         public IActionResult Index()
@@ -17,9 +21,9 @@ namespace Almostengr.PetFeeder.Web.Controllers
 
         [HttpPost]
         // [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LightOff()
+        public async Task<IActionResult> CreateNightLight(NightLightViewModel model)
         {
-            await CreateAsync<NightLightViewModel>("nightlight/off", new NightLightViewModel());
+            await _nightLightClient.CreateNightLightAsync(model.FromViewModel());
             return RedirectToAction("index");
         }
     }

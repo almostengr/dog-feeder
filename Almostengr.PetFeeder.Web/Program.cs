@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
@@ -7,6 +8,7 @@ namespace Almostengr.PetFeeder.Web
     {
         public static void Main(string[] args)
         {
+            Console.WriteLine(typeof(Program).Assembly.ToString());
             CreateHostBuilder(args).Build().Run();
         }
 

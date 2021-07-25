@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Almostengr.PetFeeder.Common.Client.Interface;
 using Almostengr.PetFeeder.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -7,15 +8,18 @@ namespace Almostengr.PetFeeder.Web.Controllers
 {
     public class PowerController : BaseController
     {
-        public PowerController(ILogger<BaseController> logger) : base(logger)
+        private readonly IPowerClient _powerClient;
+
+        public PowerController(ILogger<BaseController> logger, IPowerClient powerClient) : base(logger)
         {
+            _powerClient = powerClient;
         }
 
         [HttpPost]
         // [ValidateAntiForgeryToken]
         public async Task<IActionResult> SystemShutDown()
         {
-            await CreateAsync<PowerViewModel>("power/shutdown", new PowerViewModel());
+            await _powerClient.ShutDown();
             return RedirectToAction("Index", "Home");
         }
 
@@ -23,7 +27,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
         // [ValidateAntiForgeryToken]
         public async Task<IActionResult> SystemRestart()
         {
-            await CreateAsync<PowerViewModel>("power/restart", new PowerViewModel());
+            await _powerClient.Restart();
             return RedirectToAction("Index", "Home");
         }
         

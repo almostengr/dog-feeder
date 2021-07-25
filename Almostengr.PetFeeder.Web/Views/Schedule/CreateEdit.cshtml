@@ -1,4 +1,4 @@
-@inject Almostengr.PetFeeder.Api.Enums.DayFrequency DayFrequency
+@* @inject Almostengr.PetFeeder.Api.Enums.DayFrequency DayFrequency *@
 @model Almostengr.PetFeeder.Web.Models.ScheduleViewModel
 
 <h1>Feeding</h1>
@@ -7,16 +7,17 @@
     <a class="nav-link text-dark" asp-area="" asp-controller="feeding" asp-action="all">All Feedings</a>
 </div>
 
-<form method="post"asp-controller="feeding" asp-action="CreateUpdate">
+<form method="post"asp-controller="schedule" asp-action="CreateUpdate">
     <input type="hidden" name="id" id="id" value="@Model.Id" asp-for="@Model.Id" />
     <div>
         <label for="frequency">Frequency</label>
-        <select asp-for="@Model.Frequency" name="frequency" id="frequency" class="form-control" asp-items="Html.GetEnumSelectList<DayFrequency>()">
+        <select asp-for="@Model.Frequency" required name="frequency" id="frequency" class="form-control" asp-items="Html.GetEnumSelectList<DayFrequency>()">
+        <option>Select Frequency</option>
         </select>
     </div>
     <div>
         <label for="isActive">Enabled</label>
-        <input type="checkbox" name="isActive" asp-for="@Model.IsActive" />
+        <input type="checkbox" name="isActive" id="isActive" value="true" asp-for="@Model.IsActive" />
     </div>
     <div>
         <button type="submit" name="submit">Save</button>

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Almostengr.PetFeeder.Common.Client.Interface;
 using Almostengr.PetFeeder.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -8,8 +9,11 @@ namespace Almostengr.PetFeeder.Web.Controllers
 {
     public class Setting : BaseController
     {
-        public Setting(ILogger<BaseController> logger) : base(logger)
+        private readonly ISettingClient _settingClient;
+
+        public Setting(ILogger<BaseController> logger, ISettingClient settingClient) : base(logger)
         {
+            _settingClient = settingClient;
         }
 
         [HttpGet]
@@ -17,9 +21,15 @@ namespace Almostengr.PetFeeder.Web.Controllers
         {
             ViewData["Title"] = "All Settings";
             
-            List<SettingViewModel> settings = await GetAsync<List<SettingViewModel>>("settings");
+            var settings = await _settingClient.GetSettingsAsync();
 
-            return View(settings);
+            IList<SettingViewModel> models = new List<SettingViewModel>();
+            foreach(var setting in settings)
+            {
+                models.Add(new SettingViewModel(setting));
+            }
+
+            return View(models);
         }
 
         [HttpGet]
@@ -27,19 +37,21 @@ namespace Almostengr.PetFeeder.Web.Controllers
         {
             ViewData["Title"] = "Edit Setting";
 
-            SettingViewModel setting = await GetAsync<SettingViewModel>($"settings/edit/{id}");
+            var setting = await _settingClient.GetSettingAsync(id);
 
             if (setting == null)
                 return NotFound();
 
-            return View(setting);
+            SettingViewModel settingViewModel = new SettingViewModel(setting);
+
+            return View(settingViewModel);
         }
 
         [HttpPost]
         // [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateUpdate(SettingViewModel setting)
+        public async Task<IActionResult> CreateUpdate(SettingViewModel model)
         {
-            await UpdateAsync<SettingViewModel>($"settings/{setting.Id}", setting);
+            await _settingClient.UpdateSettingAsync(model.FromViewModel());
             return RedirectToAction("index");
         }
 
