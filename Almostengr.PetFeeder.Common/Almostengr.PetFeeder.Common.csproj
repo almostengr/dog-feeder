@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Company>Robinson Handy and Technology Services LLC</Company>
+    <Authors>Kenny Robinson</Authors>
+    <AssemblyName>Almostengr.PetFeeder.Common</AssemblyName>
+    <RootNamespace>Almostengr.PetFeeder.Common</RootNamespace>
+    <VersionSuffix>$([System.DateTime]::UtcNow.ToString(yyyy.MM.dd.hhmm))</VersionSuffix>
+    <AssemblyVersion Condition=" '$(VersionSuffix)' == '' ">0.0.0.1</AssemblyVersion>
+    <AssemblyVersion Condition=" '$(VersionSuffix)' != '' ">$(VersionSuffix)</AssemblyVersion>
+    <Version Condition=" '$(VersionSuffix)' == '' ">0.0.1.0</Version>
+    <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionSuffix)</Version>
+    <Copyright>Copyright © Robinson Handy and Technology Services</Copyright>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Almostengr.PetFeeder.Api\Almostengr.PetFeeder.Api.csproj" />
+  </ItemGroup>
+
+</Project>
