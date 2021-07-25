@@ -24,15 +24,15 @@ namespace Almostengr.PetFeeder.Worker.Workers
             while (!stoppingToken.IsCancellationRequested)
             {
                 TimeSpan currentTime = DateTime.Now.TimeOfDay;
+                NightLight nightlight = new NightLight();
 
                 if (currentTime >= nightTimeOn || currentTime <= nightTimeOff)
                 {
-                    NightLight nightlight = new NightLight();
                     nightlight.LightOn = true;
                     await _nightLightClient.CreateNightLightAsync(nightlight);
                 }
-                else {
-                    NightLight nightlight = new NightLight();
+                else
+                {
                     nightlight.LightOn = false;
                     await _nightLightClient.CreateNightLightAsync(nightlight);
                 }

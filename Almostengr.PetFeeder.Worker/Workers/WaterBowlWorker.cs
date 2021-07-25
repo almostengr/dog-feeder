@@ -1,29 +1,26 @@
 using System;
-using System.Device.Gpio;
 using System.Threading;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Models;
-using Almostengr.PetFeeder.Api.Relays;
 using Almostengr.PetFeeder.Api.Repository;
-using Almostengr.PetFeeder.Api.InputSensor;
 using Microsoft.Extensions.Logging;
+using Almostengr.PetFeeder.Common.Client.Interface;
 
 namespace Almostengr.PetFeeder.Worker.Workers
 {
     public class WaterBowlWorker : BaseWorker, IWaterBowlWorker
     {
         private readonly ILogger<WaterBowlWorker> _logger;
-        private readonly IWaterBowlRelay _relay;
-        private readonly IWaterInputSensor _sensor;
-        private readonly IWateringRepository _repository;
+        private readonly IWateringClient _wateringClient;
+        private readonly IAlarmClient _alarmClient;
 
         public WaterBowlWorker(ILogger<WaterBowlWorker> logger, IWateringRepository repository,
-            IWaterBowlRelay relay, IWaterInputSensor sensor) : base(logger)
+            IWateringClient wateringClient, IAlarmClient alarmClient
+            ) : base(logger)
         {
             _logger = logger;
-            _repository = repository;
-            _relay = relay;
-            _sensor = sensor;
+            _wateringClient = wateringClient;
+            _alarmClient = alarmClient;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -36,50 +33,33 @@ namespace Almostengr.PetFeeder.Worker.Workers
                 try
                 {
                     TimeSpan currentTime = DateTime.Now.TimeOfDay;
-                    Watering watering = null;
-                    bool isWaterLow = _sensor.IsWaterBowlLow();
+                    bool? isWaterLow = await _wateringClient.GetWaterBowlStatus();
 
                     if (currentTime >= earliestTime && currentTime <= latestTime && isWaterLow == true)
                     {
-                        watering = RefillWaterBowl();
-                    }
+                        Watering watering = new Watering();
+                        watering.Timestamp = DateTime.Now;
+                        await _wateringClient.CreateWateringAsync(watering);
 
-                    _relay.CloseWaterValve();
-                    await _repository.CreateAsync(watering);
-                    await _repository.SaveChangesAsync();
+                        var isWaterStillLow = await _wateringClient.GetWaterBowlStatus();
+
+                        if (isWaterStillLow == true)
+                        {
+                            Alarm alarm = new Alarm();
+                            alarm.Type = nameof(Watering).ToString();
+                            alarm.Message = "Water level is low. Please refill";
+
+                            await _alarmClient.CreateAlarmAsync(alarm);
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
-                    _relay.CloseWaterValve();
                     _logger.LogError(ex, ex.Message);
                 }
 
-                await Task.Delay(TimeSpan.FromMinutes(MonitorWorkerDelayMins), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(30), stoppingToken);
             }
-        }
-
-        public Watering RefillWaterBowl()
-        {
-            bool isWaterLow = _sensor.IsWaterBowlLow();
-            Watering watering = new Watering();
-            int counter = 0;
-
-            while (isWaterLow && counter <= 16)
-            {
-                watering.Timestamp = DateTime.Now;
-
-                _relay.OpenWaterValve();
-
-                Task.Delay(TimeSpan.FromMilliseconds(250));
-
-                isWaterLow = _sensor.IsWaterBowlLow();
-
-                counter++; // to prevent bowl from overflowing
-            }
-
-            _relay.CloseWaterValve();
-
-            return watering;
         }
 
     }

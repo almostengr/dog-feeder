@@ -11,18 +11,8 @@ namespace Almostengr.PetFeeder.Worker
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        private static void ShowHelp()
-        {
-            Console.WriteLine("Pet Feeder Help");
-            Console.WriteLine();
-            Console.WriteLine("For more information about this Pet Feeder,");
-            Console.WriteLine("visit https://thealmostengineer.com/petfeeder");
-            Console.WriteLine();
             Console.WriteLine(typeof(Program).Assembly.ToString());
-            Console.WriteLine();
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -30,15 +20,14 @@ namespace Almostengr.PetFeeder.Worker
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHostedService<FoodBowlWorker>();
-                    // services.AddHostedService<FoodStorageWorker>();
                     services.AddHostedService<NightLightWorker>();
                     services.AddHostedService<WaterBowlWorker>();
-                    services.AddHostedService<WaterStorageWorker>();
 
                     services.AddSingleton<IFeedingClient, FeedingClient>();
                     services.AddSingleton<INightLightClient, NightLightClient>();
                     services.AddSingleton<IScheduleClient, ScheduleClient>();
                     services.AddSingleton<ISettingClient, SettingClient>();
+                    services.AddSingleton<IWateringClient, WateringClient>();
                 });
     }
 }
