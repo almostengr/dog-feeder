@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Company>Robinson Handy and Technology Services LLC</Company>
+    <Authors>Kenny Robinson</Authors>
+    <AssemblyName>Almostengr.PetFeeder.Worker</AssemblyName>
+    <RootNamespace>Almostengr.PetFeeder.Worker</RootNamespace>
+    <VersionSuffix>$([System.DateTime]::UtcNow.ToString(yyyy.MM.dd.hhmm))</VersionSuffix>
+    <AssemblyVersion Condition=" '$(VersionSuffix)' == '' ">0.0.0.1</AssemblyVersion>
+    <AssemblyVersion Condition=" '$(VersionSuffix)' != '' ">$(VersionSuffix)</AssemblyVersion>
+    <Version Condition=" '$(VersionSuffix)' == '' ">0.0.1.0</Version>
+    <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionSuffix)</Version>
+    <Copyright>Copyright © Robinson Handy and Technology Services</Copyright>
+    <UserSecretsId>dotnet-Almostengr.PetFeeder.Worker-2F12EDE8-C52D-4326-9E78-FE9F58514702</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+    <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="3.1.15"/>
+    <ProjectReference Include="..\Almostengr.PetFeeder.Api\Almostengr.PetFeeder.Api.csproj" />
+    <ProjectReference Include="..\Almostengr.PetFeeder.Common\Almostengr.PetFeeder.Common.csproj" />
+  </ItemGroup>
+</Project>

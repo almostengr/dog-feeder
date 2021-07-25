@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "Almostengr.PetFeeder.Worker": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
