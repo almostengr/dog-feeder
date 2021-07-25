@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Almostengr.PetFeeder.Api.Enums
+namespace Almostengr.PetFeeder.Common.Enums
 {
     public enum DayFrequency
     {

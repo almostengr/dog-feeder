@@ -1,4 +1,4 @@
-namespace Almostengr.PetFeeder.Api.Enums
+namespace Almostengr.PetFeeder.Common.Enums
 {
     public enum MotorDirection
     {

@@ -1,6 +1,6 @@
 using System.Device.Gpio;
 
-namespace Almostengr.PetFeeder.Api.Constants
+namespace Almostengr.PetFeeder.Common.Constants
 {
     public static class GpioOutput
     {
