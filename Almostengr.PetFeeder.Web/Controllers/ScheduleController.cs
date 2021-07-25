@@ -8,61 +8,72 @@ namespace Almostengr.PetFeeder.Web.Controllers
 {
     public class ScheduleController : BaseController
     {
-        private readonly ILogger<ScheduleController> _logger;
-
         public ScheduleController(ILogger<ScheduleController> logger) : base(logger)
         {
-            _logger = logger;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Scheduled Feeding";
-            List<ScheduleViewModel> schedules = null;
 
-            schedules = await GetAsync<List<ScheduleViewModel>>("schedules");
+            List<ScheduleViewModel> schedules = await GetAsync<List<ScheduleViewModel>>("schedules");
 
             return View(schedules);
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteSchedule(int id)
+        // [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
         {
             ViewData["Title"] = "Delete Scheduled Feeding";
 
-            ScheduleViewModel schedule = null;
-            schedule = await DeleteAsync<ScheduleViewModel>($"schedules/{id}");
+            await DeleteAsync<ScheduleViewModel>($"schedules/{id}");
 
             return RedirectToAction("index");
         }
 
-        public async Task<IActionResult> CreateSchedule()
+        [HttpGet]
+        public IActionResult Create()
         {
             ViewData["Title"] = "Create Scheduled Feeding";
-            return View();
+
+            return View("CreateEdit", new ScheduleViewModel());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int scheduleId)
+        {
+            ViewData["Title"] = "Edit Scheduled Feeding";
+
+            ScheduleViewModel schedule = await GetAsync<ScheduleViewModel>($"schedules/{scheduleId}");
+
+            if (schedule == null)
+                return NotFound();
+
+            return View("CreateEdit", schedule);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateSchedule(ScheduleViewModel schedule)
+        // [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateUpdate(ScheduleViewModel schedule)
         {
-            ScheduleViewModel responseSchedule = null;
-            responseSchedule = await CreateAsync<ScheduleViewModel>("schedules", schedule);
-            return View(responseSchedule);
+            if (ModelState.IsValid == false)
+            {
+                return View(schedule);
+            }
+
+            if (schedule.Id > 0)
+            {
+                await CreateAsync<ScheduleViewModel>("schedules", schedule); // existing record
+            }
+            else
+            {
+                await UpdateAsync<ScheduleViewModel>($"schedules/${schedule.Id}", schedule); // new record
+            }
+
+            return RedirectToAction("index");
         }
 
-        public async Task<IActionResult> UpdateSchedule(int id)
-        {
-            ScheduleViewModel schedule = null;
-            schedule = await GetAsync<ScheduleViewModel>($"schedules/{id}");
-            return View(schedule);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> UpdateSchedule(ScheduleViewModel schedule)
-        {
-            ScheduleViewModel responseSchedule = new ScheduleViewModel();
-            responseSchedule = await UpdateAsync<ScheduleViewModel>($"schedule/${schedule.Id}", schedule);
-            return View(responseSchedule);
-        }
     }
 }

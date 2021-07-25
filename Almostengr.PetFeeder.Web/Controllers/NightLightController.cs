@@ -16,18 +16,10 @@ namespace Almostengr.PetFeeder.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> LightOn()
-        {
-            NightLightViewModel nightLightViewModel = new NightLightViewModel();
-            nightLightViewModel = await CreateAsync<NightLightViewModel>("nightlight/on", nightLightViewModel);
-            return RedirectToAction("index");
-        }
-
-        [HttpPost]
+        // [ValidateAntiForgeryToken]
         public async Task<IActionResult> LightOff()
         {
-            NightLightViewModel nightLightViewModel = new NightLightViewModel();
-            nightLightViewModel = await CreateAsync<NightLightViewModel>("nightlight/off", nightLightViewModel);
+            await CreateAsync<NightLightViewModel>("nightlight/off", new NightLightViewModel());
             return RedirectToAction("index");
         }
     }

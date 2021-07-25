@@ -15,22 +15,20 @@ namespace Almostengr.PetFeeder.Web.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
         public async Task<IActionResult> All()
         {
             ViewData["Title"] = "All Waterings";
-            List<WateringViewModel> waterings = null;
-
-            waterings = await GetAsync<List<WateringViewModel>>("waterings/all");
+            List<WateringViewModel> waterings = await GetAsync<List<WateringViewModel>>("waterings/all");
 
             return View(waterings);
         }
-
+    
+        [HttpGet("{id}")]
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Latest Waterings";
-            List<WateringViewModel> waterings = null;
-
-            waterings = await GetAsync<List<WateringViewModel>>("waterings");
+            List<WateringViewModel> waterings  = await GetAsync<List<WateringViewModel>>("waterings");
 
             return View(waterings);
         }

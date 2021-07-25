@@ -1,0 +1,22 @@
+@model Almostengr.PetFeeder.Web.Models.SettingViewModel
+
+<h1>Setting</h1>
+
+<div>
+    <a class="nav-link text-dark" asp-area="" asp-controller="feeding" asp-action="all">All Feedings</a>
+</div>
+
+<form method="post" asp-controller="setting" asp-action="CreateUpdate">
+    <input type="hidden" name="id" id="id" value="@Model.Id" asp-for="@Model.Id" />
+    <div>
+        <label for="key">Key</label>
+        <input type="textbox" readonly="readonly" asp-for="@Model.Key" name="key" id="key" class="form-control">
+    </div>
+    <div>
+        <label for="value">Value</label>
+        <input type="textbox" name="value" asp-for="@Model.Value" id="value" class="form-control">
+    </div>
+    <div>
+        <button type="submit" name="submit">Save</button>
+    </div>
+</form>

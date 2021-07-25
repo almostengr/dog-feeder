@@ -12,19 +12,19 @@ namespace Almostengr.PetFeeder.Web.Controllers
         }
 
         [HttpPost]
+        // [ValidateAntiForgeryToken]
         public async Task<IActionResult> SystemShutDown()
         {
-            PowerViewModel powerViewModel = new PowerViewModel();
-            await CreateAsync<PowerViewModel>("power/shutdown", powerViewModel);
-            return View();
+            await CreateAsync<PowerViewModel>("power/shutdown", new PowerViewModel());
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
+        // [ValidateAntiForgeryToken]
         public async Task<IActionResult> SystemRestart()
         {
-            PowerViewModel powerViewModel = new PowerViewModel();
-            await CreateAsync<PowerViewModel>("power/restart", powerViewModel);
-            return View();
+            await CreateAsync<PowerViewModel>("power/restart", new PowerViewModel());
+            return RedirectToAction("Index", "Home");
         }
         
     }

@@ -8,49 +8,32 @@ namespace Almostengr.PetFeeder.Web.Controllers
 {
     public class FeedingController : BaseController
     {
-        private readonly ILogger<FeedingController> _logger;
-
         public FeedingController(ILogger<FeedingController> logger) :
             base(logger)
         {
-            _logger = logger;
         }
 
+        [HttpGet]
         public async Task<IActionResult> All()
         {
             ViewData["Title"] = "All Feedings";
-            List<FeedingViewModel> feedings = null;
-
-            feedings = await GetAsync<List<FeedingViewModel>>("feedings/all");
-
+            List<FeedingViewModel> feedings = await GetAsync<List<FeedingViewModel>>("feedings/all");
             return View(feedings);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            ViewData["Title"] = "Feedings";
-            List<FeedingViewModel> feedings = null;
-
-            feedings = await GetAsync<List<FeedingViewModel>>("feedings");
-
+            ViewData["Title"] = "Latest Feedings";
+            List<FeedingViewModel> feedings = await GetAsync<List<FeedingViewModel>>("feedings");
             return View(feedings);
-        }
-
-        public async Task<IActionResult> GetFeedingById(int id)
-        {
-            FeedingViewModel feeding = null;
-
-            feeding = await GetAsync<FeedingViewModel>($"feedings/{id}");
-
-            return View(feeding);
         }
 
         [HttpPost]
+        // [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateFeeding(FeedingViewModel feedingViewModel)
         {
-            FeedingViewModel responseFeeding = null;
-            responseFeeding = await CreateAsync<FeedingViewModel>("feedings", feedingViewModel);
-            // return View(responseFeeding);
+            FeedingViewModel responseFeeding = await CreateAsync<FeedingViewModel>("feedings", feedingViewModel);
             return RedirectToAction("index");
         }
 

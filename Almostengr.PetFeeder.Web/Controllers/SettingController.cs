@@ -12,27 +12,34 @@ namespace Almostengr.PetFeeder.Web.Controllers
         {
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "All Settings";
             
-            List<SettingViewModel> settings = null;
-            settings = await GetAsync<List<SettingViewModel>>("settings");
+            List<SettingViewModel> settings = await GetAsync<List<SettingViewModel>>("settings");
 
             return View(settings);
         }
 
-        public async Task<IActionResult> EditSettings()
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
         {
-            List<SettingViewModel> settings = null;
-            settings = await GetAsync<List<SettingViewModel>>("settings");
-            return View(settings);
+            ViewData["Title"] = "Edit Setting";
+
+            SettingViewModel setting = await GetAsync<SettingViewModel>($"settings/edit/{id}");
+
+            if (setting == null)
+                return NotFound();
+
+            return View(setting);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateSettings(List<SettingViewModel> settings)
+        // [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateUpdate(SettingViewModel setting)
         {
-            await UpdateAsync<List<SettingViewModel>>("settings", settings);
+            await UpdateAsync<SettingViewModel>($"settings/{setting.Id}", setting);
             return RedirectToAction("index");
         }
 

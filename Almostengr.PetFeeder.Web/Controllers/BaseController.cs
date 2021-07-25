@@ -73,7 +73,6 @@ namespace Almostengr.PetFeeder.Web.Controllers
         {
             StringContent stringContent = new StringContent(JsonConvert.SerializeObject(entity), _encoding, "application/json");
             var response = await _httpClient.PutAsync(route, stringContent);
-            // var response = await httpClient.PutAsync(route, content);
 
             if (response.IsSuccessStatusCode)
             {

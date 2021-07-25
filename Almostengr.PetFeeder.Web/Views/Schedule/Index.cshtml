@@ -5,10 +5,9 @@
         <h1>Schedules</h1>
     </div>
     <div class="col-4 text-right">
-        <a href="/schedule/CreateSchedule"><button id="submit" class="btn btn-secondary">Create</button></a>
+        <a href="/schedule/createedit"><button id="submit" class="btn btn-secondary">Create</button></a>
     </div>
 </div>
-
 
 @if (Model.Count > 0)
 {
@@ -21,15 +20,19 @@
 
     @foreach (var item in Model)
     {
-    <div class="row">
-        <div class="col">@item.ScheduledTime</div>
-        <div class="col">@item.Frequency</div>
-        <div class="col">@item.IsActive</div>
-        <div class="col">
-            <a class="nav-link text-dark" href="/schedules/edit/@item.Id">Edit</a>
-            <a class="nav-link text-dark" href="/schedule/delete/@item.Id">Delete</a>
+        <div class="row">
+            <div class="col">@item.ScheduledTime</div>
+            <div class="col">@item.Frequency</div>
+            <div class="col">@item.IsActive</div>
+            <div class="col">
+                <form method="get" action="/schedule/edit/@item.Id">
+                    <button type="submit" class="btn btn-danger">Edit</button>
+                </form>
+                <form method="post" action="/schedule/delete/@item.Id">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
         </div>
-    </div>
     }
 }
 else

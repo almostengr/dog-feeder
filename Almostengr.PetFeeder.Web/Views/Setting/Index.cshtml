@@ -7,10 +7,10 @@
 @foreach (var item in Model)
 {
     <div class="row">
-    <div class="col">@item.Key</div>
-    <div class="col">@item.Value</div>
-    <div class="col">
-        <a class="nav-link text-dark" href="/settings/edit/@item.Key">Edit</a>
+        <div class="col">@item.Key</div>
+        <div class="col">@item.Value</div>
+        <div class="col">
+            <a class="nav-link text-dark" href="/settings/edit/@item.Key">Edit</a>
+        </div>
     </div>
-</div>
 }
