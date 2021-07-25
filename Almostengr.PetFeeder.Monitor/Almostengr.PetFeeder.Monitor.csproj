@@ -17,7 +17,6 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="3.1.15"/>
-    <ProjectReference Include="..\Almostengr.PetFeeder.Api\Almostengr.PetFeeder.Api.csproj" />
     <ProjectReference Include="..\Almostengr.PetFeeder.Common\Almostengr.PetFeeder.Common.csproj" />
   </ItemGroup>
 </Project>

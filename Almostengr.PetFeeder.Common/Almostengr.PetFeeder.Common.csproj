@@ -13,7 +13,7 @@
     <Copyright>Copyright © Robinson Handy and Technology Services</Copyright>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Almostengr.PetFeeder.Api\Almostengr.PetFeeder.Api.csproj" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+    <PackageReference Include="System.Device.Gpio" Version="1.5.0"/>
   </ItemGroup>
-
 </Project>
