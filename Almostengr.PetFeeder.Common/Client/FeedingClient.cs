@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Models;
@@ -11,17 +12,17 @@ namespace Almostengr.PetFeeder.Common.Client
 
         public async Task<IList<Feeding>> GetAllFeedingsAsync()
         {
-            return await GetAsync<IList<Feeding>>("feedings");
+            return await GetAsync<IList<Feeding>>("/feedings");
         }
 
         public async Task<Feeding> GetFeedingAsync(int id)
         {
-            return await GetAsync<Feeding>($"feedings/{id}");
+            return await GetAsync<Feeding>($"/feedings/{id}");
         }
 
-        public async Task<Feeding> CreateFeedingAsync(Feeding feeding)
+        public async Task<Uri> CreateFeedingAsync(Feeding feeding)
         {
-            return await CreateAsync<Feeding>("feedings", feeding);
+            return await CreateAsync<Feeding>("/feedings", feeding);
         }
 
     }

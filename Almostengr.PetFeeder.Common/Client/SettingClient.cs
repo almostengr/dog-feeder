@@ -9,19 +9,19 @@ namespace Almostengr.PetFeeder.Common.Client
     {
         public SettingClient() : base() { }
 
-        public Task<Setting> GetSettingAsync(string id)
+        public async Task<Setting> GetSettingAsync(string id)
         {
-            throw new System.NotImplementedException();
+            return await GetAsync<Setting>($"/settings/{id}");
         }
 
-        public Task<IList<Setting>> GetSettingsAsync()
+        public async Task<IList<Setting>> GetSettingsAsync()
         {
-            throw new System.NotImplementedException();
+            return await GetAsync<IList<Setting>>("/settings");
         }
 
-        public Task<Setting> UpdateSettingAsync(Setting setting)
+        public async Task<Setting> UpdateSettingAsync(Setting setting)
         {
-            throw new System.NotImplementedException();
+            return await UpdateAsync<Setting>("/settings", setting);
         }
     }
 }

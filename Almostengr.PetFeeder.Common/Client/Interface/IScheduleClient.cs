@@ -1,16 +1,19 @@
+using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Models;
 
 namespace Almostengr.PetFeeder.Common.Client.Interface
 {
-    public interface IScheduleClient{
-
-        Task<Schedule> GetAsync(int id);
+    public interface IScheduleClient
+    {
+        Task<Schedule> GetScheduleAsync(int id);
         Task<IList<Schedule>> GetAllSchedulesAsync();
         Task<IList<Schedule>> GetActiveSchedulesAsync();
-        Task<Schedule> CreateScheduleAsync(Schedule Schedule);
-        Task<Schedule> UpdateScheduleAsync(Schedule Schedule);
-        Task<bool> DeleteScheduleAsync(int id);
+        Task<IList<Schedule>> GetInactiveSchedulesAsync();
+        Task<Uri> CreateScheduleAsync(Schedule schedule);
+        Task<Schedule> UpdateScheduleAsync(Schedule schedule);
+        Task<HttpStatusCode> DeleteScheduleAsync(int id);
     }
 }
