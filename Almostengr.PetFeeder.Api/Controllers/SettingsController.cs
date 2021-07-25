@@ -11,28 +11,26 @@ namespace Almostengr.PetFeeder.Api.Controllers
     public class SettingsController : BaseController
     {
         private readonly ILogger<SettingsController> _logger;
-        private readonly ISettingRepository _repository;
+        private readonly ISettingRepository _settingRepository;
 
-        public SettingsController(ILogger<SettingsController> logger, ISettingRepository repository) :
+        public SettingsController(ILogger<SettingsController> logger, ISettingRepository settingRepository) :
         base(logger)
         {
             _logger = logger;
-            _repository = repository;
+            _settingRepository = settingRepository;
         }
 
         [HttpGet]
         public async Task<ActionResult<IList<Setting>>> GetAllSettingsAsync()
         {
-            _logger.LogInformation("Getting all settings");
-
-            IList<Setting> settings = await _repository.GetAllAsync();
+            IList<Setting> settings = await _settingRepository.GetAllAsync();
             return Ok(settings);
         }
 
         [HttpGet("{key}")]
         public async Task<ActionResult<Setting>> GetSettingByKeyAsync(string key)
         {
-            Setting setting = await _repository.GetSettingByKeyAsync(key);
+            Setting setting = await _settingRepository.GetSettingByKeyAsync(key);
 
             if (setting == null)
             {
@@ -45,7 +43,7 @@ namespace Almostengr.PetFeeder.Api.Controllers
         [HttpPut("{key}")]
         public async Task<ActionResult> UpdateSettingAsync(string key, [FromBody] Setting setting)
         {
-            Setting existingSetting = await _repository.GetSettingByKeyAsync(key);
+            Setting existingSetting = await _settingRepository.GetSettingByKeyAsync(key);
 
             if (existingSetting == null)
             {
@@ -54,8 +52,8 @@ namespace Almostengr.PetFeeder.Api.Controllers
 
             setting.Type = existingSetting.Type;
 
-            _repository.Update(setting);
-            await _repository.SaveChangesAsync();
+            _settingRepository.Update(setting);
+            await _settingRepository.SaveChangesAsync();
 
             return NoContent();
         }
@@ -65,8 +63,8 @@ namespace Almostengr.PetFeeder.Api.Controllers
         {
             try
             {
-                _repository.UpdateRange(settings);
-                await _repository.SaveChangesAsync();
+                _settingRepository.UpdateRange(settings);
+                await _settingRepository.SaveChangesAsync();
             }
             catch (Exception ex)
             {

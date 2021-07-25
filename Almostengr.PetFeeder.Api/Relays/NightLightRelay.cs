@@ -16,18 +16,18 @@ namespace Almostengr.PetFeeder.Api.Relays
             _logger = logger;
             _gpio = gpio;
 
-            OpenPin(gpio, PinMode.Output, LightRelay);
+            OpenPin(gpio, PinMode.Output, GpioPin.LightRelay);
         }
 
         public async Task NightLightOnAsync()
         {
-            _gpio.Write(LightRelay, GpioOutput.On);
+            _gpio.Write(GpioPin.LightRelay, GpioOutput.On);
             await Task.Delay(TimeSpan.FromMilliseconds(100));
         }
 
         public async Task NightLightOffAsync()
         {
-            _gpio.Write(LightRelay, GpioOutput.Off);
+            _gpio.Write(GpioPin.LightRelay, GpioOutput.Off);
             await Task.Delay(TimeSpan.FromMilliseconds(100));
         }
     }

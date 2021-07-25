@@ -21,7 +21,7 @@ namespace Almostengr.PetFeeder.Api.Repository
         public async Task<Setting> GetSettingByKeyAsync(string key)
         {
             _logger.LogInformation("Getting single setting");
-            return await _dbContext.Settings.FirstOrDefaultAsync(s => s.Key == key);
+            return await _dbContext.Settings.SingleOrDefaultAsync(s => s.Key == key);
         }
 
     }

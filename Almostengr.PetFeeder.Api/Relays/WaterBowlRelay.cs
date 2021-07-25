@@ -15,19 +15,19 @@ namespace Almostengr.PetFeeder.Api.Relays
             _logger = logger;
             _gpio = gpio;
             
-            OpenPin(gpio, PinMode.Output, WaterValveRelay);
+            OpenPin(gpio, PinMode.Output, GpioPin.WaterValveRelay);
         }
 
         public void OpenWaterValve()
         {
             _logger.LogInformation("Turning on water");
-            _gpio.Write(WaterValveRelay, GpioOutput.On);
+            _gpio.Write(GpioPin.WaterValveRelay, GpioOutput.On);
         }
 
         public void CloseWaterValve()
         {
             _logger.LogInformation("Turning off water");
-            _gpio.Write(WaterValveRelay, GpioOutput.Off); // turn off water
+            _gpio.Write(GpioPin.WaterValveRelay, GpioOutput.Off); // turn off water
         }
 
     }

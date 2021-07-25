@@ -45,7 +45,10 @@ namespace Almostengr.PetFeeder.Api.Repository
 
         public async Task<List<Alarm>> GetActiveAlarmsAsync()
         {
-            return await _dbContext.Alarms.Where(a => a.IsActive == true).OrderByDescending(a => a.Created).ToListAsync();
+            return await _dbContext.Alarms
+                .Where(a => a.IsActive == true)
+                .OrderByDescending(a => a.Created)
+                .ToListAsync();
         }
 
         public async Task<List<Alarm>> GetActiveAlarmsByTypeAsync(string type)

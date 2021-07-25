@@ -19,7 +19,7 @@ namespace Almostengr.PetFeeder.Api.Relays
             _logger = logger;
             _gpio = gpio;
 
-            OpenPins(gpio, PinMode.Output, new Int32[] { FoodForwardRelay, FoodBackwardRelay });
+            OpenPins(gpio, PinMode.Output, new Int32[] { GpioPin.FoodForwardRelay, GpioPin.FoodBackwardRelay });
         }
 
         public async Task<Feeding> PerformFeeding(Feeding feeding)
@@ -41,13 +41,13 @@ namespace Almostengr.PetFeeder.Api.Relays
             switch (direction)
             {
                 case MotorDirection.Forward:
-                    _gpio.Write(FoodForwardRelay, GpioOutput.On);
-                    _gpio.Write(FoodBackwardRelay, GpioOutput.Off);
+                    _gpio.Write(GpioPin.FoodForwardRelay, GpioOutput.On);
+                    _gpio.Write(GpioPin.FoodBackwardRelay, GpioOutput.Off);
                     break;
 
                 case MotorDirection.Backward:
-                    _gpio.Write(FoodForwardRelay, GpioOutput.Off);
-                    _gpio.Write(FoodBackwardRelay, GpioOutput.On);
+                    _gpio.Write(GpioPin.FoodForwardRelay, GpioOutput.Off);
+                    _gpio.Write(GpioPin.FoodBackwardRelay, GpioOutput.On);
                     break;
 
                 default:
@@ -56,8 +56,8 @@ namespace Almostengr.PetFeeder.Api.Relays
 
             await Task.Delay(TimeSpan.FromSeconds(onTime));
 
-            _gpio.Write(FoodForwardRelay, GpioOutput.Off);
-            _gpio.Write(FoodBackwardRelay, GpioOutput.Off);
+            _gpio.Write(GpioPin.FoodForwardRelay, GpioOutput.Off);
+            _gpio.Write(GpioPin.FoodBackwardRelay, GpioOutput.Off);
         }
     }
 }

@@ -23,16 +23,25 @@ namespace Almostengr.PetFeeder.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<PetFeederDbContext>(options =>
-                options.UseMySQL(Configuration.GetConnectionString("DbConnection")));
+            services.AddControllers();
 
             // repositories
 
-            services.AddScoped<IAlarmRepository, AlarmRepository>();
-            services.AddScoped<IFeedingRepository, FeedingRepository>();
-            services.AddScoped<IScheduleRepository, ScheduleRepository>();
-            services.AddScoped<ISettingRepository, SettingRepository>();
-            services.AddScoped<IWateringRepository, WateringRepository>();
+            // services.AddScoped<IAlarmRepository, AlarmRepository>();
+            // services.AddScoped<IFeedingRepository, FeedingRepository>();
+            // services.AddScoped<IScheduleRepository, ScheduleRepository>();
+            // services.AddScoped<ISettingRepository, SettingRepository>();
+            // services.AddScoped<IWateringRepository, WateringRepository>();
+            
+            services.AddTransient<IAlarmRepository, AlarmRepository>();
+            services.AddTransient<IFeedingRepository, FeedingRepository>();
+            services.AddTransient<IScheduleRepository, ScheduleRepository>();
+            services.AddTransient<ISettingRepository, SettingRepository>();
+            services.AddTransient<IWateringRepository, WateringRepository>();
+
+            // database
+            services.AddDbContext<PetFeederDbContext>(options =>
+                options.UseMySQL(Configuration.GetConnectionString("DbConnection")));
 
             // relays
 
@@ -51,10 +60,8 @@ namespace Almostengr.PetFeeder.Api
             // services.AddSingleton<IWaterStorageInputSensor, WaterStorageInputSensor>();
 
             services.AddSingleton<IWaterInputSensor, MockWaterInputSensor>();
-            services.AddSingleton<IFoodStorageInputSensor, MockFoodStorageInputSensor>();
+            // services.AddSingleton<IFoodStorageInputSensor, MockFoodStorageInputSensor>();
             services.AddSingleton<IWaterStorageInputSensor, MockWaterStorageInputSensor>();
-
-            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

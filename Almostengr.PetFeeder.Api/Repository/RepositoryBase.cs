@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Data;
@@ -33,7 +32,7 @@ namespace Almostengr.PetFeeder.Api.Repository
 
         public async Task<Entity> GetByIdAsync(int id)
         {
-            return await _table.FirstOrDefaultAsync(e => e.Id == id);
+            return await _table.SingleOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task CreateAsync(Entity entity)

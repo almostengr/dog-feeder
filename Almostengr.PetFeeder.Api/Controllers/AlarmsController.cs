@@ -48,7 +48,7 @@ namespace Almostengr.PetFeeder.Api.Controllers
         [HttpGet("{id}/dismiss")]
         public async Task<ActionResult<Alarm>> DismissActiveAlarmAsync(int id)
         {
-            var alarm = await _alarmRepo.GetByIdAsync(id);
+            Alarm alarm = await _alarmRepo.GetByIdAsync(id);
 
             if (alarm == null)
             {

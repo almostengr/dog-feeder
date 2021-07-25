@@ -14,7 +14,7 @@ namespace Almostengr.PetFeeder.Api.Data
         public virtual DbSet<Schedule> Schedules { get; set; }
         public virtual DbSet<Setting> Settings { get; set; }
         public virtual DbSet<Watering> Waterings { get; set; }
-
+    
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Alarm>().ToTable(nameof(Alarm).ToLower());
