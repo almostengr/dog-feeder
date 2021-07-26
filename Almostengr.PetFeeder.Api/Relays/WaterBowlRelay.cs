@@ -1,5 +1,5 @@
 using System.Device.Gpio;
-using Almostengr.PetFeeder.Api.Constants;
+using Almostengr.PetFeeder.Common.Constants;
 using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.Api.Relays

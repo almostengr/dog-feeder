@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.Api.Models;
 using Almostengr.PetFeeder.Common.Client.Interface;
+using Almostengr.PetFeeder.Common.DataTransferObject;
 using Almostengr.PetFeeder.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -56,7 +56,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
         {
             ViewData["Title"] = "Edit Scheduled Feeding";
 
-            Schedule schedule = await _scheduleClient.GetScheduleAsync(scheduleId);            
+            ScheduleDto schedule = await _scheduleClient.GetScheduleAsync(scheduleId);            
 
             if (schedule == null)
                 return NotFound();
@@ -78,12 +78,12 @@ namespace Almostengr.PetFeeder.Web.Controllers
             if (schedule.Id > 0)
             {
                 // existing record
-                await _scheduleClient.CreateScheduleAsync(schedule.FromViewModel());
+                await _scheduleClient.UpdateScheduleAsync(schedule.FromViewModel());
             }
             else
             {
                 // new record
-                await _scheduleClient.UpdateScheduleAsync(schedule.FromViewModel());
+                await _scheduleClient.CreateScheduleAsync(schedule.FromViewModel());
             }
 
             return RedirectToAction("index");

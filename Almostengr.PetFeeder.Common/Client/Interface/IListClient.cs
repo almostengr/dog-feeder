@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.Api.Enums;
+using Almostengr.PetFeeder.Common.Enums;
 
-namespace Amostengr.PetFeeder.Common.Client.Interface
+namespace Almostengr.PetFeeder.Common.Client.Interface
 {
     public interface IListClient
     {

@@ -1,20 +1,18 @@
-using Almostengr.PetFeeder.Api.Models;
+using Almostengr.PetFeeder.Common.DataTransferObject;
 
 namespace Almostengr.PetFeeder.Web.Models
 {
     public class SettingViewModel
     {
-        public SettingViewModel(Setting setting)
+        public SettingViewModel(SettingDto setting)
         {
-            this.Id = setting.Id;
             this.Key = setting.Key;
             this.Value = setting.Value;
         }
 
-        public Setting FromViewModel()
+        public SettingDto FromViewModel()
         {
-            return new Setting(){
-                Id = this.Id,
+            return new SettingDto(){
                 Key = this.Key,
                 Value = this.Value
             };

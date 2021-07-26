@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.Api.Models;
+using Almostengr.PetFeeder.Common.DataTransferObject;
 
 namespace Almostengr.PetFeeder.Common.Client.Interface
 {
     public interface IFeedingClient
     {
-        Task<IList<Feeding>> GetAllFeedingsAsync();
-        Task<Feeding> GetFeedingAsync(int id);
-        Task<Uri> CreateFeedingAsync(Feeding feeding);
+        Task<IList<FeedingDto>> GetAllFeedingsAsync();
+        Task<FeedingDto> GetFeedingAsync(int id);
+        Task<Uri> CreateFeedingAsync(FeedingDto feeding);
     }
 }

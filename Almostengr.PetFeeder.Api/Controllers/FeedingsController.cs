@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Models;
 using Almostengr.PetFeeder.Api.Relays;
 using Almostengr.PetFeeder.Api.Repository;
+using Almostengr.PetFeeder.Common.DataTransferObject;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -24,34 +25,34 @@ namespace Almostengr.PetFeeder.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IList<Feeding>>> GetRecentFeedingsAsync()
+        public async Task<ActionResult<IList<FeedingDto>>> GetRecentFeedingsAsync()
         {
             var feedings = await _feedingRepository.GetRecentFeedingsAsync();
             return Ok(feedings);
         }
 
         [HttpGet, Route("all")]
-        public async Task<ActionResult<IList<Feeding>>> GetAllFeedingsAsync()
+        public async Task<ActionResult<IList<FeedingDto>>> GetAllFeedingsAsync()
         {
             var feedings = await _feedingRepository.GetAllAsync();
             return Ok(feedings);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Feeding>> GetFeedingByIdAsync(int id)
+        public async Task<ActionResult<FeedingDto>> GetFeedingByIdAsync(int id)
         {
-            var feeding = await _feedingRepository.GetByIdAsync(id);
+            var FeedingDto = await _feedingRepository.GetByIdAsync(id);
 
-            if (feeding != null)
+            if (FeedingDto != null)
             {
-                return Ok(feeding);
+                return Ok(FeedingDto);
             }
 
             return NotFound();
         }
 
         [HttpPost]
-        public async Task<ActionResult<Feeding>> CreateFeedingAsync([FromBody] Feeding feeding)
+        public async Task<ActionResult<FeedingDto>> CreateFeedingAsync([FromBody] FeedingDto feedingDto)
         {
             if (ModelState.IsValid == false)
             {
@@ -60,9 +61,12 @@ namespace Almostengr.PetFeeder.Api.Controllers
 
             try
             {
+                Feeding feeding = new Feeding();
+                feeding.AssignFromDto(feedingDto);
+                
                 await _feedingRelay.PerformFeeding(feeding);
 
-                await _feedingRepository.CreateAsync(feeding);
+                await _feedingRepository.AddAsync(feeding);
                 await _feedingRepository.SaveChangesAsync();
             }
             catch (Exception ex)

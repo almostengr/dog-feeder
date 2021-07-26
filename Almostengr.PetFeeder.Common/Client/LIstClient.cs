@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.Api.Enums;
-using Amostengr.PetFeeder.Common.Client.Interface;
+using Almostengr.PetFeeder.Common.Enums;
+using Almostengr.PetFeeder.Common.Client.Interface;
 
 namespace Almostengr.PetFeeder.Common.Client
 {

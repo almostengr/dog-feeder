@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.Api.Enums;
-using Almostengr.PetFeeder.Api.Models;
+using Almostengr.PetFeeder.Common.Enums;
 using Microsoft.Extensions.Logging;
 using Almostengr.PetFeeder.Common.Client.Interface;
+using Almostengr.PetFeeder.Common.DataTransferObject;
 
 namespace Almostengr.PetFeeder.Monitor.Workers
 {
@@ -29,9 +29,9 @@ namespace Almostengr.PetFeeder.Monitor.Workers
             {
                 try
                 {
-                    IList<Schedule> schedules = await _scheduleClient.GetActiveSchedulesAsync();
+                    IList<ScheduleDto> schedules = await _scheduleClient.GetActiveSchedulesAsync();
 
-                    Schedule schedule = IsTimeToFeed(schedules);
+                    ScheduleDto schedule = IsTimeToFeed(schedules);
 
                     if (schedule != null) // if time to feed, then call feeding api
                     {
@@ -47,16 +47,16 @@ namespace Almostengr.PetFeeder.Monitor.Workers
             }
         }
 
-        public async Task DoFeedPetAsync(Schedule schedule)
+        public async Task DoFeedPetAsync(ScheduleDto schedule)
         {
-            Feeding feeding = new Feeding();
+            FeedingDto feeding = new FeedingDto();
             feeding.Amount = schedule.FeedingAmount;
-            feeding.ScheduleId = schedule.Id;
+            feeding.ScheduleId = schedule.ScheduleId;
 
             await _feedingClient.CreateFeedingAsync(feeding);
         }
 
-        public Schedule IsTimeToFeed(IList<Schedule> schedules)
+        public ScheduleDto IsTimeToFeed(IList<ScheduleDto> schedules)
         {
             DateTime currentDateTime = DateTime.Now;
             currentDateTime = currentDateTime.AddMilliseconds(-currentDateTime.Millisecond)

@@ -1,7 +1,7 @@
 using System;
 using System.Device.Gpio;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.Api.Constants;
+using Almostengr.PetFeeder.Common.Constants;
 using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.Api.InputSensor

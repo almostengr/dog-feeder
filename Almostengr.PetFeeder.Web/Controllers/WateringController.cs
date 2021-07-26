@@ -30,7 +30,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
                 models.Add(new WateringViewModel(watering));
             }
 
-            return View(waterings);
+            return View(models);
         }
     
         public async Task<IActionResult> Index()
@@ -44,7 +44,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
                 models.Add(new WateringViewModel(watering));
             }
 
-            return View(waterings);
+            return View(models);
         }
 
         [HttpGet("{id}")]

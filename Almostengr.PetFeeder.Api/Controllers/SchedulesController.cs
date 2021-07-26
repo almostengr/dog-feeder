@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Models;
 using Almostengr.PetFeeder.Api.Repository;
+using Almostengr.PetFeeder.Common.DataTransferObject;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -13,7 +14,8 @@ namespace Almostengr.PetFeeder.Api.Controllers
         private readonly ILogger<SchedulesController> _logger;
         private readonly IScheduleRepository _scheduleRepository;
 
-        public SchedulesController(ILogger<SchedulesController> logger, IScheduleRepository scheduleRepository)
+        public SchedulesController(ILogger<SchedulesController> logger,
+            IScheduleRepository scheduleRepository)
             : base(logger)
         {
             _logger = logger;
@@ -21,28 +23,35 @@ namespace Almostengr.PetFeeder.Api.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<IList<Schedule>>> GetAllSchedulesAsync()
+        public async Task<ActionResult<IList<ScheduleDto>>> GetAllSchedulesAsync()
         {
             var schedules = await _scheduleRepository.GetAllAsync();
-            return Ok(schedules);
+            var schedulesDto = new List<ScheduleDto>();
+
+            foreach (var schedule in schedules)
+            {
+                schedulesDto.Add(schedule.AssignToDto());
+            }
+
+            return Ok(schedulesDto);
         }
 
         [HttpGet]
-        public async Task<ActionResult<IList<Schedule>>> GetActiveSchedulesAsync()
+        public async Task<ActionResult<IList<ScheduleDto>>> GetActiveSchedulesAsync()
         {
             var schedules = await _scheduleRepository.GetAllActiveSchedulesAsync();
-            return Ok(schedules);
-        }
+            var schedulesDto = new List<ScheduleDto>();
 
-        [HttpGet, Route("inactive")]
-        public async Task<ActionResult<IList<Schedule>>> GetInactiveAsync()
-        {
-            var schedules = await _scheduleRepository.GetAllInactiveSchedulesAsync();
+            foreach (var schedule in schedules)
+            {
+                schedulesDto.Add(schedule.AssignToDto());
+            }
+
             return Ok(schedules);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Schedule>> GetScheduleByIdAsync(int id)
+        public async Task<ActionResult<ScheduleDto>> GetScheduleByIdAsync(int id)
         {
             var schedule = await _scheduleRepository.GetByIdAsync(id);
 
@@ -50,12 +59,14 @@ namespace Almostengr.PetFeeder.Api.Controllers
             {
                 return NotFound();
             }
-            
-            return Ok(schedule);
+
+            ScheduleDto scheduleDto = schedule.AssignToDto();
+
+            return Ok(scheduleDto);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Schedule>> CreateScheduleAsync([FromBody] Schedule schedule)
+        public async Task<ActionResult<ScheduleDto>> CreateScheduleAsync([FromBody] ScheduleDto scheduleDto)
         {
             if (ModelState.IsValid == false)
             {
@@ -64,7 +75,10 @@ namespace Almostengr.PetFeeder.Api.Controllers
 
             try
             {
-                await _scheduleRepository.CreateAsync(schedule);
+                Schedule schedule = new Schedule();
+                schedule.AssignFromDto(scheduleDto);
+
+                await _scheduleRepository.AddAsync(schedule);
                 await _scheduleRepository.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -99,15 +113,15 @@ namespace Almostengr.PetFeeder.Api.Controllers
             return NoContent();
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateScheduleAsync(int id, [FromBody] Schedule schedule)
+        [HttpPut]
+        public async Task<ActionResult> UpdateScheduleAsync([FromBody] ScheduleDto scheduleDto)
         {
             if (ModelState.IsValid == false)
             {
                 return BadRequest(ModelState);
             }
 
-            Schedule existingSchedule = await _scheduleRepository.GetByIdAsync(id);
+            var existingSchedule = await _scheduleRepository.GetByIdAsync(scheduleDto.ScheduleId);
 
             if (existingSchedule == null)
             {
@@ -116,6 +130,9 @@ namespace Almostengr.PetFeeder.Api.Controllers
 
             try
             {
+                Schedule schedule = new Schedule();
+                schedule.AssignFromDto(scheduleDto);
+
                 _scheduleRepository.Update(schedule);
                 await _scheduleRepository.SaveChangesAsync();
             }

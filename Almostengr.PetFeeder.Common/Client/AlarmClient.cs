@@ -1,42 +1,41 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.Api.Models;
 using Almostengr.PetFeeder.Common.Client.Interface;
+using Almostengr.PetFeeder.Common.DataTransferObject;
 
 namespace Almostengr.PetFeeder.Common.Client
 {
     public class AlarmClient : BaseClient, IAlarmClient
     {
-        public async Task<Uri> CreateAlarmAsync(Alarm alarm)
+        public async Task<Uri> CreateAlarmAsync(AlarmDto alarm)
         {
-            // return await CreateAsync<Alarm>("/alarms", alarm);
-            return await CreateAsync<Alarm>("/alarms", alarm);
+            return await CreateAsync<AlarmDto>("/alarms", alarm);
         }
 
-        public async Task<Alarm> DismissActiveAlarmAsync(int id)
+        public async Task<AlarmDto> DismissActiveAlarmAsync(int id)
         {
-            return await GetAsync<Alarm>($"/alarms/{id}/dismiss");
+            return await GetAsync<AlarmDto>($"/alarms/{id}/dismiss");
         }
 
-        public async Task<IList<Alarm>> GetActiveAlarmsAsync()
+        public async Task<IList<AlarmDto>> GetActiveAlarmsAsync()
         {
-            return await GetAsync<IList<Alarm>>("/alarms");
+            return await GetAsync<IList<AlarmDto>>("/alarms");
         }
 
-        public async Task<Alarm> GetAlarmAsync(int id)
+        public async Task<AlarmDto> GetAlarmAsync(int id)
         {
-            return await GetAsync<Alarm>($"/alarms/{id}");
+            return await GetAsync<AlarmDto>($"/alarms/{id}");
         }
 
-        public async Task<IList<Alarm>> GetAllAlarmsAsync()
+        public async Task<IList<AlarmDto>> GetAllAlarmsAsync()
         {
-            return await GetAsync<IList<Alarm>>("/alarms/all");
+            return await GetAsync<IList<AlarmDto>>("/alarms/all");
         }
 
-        public async Task<IList<Alarm>> GetActiveAlarmsByTypeAsync(string alarmType)
+        public async Task<IList<AlarmDto>> GetActiveAlarmsByTypeAsync(string alarmType)
         {
-            return await GetAsync<IList<Alarm>>($"/alarms/type/{alarmType}");
+            return await GetAsync<IList<AlarmDto>>($"/alarms/type/{alarmType}");
         }
 
     }

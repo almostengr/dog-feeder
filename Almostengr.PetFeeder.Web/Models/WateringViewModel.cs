@@ -1,19 +1,19 @@
 using System;
-using Almostengr.PetFeeder.Api.Models;
+using Almostengr.PetFeeder.Common.DataTransferObject;
 
 namespace Almostengr.PetFeeder.Web.Models
 {
     public class WateringViewModel
     {
-        public WateringViewModel(Watering watering)
+        public WateringViewModel(WateringDto watering)
         {
-            this.Id = watering.Id;
+            this.Id = watering.WateringId;
             this.WateringTime = watering.Timestamp;
         }
 
-        public Watering FromViewModel()
+        public WateringDto FromViewModel()
         {
-            return new Watering(){
+            return new WateringDto(){
                 Timestamp = this.WateringTime,
             };
         }

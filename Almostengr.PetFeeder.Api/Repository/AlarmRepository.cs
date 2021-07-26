@@ -23,38 +23,17 @@ namespace Almostengr.PetFeeder.Api.Repository
             _dbContext.Alarms.Update(alarm);
         }
 
-        public void DismissAlarms(List<Alarm> alarms)
-        {
-            alarms.ForEach(a => a.IsActive = false);
-            _dbContext.Alarms.UpdateRange(alarms);
-        }
-
         public async Task<bool> GetActiveAlarmsExistByTypeAsync(string type)
         {
-            var result = await _dbContext.Alarms
+            return await _dbContext.Alarms
                 .Where(a => a.Type == type && a.IsActive == true)
-                .ToListAsync();
-
-            if (result.Count > 0)
-            {
-                return true;
-            }
-
-            return false;
+                .AnyAsync();
         }
 
         public async Task<List<Alarm>> GetActiveAlarmsAsync()
         {
             return await _dbContext.Alarms
                 .Where(a => a.IsActive == true)
-                .OrderByDescending(a => a.Created)
-                .ToListAsync();
-        }
-
-        public async Task<List<Alarm>> GetActiveAlarmsByTypeAsync(string type)
-        {
-            return await _dbContext.Alarms
-                .Where(a => a.Type == type && a.IsActive == true)
                 .OrderByDescending(a => a.Created)
                 .ToListAsync();
         }

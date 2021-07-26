@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Api.Models;
 using Almostengr.PetFeeder.Api.Repository;
+using Almostengr.PetFeeder.Common.DataTransferObject;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -21,14 +22,21 @@ namespace Almostengr.PetFeeder.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IList<Setting>>> GetAllSettingsAsync()
+        public async Task<ActionResult<IList<SettingDto>>> GetAllSettingsAsync()
         {
             IList<Setting> settings = await _settingRepository.GetAllAsync();
-            return Ok(settings);
+            var settingsDto = new List<SettingDto>();
+
+            foreach (Setting setting in settings)
+            {
+                settingsDto.Add(setting.AssignToDto());
+            }
+
+            return Ok(settingsDto);
         }
 
         [HttpGet("{key}")]
-        public async Task<ActionResult<Setting>> GetSettingByKeyAsync(string key)
+        public async Task<ActionResult<SettingDto>> GetSettingByKeyAsync(string key)
         {
             Setting setting = await _settingRepository.GetSettingByKeyAsync(key);
 
@@ -37,33 +45,26 @@ namespace Almostengr.PetFeeder.Api.Controllers
                 return NotFound();
             }
 
-            return Ok(setting);
+            SettingDto settingDto = setting.AssignToDto();
+
+            return Ok(settingDto);
         }
 
         [HttpPut("{key}")]
-        public async Task<ActionResult> UpdateSettingAsync(string key, [FromBody] Setting setting)
+        public async Task<ActionResult> UpdateSettingAsync(string key, [FromBody] SettingDto settingDto)
         {
-            Setting existingSetting = await _settingRepository.GetSettingByKeyAsync(key);
+            Setting setting = await _settingRepository.GetSettingByKeyAsync(settingDto.Key);
 
-            if (existingSetting == null)
+            if (setting == null)
             {
                 return NotFound();
             }
 
-            setting.Type = existingSetting.Type;
-
-            _settingRepository.Update(setting);
-            await _settingRepository.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        [HttpPut]
-        public async Task<ActionResult<IList<Setting>>> UpdateAllSettingsAsync([FromBody] IList<Setting> settings)
-        {
             try
             {
-                _settingRepository.UpdateRange(settings);
+                setting.AssignFromDto(settingDto);
+
+                _settingRepository.Update(setting);
                 await _settingRepository.SaveChangesAsync();
             }
             catch (Exception ex)

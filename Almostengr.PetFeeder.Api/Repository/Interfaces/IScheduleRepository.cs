@@ -7,6 +7,5 @@ namespace Almostengr.PetFeeder.Api.Repository
     public interface IScheduleRepository : IRepositoryBase<Schedule>
     {
         Task<List<Schedule>> GetAllActiveSchedulesAsync();
-        Task<List<Schedule>> GetAllInactiveSchedulesAsync();
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.Api.Models;
 using Almostengr.PetFeeder.Common.Client.Interface;
+using Almostengr.PetFeeder.Common.DataTransferObject;
 
 namespace  Almostengr.PetFeeder.Common.Client
 {
@@ -9,9 +9,9 @@ namespace  Almostengr.PetFeeder.Common.Client
     {
         public NightLightClient() : base() {}
 
-        public async Task<Uri> CreateNightLightAsync(NightLight nightLight)
+        public async Task<Uri> CreateNightLightAsync(NightLightDto nightLight)
         {
-            return await CreateAsync<NightLight>("/nightlights", nightLight);
+            return await CreateAsync<NightLightDto>("/nightlights", nightLight);
         }
 
     }

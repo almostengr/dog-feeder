@@ -1,21 +1,21 @@
 using System;
-using Almostengr.PetFeeder.Api.Models;
+using Almostengr.PetFeeder.Common.DataTransferObject;
 
 namespace Almostengr.PetFeeder.Web.Models
 {
     public class FeedingViewModel
     {
-        public FeedingViewModel(Feeding feeding)
+        public FeedingViewModel(FeedingDto feeding)
         {
-            this.Id = feeding.Id;
+            this.Id = feeding.FeedingId;
             this.Timestamp = feeding.Timestamp;
             this.ScheduleId = feeding.ScheduleId;
         }
 
-        public Feeding FromViewModel()
+        public FeedingDto FromViewModel()
         {
-            return new Feeding() {
-                Id = this.Id,
+            return new FeedingDto() {
+                FeedingId = this.Id,
                 Timestamp = this.Timestamp,
                 ScheduleId = this.ScheduleId
             };

@@ -1,9 +1,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.Api.Models;
 using Microsoft.Extensions.Logging;
 using Almostengr.PetFeeder.Common.Client.Interface;
+using Almostengr.PetFeeder.Common.DataTransferObject;
 
 namespace Almostengr.PetFeeder.Monitor.Workers
 {
@@ -24,7 +24,7 @@ namespace Almostengr.PetFeeder.Monitor.Workers
             while (!stoppingToken.IsCancellationRequested)
             {
                 TimeSpan currentTime = DateTime.Now.TimeOfDay;
-                NightLight nightlight = new NightLight();
+                NightLightDto nightlight = new NightLightDto();
 
                 if (currentTime >= nightTimeOn || currentTime <= nightTimeOff)
                 {

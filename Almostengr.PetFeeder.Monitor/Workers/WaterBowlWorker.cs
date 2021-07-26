@@ -1,10 +1,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.Api.Models;
-using Almostengr.PetFeeder.Api.Repository;
 using Microsoft.Extensions.Logging;
 using Almostengr.PetFeeder.Common.Client.Interface;
+using Almostengr.PetFeeder.Common.DataTransferObject;
 
 namespace Almostengr.PetFeeder.Monitor.Workers
 {
@@ -14,7 +13,7 @@ namespace Almostengr.PetFeeder.Monitor.Workers
         private readonly IWateringClient _wateringClient;
         private readonly IAlarmClient _alarmClient;
 
-        public WaterBowlWorker(ILogger<WaterBowlWorker> logger, IWateringRepository repository,
+        public WaterBowlWorker(ILogger<WaterBowlWorker> logger, 
             IWateringClient wateringClient, IAlarmClient alarmClient
             ) : base(logger)
         {
@@ -37,7 +36,7 @@ namespace Almostengr.PetFeeder.Monitor.Workers
 
                     if (currentTime >= earliestTime && currentTime <= latestTime && isWaterLow == true)
                     {
-                        Watering watering = new Watering();
+                        WateringDto watering = new WateringDto();
                         watering.Timestamp = DateTime.Now;
                         await _wateringClient.CreateWateringAsync(watering);
 
@@ -45,8 +44,8 @@ namespace Almostengr.PetFeeder.Monitor.Workers
 
                         if (isWaterStillLow == true)
                         {
-                            Alarm alarm = new Alarm();
-                            alarm.Type = nameof(Watering).ToString();
+                            AlarmDto alarm = new AlarmDto();
+                            alarm.Type = nameof(WateringDto).ToString();
                             alarm.Message = "Water level is low. Please refill";
 
                             await _alarmClient.CreateAlarmAsync(alarm);

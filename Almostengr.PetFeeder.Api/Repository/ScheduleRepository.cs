@@ -32,7 +32,8 @@ namespace Almostengr.PetFeeder.Api.Repository
         public async Task<List<Schedule>> GetOldOneTimeSchedulesAsync()
         {
             return await _dbContext.Schedules
-                .Where(s => s.ScheduledTime <= DateTime.Now && s.Frequency == Enums.DayFrequency.Once)
+                .Where(s => s.ScheduledTime <= DateTime.Now && 
+                    s.Frequency == Common.Enums.DayFrequency.Once)
                 .ToListAsync();
         }
     }

@@ -35,7 +35,7 @@ namespace Almostengr.PetFeeder.Api.Repository
             return await _table.SingleOrDefaultAsync(e => e.Id == id);
         }
 
-        public async Task CreateAsync(Entity entity)
+        public async Task AddAsync(Entity entity)
         {
             await _table.AddAsync(entity);
         }

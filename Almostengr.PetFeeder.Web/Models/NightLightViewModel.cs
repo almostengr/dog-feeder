@@ -1,4 +1,4 @@
-using Almostengr.PetFeeder.Api.Models;
+using Almostengr.PetFeeder.Common.DataTransferObject;
 
 public class NightLightViewModel
 {
@@ -7,9 +7,9 @@ public class NightLightViewModel
         this.LightOn = lighton;
     }
 
-    public NightLight FromViewModel()
+    public NightLightDto FromViewModel()
     {
-        return new NightLight()
+        return new NightLightDto()
         {
             LightOn = this.LightOn
         };

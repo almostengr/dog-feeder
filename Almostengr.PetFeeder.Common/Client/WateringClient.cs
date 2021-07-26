@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.Api.Models;
 using Almostengr.PetFeeder.Common.Client.Interface;
+using Almostengr.PetFeeder.Common.DataTransferObject;
 
 namespace Almostengr.PetFeeder.Common.Client
 {
@@ -12,19 +12,19 @@ namespace Almostengr.PetFeeder.Common.Client
         {
         }
 
-        public async Task<Uri> CreateWateringAsync(Watering watering)
+        public async Task<Uri> CreateWateringAsync(WateringDto watering)
         {
-            return await CreateAsync<Watering>("/waterings", watering);
+            return await CreateAsync<WateringDto>("/waterings", watering);
         }
         
-        public async Task<IList<Watering>> GetAllWateringsAsync()
+        public async Task<IList<WateringDto>> GetAllWateringsAsync()
         {
-            return await GetAsync<IList<Watering>>("/waterings/all");
+            return await GetAsync<IList<WateringDto>>("/waterings/all");
         }
 
-        public async Task<IList<Watering>> GetRecentWateringsAsync()
+        public async Task<IList<WateringDto>> GetRecentWateringsAsync()
         {
-            return await GetAsync<IList<Watering>>("/waterings");
+            return await GetAsync<IList<WateringDto>>("/waterings");
         }
 
         public async Task<bool?> GetWaterBowlStatus()
@@ -32,9 +32,9 @@ namespace Almostengr.PetFeeder.Common.Client
             return await GetAsyncBool("/waterings/status/bowllow");
         }
 
-        public async Task<Watering> GetWateringAsync(int id)
+        public async Task<WateringDto> GetWateringAsync(int id)
         {
-            return await GetAsync<Watering>($"/waterings/{id}");
+            return await GetAsync<WateringDto>($"/waterings/{id}");
         }
 
     }

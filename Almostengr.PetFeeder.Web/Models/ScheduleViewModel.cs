@@ -1,6 +1,6 @@
 using System;
-using Almostengr.PetFeeder.Api.Enums;
-using Almostengr.PetFeeder.Api.Models;
+using Almostengr.PetFeeder.Common.Enums;
+using Almostengr.PetFeeder.Common.DataTransferObject;
 
 namespace Almostengr.PetFeeder.Web.Models
 {
@@ -9,20 +9,20 @@ namespace Almostengr.PetFeeder.Web.Models
         public ScheduleViewModel()
         { }
 
-        public ScheduleViewModel(Schedule schedule)
+        public ScheduleViewModel(ScheduleDto schedule)
         {
-            this.Id = schedule.Id;
+            this.Id = schedule.ScheduleId;
             this.ScheduledTime = schedule.ScheduledTime;
             this.IsActive = schedule.IsActive;
             this.Frequency = schedule.Frequency;
             this.IpAddress = schedule.IpAddress;
         }
 
-        public Schedule FromViewModel()
+        public ScheduleDto FromViewModel()
         {
-            return new Schedule()
+            return new ScheduleDto()
             {
-                Id = this.Id,
+                ScheduleId = this.Id,
                 ScheduledTime = this.ScheduledTime,
                 IsActive = this.IsActive,
                 Frequency = this.Frequency,

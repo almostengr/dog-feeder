@@ -5,6 +5,7 @@ using Almostengr.PetFeeder.Api.InputSensor;
 using Almostengr.PetFeeder.Api.Models;
 using Almostengr.PetFeeder.Api.Relays;
 using Almostengr.PetFeeder.Api.Repository;
+using Almostengr.PetFeeder.Common.DataTransferObject;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -18,7 +19,7 @@ namespace Almostengr.PetFeeder.Api.Controllers
         private readonly IWaterBowlRelay _waterBowlRelay;
 
         public WateringsController(ILogger<WateringsController> logger, IWateringRepository wateringRepository,
-            IWaterBowlInputSensor waterBowlInputSensor, 
+            IWaterBowlInputSensor waterBowlInputSensor,
             IWaterBowlRelay waterBowlRelay
             ) : base(logger)
         {
@@ -29,21 +30,35 @@ namespace Almostengr.PetFeeder.Api.Controllers
         }
 
         [HttpGet, Route("all")]
-        public async Task<ActionResult<IList<Watering>>> GetAllWateringsAsync()
+        public async Task<ActionResult<IList<WateringDto>>> GetAllWateringsAsync()
         {
             var waterings = await _wateringRepository.GetAllAsync();
+            var wateringsDto = new List<WateringDto>();
+
+            foreach (var watering in waterings)
+            {
+                wateringsDto.Add(watering.AssignToDto());
+            }
+
             return Ok(waterings);
         }
 
         [HttpGet]
-        public async Task<ActionResult<IList<Watering>>> GetRecentWateringsAsync()
+        public async Task<ActionResult<IList<WateringDto>>> GetRecentWateringsAsync()
         {
             var waterings = await _wateringRepository.GetRecentWateringsAsync();
+            var wateringsDto = new List<WateringDto>();
+
+            foreach (var watering in waterings)
+            {
+                wateringsDto.Add(watering.AssignToDto());
+            }
+            
             return Ok(waterings);
         }
 
         [HttpGet, Route("{id}")]
-        public async Task<ActionResult<Watering>> GetWateringByIdAsync(int id)
+        public async Task<ActionResult<WateringDto>> GetWateringByIdAsync(int id)
         {
             Watering watering = await _wateringRepository.GetByIdAsync(id);
 
@@ -52,11 +67,11 @@ namespace Almostengr.PetFeeder.Api.Controllers
                 return NotFound();
             }
 
-            return Ok(watering);
+            return Ok(watering.AssignToDto());
         }
 
         [HttpPost]
-        public async Task<ActionResult<Watering>> CreateWateringAsync([FromBody] Watering watering)
+        public async Task<ActionResult<Watering>> CreateWateringAsync([FromBody] WateringDto wateringDto)
         {
             if (!ModelState.IsValid)
             {
@@ -66,21 +81,24 @@ namespace Almostengr.PetFeeder.Api.Controllers
             try
             {
                 if (_waterBowlInputSensor.IsWaterBowlLow() == false)
-                { 
+                {
                     return Ok();
                 }
 
-                await _wateringRepository.CreateAsync(watering);
+                Watering watering = new Watering();
+                watering.AssignFromDto(wateringDto);
+
+                await _wateringRepository.AddAsync(watering);
                 await _wateringRepository.SaveChangesAsync();
 
                 int counter = 0;
-                while(_waterBowlInputSensor.IsWaterBowlLow() && counter < 8)
+                while (_waterBowlInputSensor.IsWaterBowlLow() && counter < 8)
                 {
                     _waterBowlRelay.OpenWaterValve();
                     await Task.Delay(TimeSpan.FromMilliseconds(250));
                     counter++;
                 }
-                
+
                 _waterBowlRelay.CloseWaterValve();
                 return StatusCode(201);
             }

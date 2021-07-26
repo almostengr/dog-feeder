@@ -5,6 +5,7 @@ using Almostengr.PetFeeder.Api.Models;
 using Almostengr.PetFeeder.Api.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Almostengr.PetFeeder.Common.DataTransferObject;
 
 namespace Almostengr.PetFeeder.Api.Controllers
 {
@@ -20,40 +21,62 @@ namespace Almostengr.PetFeeder.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IList<Alarm>>> GetActiveAlarmsAsync()
+        public async Task<ActionResult<IList<AlarmDto>>> GetActiveAlarmsAsync()
         {
             var alarms = await _alarmRepo.GetActiveAlarmsAsync();
-            return Ok(alarms);
+            var alarmsDto = new List<AlarmDto>();
+
+            foreach (var alarm in alarms)
+            {
+                alarmsDto.Add(alarm.AssignToDto());
+            }
+
+            return Ok(alarmsDto);
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<IList<Alarm>>> GetAllAlarmsAsync()
+        public async Task<ActionResult<IList<AlarmDto>>> GetAllAlarmsAsync()
         {
             var alarms = await _alarmRepo.GetAllAsync();
-            return Ok(alarms);
+            var alarmsDto = new List<AlarmDto>();
+
+            foreach (var alarm in alarms)
+            {
+                alarmsDto.Add(alarm.AssignToDto());
+            }
+
+            return Ok(alarmsDto);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Alarm>> GetAlarmByIdAsync(int id)
+        public async Task<ActionResult<AlarmDto>> GetAlarmByIdAsync(int id)
         {
-            Alarm alarm = await _alarmRepo.GetByIdAsync(id);
+            var alarm = await _alarmRepo.GetByIdAsync(id);
+
             if (alarm == null)
             {
                 return NotFound();
             }
 
-            return Ok(alarm);
+            return Ok(alarm.AssignToDto());
         }
 
         [HttpGet("type/{alarmType}")]
-        public async Task<ActionResult<IList<Alarm>>> GetAlarmsByTypeAsync(string alarmType)
+        public async Task<ActionResult<IList<AlarmDto>>> GetAlarmsByTypeAsync(string alarmType)
         {
             var alarms = await _alarmRepo.GetAlarmsByTypeAsync(alarmType);
-            return Ok(alarms);
+            var alarmsDto = new List<AlarmDto>();
+
+            foreach (var alarm in alarms)
+            {
+                alarmsDto.Add(alarm.AssignToDto());
+            }   
+
+            return Ok(alarmsDto);
         }
 
         [HttpGet("{id}/dismiss")]
-        public async Task<ActionResult<Alarm>> DismissActiveAlarmAsync(int id)
+        public async Task<ActionResult<AlarmDto>> DismissActiveAlarmAsync(int id)
         {
             Alarm alarm = await _alarmRepo.GetByIdAsync(id);
 
@@ -77,7 +100,7 @@ namespace Almostengr.PetFeeder.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Alarm>> CreateAlarmAsync([FromBody] Alarm alarm)
+        public async Task<ActionResult<Alarm>> CreateAlarmAsync([FromBody] AlarmDto alarmDto)
         {
             if (ModelState.IsValid == false)
             {
@@ -86,7 +109,10 @@ namespace Almostengr.PetFeeder.Api.Controllers
 
             try
             {
-                await _alarmRepo.CreateAsync(alarm);
+                Alarm alarm = new Alarm();
+                alarm.AssignFromDto(alarmDto);
+
+                await _alarmRepo.AddAsync(alarm);
                 await _alarmRepo.SaveChangesAsync();
             }
             catch (Exception ex)

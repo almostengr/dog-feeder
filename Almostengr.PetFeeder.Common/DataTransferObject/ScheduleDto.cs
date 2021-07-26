@@ -1,5 +1,5 @@
 using System;
-using Almostengr.PetFeeder.Api.Enums;
+using Almostengr.PetFeeder.Common.Enums;
 
 namespace Almostengr.PetFeeder.Common.DataTransferObject
 {

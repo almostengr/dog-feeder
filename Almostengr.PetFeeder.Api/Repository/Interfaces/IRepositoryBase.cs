@@ -9,7 +9,7 @@ namespace Almostengr.PetFeeder.Api.Repository
         void Delete(Entity entity);
         Task<IList<Entity>> GetAllAsync();
         Task<Entity> GetByIdAsync(int id);
-        Task CreateAsync(Entity entity);
+        Task AddAsync(Entity entity);
         void Update(Entity entity);
         void UpdateRange(IList<Entity> entities);
         Task SaveChangesAsync();

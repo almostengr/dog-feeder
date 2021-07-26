@@ -1,10 +1,10 @@
 using System;
 using System.Device.Gpio;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.Api.Enums;
+using Almostengr.PetFeeder.Common.Enums;
 using Almostengr.PetFeeder.Api.Models;
 using Microsoft.Extensions.Logging;
-using Almostengr.PetFeeder.Api.Constants;
+using Almostengr.PetFeeder.Common.Constants;
 
 namespace Almostengr.PetFeeder.Api.Relays
 {

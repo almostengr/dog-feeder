@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.Api.Models;
 using Almostengr.PetFeeder.Common.Client.Interface;
+using Almostengr.PetFeeder.Common.DataTransferObject;
 
 namespace Almostengr.PetFeeder.Common.Client
 {
@@ -10,19 +10,19 @@ namespace Almostengr.PetFeeder.Common.Client
     {
         public FeedingClient() : base() {}
 
-        public async Task<IList<Feeding>> GetAllFeedingsAsync()
+        public async Task<IList<FeedingDto>> GetAllFeedingsAsync()
         {
-            return await GetAsync<IList<Feeding>>("/feedings");
+            return await GetAsync<IList<FeedingDto>>("/feedings");
         }
 
-        public async Task<Feeding> GetFeedingAsync(int id)
+        public async Task<FeedingDto> GetFeedingAsync(int id)
         {
-            return await GetAsync<Feeding>($"/feedings/{id}");
+            return await GetAsync<FeedingDto>($"/feedings/{id}");
         }
 
-        public async Task<Uri> CreateFeedingAsync(Feeding feeding)
+        public async Task<Uri> CreateFeedingAsync(FeedingDto feeding)
         {
-            return await CreateAsync<Feeding>("/feedings", feeding);
+            return await CreateAsync<FeedingDto>("/feedings", feeding);
         }
 
     }
