@@ -62,7 +62,8 @@ namespace Almostengr.PetFeeder.Web.Controllers.Api
                 return StatusCode(500, "A problem occurred when handling your request");
             }
 
-            return StatusCode(201);
+//             return StatusCode(201);
+                return CreatedAtAction(nameof(GetFeedingById), new { id = feeding.FeedingId }, feeding.AssignToDto());
         }
 
     }
