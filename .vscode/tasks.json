@@ -31,7 +31,7 @@
                 "-p",
                 "Almostengr.PetFeeder.Api/",
                 "-o",
-                "${workspaceFolder}/Almostengr.PetFeeder.Api/Migrations",
+                "${workspaceFolder}/Almostengr.PetFeeder.Web/Migrations",
                 "${input:migrationName}"
             ],
             "group": "none",
@@ -49,7 +49,7 @@
                 "database",
                 "update",
                 "-p",
-                "Almostengr.PetFeeder.Api/",
+                "Almostengr.PetFeeder.Web/",
             ],
             "group": "none",
             "presentation": {
@@ -67,23 +67,7 @@
                 "remove",
                 "${input:migrationName}",
                 "-p",
-                "Almostengr.PetFeeder.Api/",
-            ],
-            "group": "none",
-            "presentation": {
-                "reveal": "silent"
-            },
-            "problemMatcher": "$msCompile",
-        },
-        {
-            "label": "watch run API",
-            "command": "dotnet",
-            "type" : "shell",
-            "args": [
-                "watch",
-                "-p",
-                "Almostengr.PetFeeder.Api/",
-                "run"
+                "Almostengr.PetFeeder.Web/",
             ],
             "group": "none",
             "presentation": {
@@ -107,10 +91,6 @@
             },
             "problemMatcher": "$msCompile",
         },
-        {
-            "label": "Launch solution",
-            "dependsOn": ["watch run API", "watch run WEB"]
-        }
     ],
     "inputs": [
         {

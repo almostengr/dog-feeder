@@ -1,4 +1,4 @@
-@model List<ScheduleViewModel>
+@model List<ScheduleDto>
 
 <div class="row">
     <div class="col-8">
@@ -25,10 +25,10 @@
             <div class="col">@item.Frequency</div>
             <div class="col">@item.IsActive</div>
             <div class="col">
-                <form method="get" action="/schedule/edit/@item.Id">
+                <form method="get" action="/schedule/edit/@item.ScheduleId">
                     <button type="submit" class="btn btn-danger">Edit</button>
                 </form>
-                <form method="post" action="/schedule/delete/@item.Id">
+                <form method="post" action="/schedule/delete/@item.ScheduleId">
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
             </div>

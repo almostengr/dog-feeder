@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.Common.Client.Interface;
+using Almostengr.PetFeeder.Web.DataTransferObjects;
 using Almostengr.PetFeeder.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -9,48 +9,30 @@ namespace Almostengr.PetFeeder.Web.Controllers
 {
     public class WateringController : BaseController
     {
-        private readonly ILogger<WateringController> _logger;
-        private readonly IWateringClient _wateringClient;
-
-        public WateringController(ILogger<WateringController> logger, IWateringClient wateringClient) : base(logger)
+        public WateringController(ILogger<WateringController> logger) : base(logger)
         {
-            _logger = logger;
-            _wateringClient = wateringClient;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<IActionResult> All()
         {
             ViewData["Title"] = "All Waterings";
-            var waterings = await _wateringClient.GetAllWateringsAsync();
-
-            IList<WateringViewModel> models = new List<WateringViewModel>();
-            foreach(var watering in waterings)
-            {
-                models.Add(new WateringViewModel(watering));
-            }
-
-            return View(models);
+            var result = await GetAsync<IList<WateringDto>>("/api/waterings/all");
+            return View(result);
         }
     
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Latest Waterings";
-            var waterings = await _wateringClient.GetRecentWateringsAsync();
-
-            IList<WateringViewModel> models = new List<WateringViewModel>();
-            foreach(var watering in waterings)
-            {
-                models.Add(new WateringViewModel(watering));
-            }
-
-            return View(models);
+            var waterings = await GetAsync<IList<WateringDto>>("/api/waterings");
+            return View(waterings);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetWatering(int id)
         {
-            var watering = await _wateringClient.GetWateringAsync(id);
+            var watering = await GetAsync<WateringDto>("/api/waterings/{id}");
 
             if(watering == null)
             {
@@ -58,6 +40,18 @@ namespace Almostengr.PetFeeder.Web.Controllers
             }
 
             return View(new WateringViewModel(watering));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostWatering([FromBody] WateringDto wateringDto)
+        {
+            if(ModelState.IsValid == false)
+            {
+                return View(wateringDto);
+            }
+
+            await PostAsync("/api/waterings", wateringDto);
+            return RedirectToAction("Index");
         }
 
     }

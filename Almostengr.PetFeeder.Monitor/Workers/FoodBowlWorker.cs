@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.Common.Enums;
+using Almostengr.PetFeeder.Web.Enums;
 using Microsoft.Extensions.Logging;
-using Almostengr.PetFeeder.Common.Client.Interface;
-using Almostengr.PetFeeder.Common.DataTransferObject;
+using Almostengr.PetFeeder.Web.Client.Interface;
+using Almostengr.PetFeeder.Web.DataTransferObject;
 
 namespace Almostengr.PetFeeder.Monitor.Workers
 {

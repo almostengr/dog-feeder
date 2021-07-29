@@ -1,11 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Almostengr.PetFeeder.Web.Models;
-using Newtonsoft.Json;
-using System.Net.Http;
 
 namespace Almostengr.PetFeeder.Web.Controllers
 {
@@ -32,29 +28,6 @@ namespace Almostengr.PetFeeder.Web.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        public async Task<IActionResult> LatestFeeding()
-        {
-            List<FeedingViewModel> feedings = null;
-
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new System.Uri("http://localhost:5000");
-
-                var response = await client.GetAsync("feedings");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    feedings = JsonConvert.DeserializeObject<List<FeedingViewModel>>(response.Content.ReadAsStringAsync().Result);
-                }
-                else
-                {
-                    feedings = new List<FeedingViewModel>();
-                }
-            }
-
-            return PartialView("_LatestFeedings", feedings);
         }
     }
 }

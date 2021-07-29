@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.Common.Client.Interface;
-using Almostengr.PetFeeder.Common.DataTransferObject;
-using Almostengr.PetFeeder.Web.Models;
+using Almostengr.PetFeeder.Web.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -10,35 +8,26 @@ namespace Almostengr.PetFeeder.Web.Controllers
 {
     public class ScheduleController : BaseController
     {
-        private readonly IScheduleClient _scheduleClient;
-
-        public ScheduleController(ILogger<ScheduleController> logger, IScheduleClient scheduleClient) : base(logger)
+        public ScheduleController(ILogger<ScheduleController> logger) : base(logger)
         {
-            _scheduleClient = scheduleClient;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            ViewData["Title"] = "Scheduled Feeding";
-            var schedules = await _scheduleClient.GetAllSchedulesAsync();
+            ViewData["Title"] = "Scheduled Feedings";
+            var schedules = await GetAsync<IList<ScheduleDto>>("/api/schedules");
 
-            List<ScheduleViewModel> models = new List<ScheduleViewModel>();
-            foreach(var schedule in schedules)
-            {
-                models.Add(new ScheduleViewModel(schedule));
-            }
-
-            return View(models);
+            return View(schedules);
         }
 
-        [HttpPost]
+        [HttpPost("{id}")]
         // [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             ViewData["Title"] = "Delete Scheduled Feeding";
 
-            await _scheduleClient.DeleteScheduleAsync(id);
+            await DeleteAsync<ScheduleDto>("/api/schedules/" + id);
 
             return RedirectToAction("index");
         }
@@ -48,7 +37,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
         {
             ViewData["Title"] = "Create Scheduled Feeding";
 
-            return View("CreateEdit", new ScheduleViewModel());
+            return View("CreateEdit", new ScheduleDto());
         }
 
         [HttpGet]
@@ -56,34 +45,32 @@ namespace Almostengr.PetFeeder.Web.Controllers
         {
             ViewData["Title"] = "Edit Scheduled Feeding";
 
-            ScheduleDto schedule = await _scheduleClient.GetScheduleAsync(scheduleId);            
+            ScheduleDto scheduleDto = await GetAsync<ScheduleDto>("/api/schedules/" + scheduleId);
 
-            if (schedule == null)
+            if (scheduleDto == null)
                 return NotFound();
 
-            ScheduleViewModel model = new ScheduleViewModel(schedule);
-
-            return View("CreateEdit", schedule);
+            return View("CreateEdit", scheduleDto);
         }
 
         [HttpPost]
         // [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateUpdate(ScheduleViewModel schedule)
+        public async Task<IActionResult> CreateUpdate(ScheduleDto scheduleDto)
         {
             if (ModelState.IsValid == false)
             {
-                return View(schedule);
+                return View(scheduleDto);
             }
 
-            if (schedule.Id > 0)
+            if (scheduleDto.ScheduleId > 0)
             {
                 // existing record
-                await _scheduleClient.UpdateScheduleAsync(schedule.FromViewModel());
+                await PutAsync<ScheduleDto>("/api/schedules/", scheduleDto);
             }
             else
             {
                 // new record
-                await _scheduleClient.CreateScheduleAsync(schedule.FromViewModel());
+                await PostAsync<ScheduleDto>("/api/schedules", scheduleDto);
             }
 
             return RedirectToAction("index");

@@ -1,4 +1,4 @@
-@model List<WateringViewModel>
+@model List<Watering>
 
 <div class="row pb-3">
     <div class="col-10">
@@ -18,7 +18,7 @@
     @foreach (var item in Model)
     {
         <div class="row">
-        <div class="col px-1">@item.WateringTime</div>
+        <div class="col px-1">@item.Created</div>
         </div>
     }
 }

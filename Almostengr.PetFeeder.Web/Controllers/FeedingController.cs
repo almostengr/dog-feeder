@@ -1,6 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.Common.Client.Interface;
+using Almostengr.PetFeeder.Web.DataTransferObjects;
 using Almostengr.PetFeeder.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -9,49 +10,42 @@ namespace Almostengr.PetFeeder.Web.Controllers
 {
     public class FeedingController : BaseController
     {
-        private readonly IFeedingClient _feedingClient;
-
-        public FeedingController(ILogger<FeedingController> logger, IFeedingClient feedingClient) :
+        public FeedingController(ILogger<FeedingController> logger) :
             base(logger)
         {
-            _feedingClient = feedingClient;
         }
 
         [HttpGet]
         public async Task<IActionResult> All()
         {
             ViewData["Title"] = "All Feedings";
-            var feedings = await _feedingClient.GetAllFeedingsAsync();
 
-            List<FeedingViewModel> feedingsViewModel = new List<FeedingViewModel>();
-            foreach (var feeding in feedings)
-            {
-                feedingsViewModel.Add(new FeedingViewModel(feeding));
-            }
+            var feedings = await GetAsync<IList<FeedingDto>>("api/feedings/all");
 
-            return View(feedingsViewModel);
+            return View(feedings);
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Latest Feedings";
-            var feedings = await _feedingClient.GetAllFeedingsAsync();
 
-            IList<FeedingViewModel> feedingsViewModel = new List<FeedingViewModel>();
-            foreach (var feeding in feedings)
-            {
-                feedingsViewModel.Add(new FeedingViewModel(feeding));
-            }
+            var feedings = await GetAsync<IList<FeedingDto>>("api/feedings");
 
-            return View(feedingsViewModel);
+            return View(feedings);
         }
 
         [HttpPost]
         // [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateFeeding(FeedingViewModel model)
+        public async Task<IActionResult> CreateFeeding(FeedingDto feedingDto)
         {
-            await _feedingClient.CreateFeedingAsync(model.FromViewModel());
+            if (ModelState.IsValid == false)
+            {
+                return View(feedingDto);
+            }
+
+            await PostAsync<FeedingDto>("api/feedings", feedingDto);
+
             return RedirectToAction("index");
         }
 

@@ -1,4 +1,4 @@
-@model SettingViewModel
+@model SettingDto
 
 <h1>Setting</h1>
 
@@ -7,7 +7,6 @@
 </div>
 
 <form method="post" asp-controller="setting" asp-action="CreateUpdate">
-    <input type="hidden" name="id" id="id" value="@Model.Id" asp-for="@Model.Id" />
     <div>
         <label for="key">Key</label>
         <input type="textbox" readonly="readonly" asp-for="@Model.Key" name="key" id="key" class="form-control">

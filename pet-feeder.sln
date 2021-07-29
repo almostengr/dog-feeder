@@ -3,13 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Almostengr.PetFeeder.Api", "Almostengr.PetFeeder.Api\Almostengr.PetFeeder.Api.csproj", "{C20366C2-436E-4492-A3D2-3AC5E2C9EDB8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Almostengr.PetFeeder.Web", "Almostengr.PetFeeder.Web\Almostengr.PetFeeder.Web.csproj", "{442150ED-08B1-4875-9799-9CF0B342E76A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Almostengr.PetFeeder.Common", "Almostengr.PetFeeder.Common\Almostengr.PetFeeder.Common.csproj", "{FD0949ED-96ED-4A56-89BF-05BDF9569147}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Almostengr.PetFeeder.Monitor", "Almostengr.PetFeeder.Monitor\Almostengr.PetFeeder.Monitor.csproj", "{C3145D0B-7CF2-438F-88D7-AE8A2CE03708}"
 EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution

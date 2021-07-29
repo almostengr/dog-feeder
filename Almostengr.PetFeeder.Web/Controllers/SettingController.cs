@@ -1,19 +1,15 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.Common.Client.Interface;
-using Almostengr.PetFeeder.Web.Models;
+using Almostengr.PetFeeder.Web.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.Web.Controllers
 {
-    public class Setting : BaseController
+    public class SettingController : BaseController
     {
-        private readonly ISettingClient _settingClient;
-
-        public Setting(ILogger<BaseController> logger, ISettingClient settingClient) : base(logger)
+        public SettingController(ILogger<SettingController> logger) : base(logger)
         {
-            _settingClient = settingClient;
         }
 
         [HttpGet]
@@ -21,37 +17,29 @@ namespace Almostengr.PetFeeder.Web.Controllers
         {
             ViewData["Title"] = "All Settings";
             
-            var settings = await _settingClient.GetSettingsAsync();
+            var settings = await GetAsync<IList<SettingDto>>("api/settings");
 
-            IList<SettingViewModel> models = new List<SettingViewModel>();
-            foreach(var setting in settings)
-            {
-                models.Add(new SettingViewModel(setting));
-            }
-
-            return View(models);
+            return View(settings);
         }
 
-        [HttpGet]
+        [HttpGet("{id}/edit")]
         public async Task<IActionResult> Edit(string id)
         {
             ViewData["Title"] = "Edit Setting";
 
-            var setting = await _settingClient.GetSettingAsync(id);
+            var setting = await GetAsync<SettingDto>("api/settings/" + id);
 
             if (setting == null)
                 return NotFound();
 
-            SettingViewModel settingViewModel = new SettingViewModel(setting);
-
-            return View(settingViewModel);
+            return View(setting);
         }
 
         [HttpPost]
         // [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateUpdate(SettingViewModel model)
+        public async Task<IActionResult> CreateUpdate(SettingDto settingDto)
         {
-            await _settingClient.UpdateSettingAsync(model.FromViewModel());
+            await PutAsync("api/settings/" + settingDto.Key, settingDto);
             return RedirectToAction("index");
         }
 

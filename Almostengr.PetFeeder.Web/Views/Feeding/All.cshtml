@@ -1,6 +1,6 @@
-@model List<FeedingViewModel>
+@model List<FeedingDto>
 @{
-    var sortedModel = Model.OrderByDescending(m => m.Timestamp);
+    var sortedModel = Model.OrderByDescending(m => m.Created);
 }
 
 <h1>All Feedings</h1>
@@ -17,7 +17,7 @@
         string wasScheduled = item.ScheduleId > 0 ? "Yes" : "No";
 
         <div class="row">
-            <div class="col px-1">@item.Timestamp</div>
+            <div class="col px-1">@item.Created</div>
             <div class="col px-1">@wasScheduled</div>
         </div>
     }
