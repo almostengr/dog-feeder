@@ -20,12 +20,21 @@ namespace Almostengr.PetFeeder.Web.Models
         public bool IsActive { get; set; } = true;
         public DateTime Modified { get; set; }
 
-        public void AssignFromDto(AlarmDto dto)
+        internal void CreateFromDto(AlarmDto alarmDto)
         {
-            Created = DateTime.Now;
-            Type = dto.Type;
-            Message = dto.Message;
-            IsActive = true;
+            this.Created = DateTime.Now;
+            this.Type = alarmDto.Type;
+            this.Message = alarmDto.Message;
+            this.IsActive = true;
+            this.Modified = DateTime.Now;
+        }
+
+        internal void UpdateFromDto(AlarmDto alarmDto)
+        {
+            this.Type = alarmDto.Type;
+            this.Message = alarmDto.Message;
+            this.IsActive = alarmDto.IsActive;
+            this.Modified = DateTime.Now;
         }
 
         public AlarmDto AssignToDto()

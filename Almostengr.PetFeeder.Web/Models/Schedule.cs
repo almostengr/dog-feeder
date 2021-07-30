@@ -13,11 +13,20 @@ namespace Almostengr.PetFeeder.Web.Models
         [Required]
         public DateTime ScheduledTime { get; set; }
 
+        [Required]
         public bool IsActive { get; set; } = true;
+        
+        [Required]
         public double FeedingAmount { get; set; }
+
+        [Required]
         public DayFrequency Frequency { get; set; }
-        public string IpAddress { get; set; }
+
+        [Required]
         public DateTime Created { get; set; }
+
+        [Required]
+        public DateTime Modified {get;set;}
 
         internal ScheduleDto AssignToDto()
         {
@@ -28,17 +37,29 @@ namespace Almostengr.PetFeeder.Web.Models
                 IsActive = this.IsActive,
                 FeedingAmount = this.FeedingAmount,
                 Frequency = this.Frequency,
-                IpAddress = this.IpAddress,
+                Created = this.Created,
+                Modified = this.Modified,
             };
         }
 
-        internal void AssignFromDto(ScheduleDto scheduleDto)
+        internal void CreateFromDto(ScheduleDto scheduleDto)
+        {
+            this.Created = DateTime.Now;
+            this.ScheduledTime = scheduleDto.ScheduledTime;
+            this.IsActive = scheduleDto.IsActive;
+            this.FeedingAmount = scheduleDto.FeedingAmount;
+            this.Frequency = scheduleDto.Frequency;
+            this.Modified = DateTime.Now;
+        }
+
+        internal void UpdateFromDto(ScheduleDto scheduleDto)
         {
             this.ScheduledTime = scheduleDto.ScheduledTime;
             this.IsActive = scheduleDto.IsActive;
             this.FeedingAmount = scheduleDto.FeedingAmount;
             this.Frequency = scheduleDto.Frequency;
-            this.IpAddress = scheduleDto.IpAddress;
+            this.Modified = DateTime.Now;
         }
+
     }
 }

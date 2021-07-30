@@ -56,7 +56,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
             return response.StatusCode;
         }
 
-        public async Task<Uri> PostAsync<Entity>(string route, Entity entity) where Entity : class
+        public async Task<Entity> PostAsync<Entity>(string route, Entity entity) where Entity : class
         {
             Entity responseEntity = null;
 
@@ -67,8 +67,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
                 responseEntity = JsonConvert.DeserializeObject<Entity>(response.Content.ReadAsStringAsync().Result);
             }
 
-            // return responseEntity;
-            return response.Headers.Location;
+            return responseEntity;
         }
 
         public async Task<Entity> PutAsync<Entity>(string route, Entity entity) where Entity : class

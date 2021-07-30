@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Web.Data;
 using Almostengr.PetFeeder.Web.Models;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.Web.Repository
 {
+
     public class SettingRepository : RepositoryBase<Setting>, ISettingRepository
     {
         private readonly PetFeederDbContext _dbContext;
@@ -20,8 +22,9 @@ namespace Almostengr.PetFeeder.Web.Repository
 
         public async Task<Setting> GetSettingByKeyAsync(string key)
         {
-            _logger.LogInformation("Getting single setting");
-            return await _dbContext.Settings.SingleOrDefaultAsync(s => s.Key == key);
+            return await _dbContext.Settings
+                .Where(s => s.Key == key)
+                .SingleOrDefaultAsync();
         }
 
     }

@@ -6,6 +6,8 @@ using Almostengr.PetFeeder.Web.Repository;
 using Almostengr.PetFeeder.Web.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Linq;
+using Almostengr.PetFeeder.Web.Constants;
 
 namespace Almostengr.PetFeeder.Web.Controllers.Api
 {
@@ -22,34 +24,25 @@ namespace Almostengr.PetFeeder.Web.Controllers.Api
             _scheduleRepository = scheduleRepository;
         }
 
+        // GET /api/schedules/all
         [HttpGet("all")]
         public async Task<ActionResult<IList<ScheduleDto>>> GetAllSchedulesAsync()
         {
             var schedules = await _scheduleRepository.GetAllAsync();
-            var schedulesDto = new List<ScheduleDto>();
 
-            foreach (var schedule in schedules)
-            {
-                schedulesDto.Add(schedule.AssignToDto());
-            }
-
-            return Ok(schedulesDto);
+            return Ok(schedules.Select(s => s.AssignToDto()).ToList());
         }
 
+        // GET /api/schedules
         [HttpGet]
         public async Task<ActionResult<IList<ScheduleDto>>> GetActiveSchedulesAsync()
         {
             var schedules = await _scheduleRepository.GetAllActiveSchedulesAsync();
-            var schedulesDto = new List<ScheduleDto>();
 
-            foreach (var schedule in schedules)
-            {
-                schedulesDto.Add(schedule.AssignToDto());
-            }
-
-            return Ok(schedules);
+            return Ok(schedules.Select(s => s.AssignToDto()).ToList());
         }
 
+        // GET /api/schedules/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<ScheduleDto>> GetScheduleByIdAsync(int id)
         {
@@ -60,11 +53,10 @@ namespace Almostengr.PetFeeder.Web.Controllers.Api
                 return NotFound();
             }
 
-            ScheduleDto scheduleDto = schedule.AssignToDto();
-
-            return Ok(scheduleDto);
+            return Ok(schedule.AssignToDto());
         }
 
+        // POST /api/schedules
         [HttpPost]
         public async Task<ActionResult<ScheduleDto>> CreateScheduleAsync([FromBody] ScheduleDto scheduleDto)
         {
@@ -76,20 +68,22 @@ namespace Almostengr.PetFeeder.Web.Controllers.Api
             try
             {
                 Schedule schedule = new Schedule();
-                schedule.AssignFromDto(scheduleDto);
+                schedule.CreateFromDto(scheduleDto);
 
                 await _scheduleRepository.AddAsync(schedule);
                 await _scheduleRepository.SaveChangesAsync();
+
+                // return StatusCode(201);
+                return CreatedAtAction(nameof(GetScheduleByIdAsync), new { id = schedule.ScheduleId }, schedule.AssignToDto());
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return StatusCode(500, "A problem occurred when handling your request");
+                return StatusCode(500, ErrorMessage.Api500);
             }
-
-            return StatusCode(201);
         }
 
+        // DELETE /api/schedules/{id}        
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteScheduleAsync(int id)
         {
@@ -103,16 +97,16 @@ namespace Almostengr.PetFeeder.Web.Controllers.Api
             {
                 _scheduleRepository.Delete(existingSchedule);
                 await _scheduleRepository.SaveChangesAsync();
+                return NoContent();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return StatusCode(500, "A problem occurred when handling your request");
+                return StatusCode(500, ErrorMessage.Api500);
             }
-
-            return NoContent();
         }
 
+        // PUT /api/schedules
         [HttpPut]
         public async Task<ActionResult> UpdateScheduleAsync([FromBody] ScheduleDto scheduleDto)
         {
@@ -131,18 +125,18 @@ namespace Almostengr.PetFeeder.Web.Controllers.Api
             try
             {
                 Schedule schedule = new Schedule();
-                schedule.AssignFromDto(scheduleDto);
+                schedule.CreateFromDto(scheduleDto);
 
                 _scheduleRepository.Update(schedule);
                 await _scheduleRepository.SaveChangesAsync();
+                return NoContent();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return StatusCode(500, "A problem occurred when handling your request");
+                return StatusCode(500, ErrorMessage.Api500);
             }
-
-            return NoContent();
         }
+
     }
 }

@@ -6,6 +6,8 @@ using Almostengr.PetFeeder.Web.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Almostengr.PetFeeder.Web.DataTransferObjects;
+using System.Linq;
+using Almostengr.PetFeeder.Web.Constants;
 
 namespace Almostengr.PetFeeder.Web.Controllers.Api
 {
@@ -20,34 +22,25 @@ namespace Almostengr.PetFeeder.Web.Controllers.Api
             _logger = logger;
         }
 
+        // GET /api/alarms
         [HttpGet]
         public async Task<ActionResult<IList<AlarmDto>>> GetActiveAlarmsAsync()
         {
             var alarms = await _alarmRepo.GetActiveAlarmsAsync();
-            var alarmsDto = new List<AlarmDto>();
 
-            foreach (var alarm in alarms)
-            {
-                alarmsDto.Add(alarm.AssignToDto());
-            }
-
-            return Ok(alarmsDto);
+            return Ok(alarms.Select(a => a.AssignToDto()).ToList());
         }
 
+        // GET /api/alarms/all
         [HttpGet("all")]
         public async Task<ActionResult<IList<AlarmDto>>> GetAllAlarmsAsync()
         {
             var alarms = await _alarmRepo.GetAllAsync();
-            var alarmsDto = new List<AlarmDto>();
 
-            foreach (var alarm in alarms)
-            {
-                alarmsDto.Add(alarm.AssignToDto());
-            }
-
-            return Ok(alarmsDto);
+            return Ok(alarms.Select(a => a.AssignToDto()).ToList());
         }
 
+        // GET /api/alarms/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<AlarmDto>> GetAlarmByIdAsync(int id)
         {
@@ -61,10 +54,11 @@ namespace Almostengr.PetFeeder.Web.Controllers.Api
             return Ok(alarm.AssignToDto());
         }
 
-        [HttpGet("{id}/dismiss")]
-        public async Task<ActionResult<AlarmDto>> DismissActiveAlarmAsync(int id)
+        // PUT /api/alarms
+        [HttpPut]
+        public async Task<ActionResult> UpdateAlarmAsync([FromBody] AlarmDto alarmDto)
         {
-            Alarm alarm = await _alarmRepo.GetByIdAsync(id);
+            Alarm alarm = await _alarmRepo.GetByIdAsync(alarmDto.AlarmId);
 
             if (alarm == null)
             {
@@ -73,18 +67,20 @@ namespace Almostengr.PetFeeder.Web.Controllers.Api
 
             try
             {
-                _alarmRepo.DismissAlarm(alarm);
+                alarm.UpdateFromDto(alarmDto);
+                _alarmRepo.Update(alarm);
                 await _alarmRepo.SaveChangesAsync();
+
+                return NoContent();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return StatusCode(500);
+                return StatusCode(500, ErrorMessage.Api500);
             }
-
-            return NoContent();
         }
 
+        // POST /api/alarms
         [HttpPost]
         public async Task<ActionResult<Alarm>> CreateAlarmAsync([FromBody] AlarmDto alarmDto)
         {
@@ -96,18 +92,18 @@ namespace Almostengr.PetFeeder.Web.Controllers.Api
             try
             {
                 Alarm alarm = new Alarm();
-                alarm.AssignFromDto(alarmDto);
+                alarm.CreateFromDto(alarmDto);
 
                 await _alarmRepo.AddAsync(alarm);
                 await _alarmRepo.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(GetAlarmByIdAsync), new { id = alarm.AlarmId }, alarm.AssignToDto());
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return StatusCode(500, "A problem occurred when handling your request");
+                return StatusCode(500, ErrorMessage.Api500);
             }
-
-            return StatusCode(201);
         }
 
     }

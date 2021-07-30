@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.Web.Repository
 {
-    public abstract class RepositoryBase<Entity> : IRepositoryBase<Entity> where Entity : class
+    public abstract class RepositoryBase<Entity> : IRepositoryBase<Entity> where Entity : ModelBase
     {
         private readonly PetFeederDbContext _dbContext;
         private readonly ILogger<RepositoryBase<Entity>> _logger;

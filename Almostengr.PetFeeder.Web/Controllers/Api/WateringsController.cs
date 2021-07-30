@@ -8,6 +8,8 @@ using Almostengr.PetFeeder.Web.Repository;
 using Almostengr.PetFeeder.Web.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Linq;
+using Almostengr.PetFeeder.Web.Constants;
 
 namespace Almostengr.PetFeeder.Web.Controllers.Api
 {
@@ -29,47 +31,34 @@ namespace Almostengr.PetFeeder.Web.Controllers.Api
             _waterBowlRelay = waterBowlRelay;
         }
 
+        // GET /api/waterings/all
         [HttpGet, Route("all")]
         public async Task<ActionResult<IList<WateringDto>>> GetAllWateringsAsync()
         {
             var waterings = await _wateringRepository.GetAllAsync();
-            var wateringsDto = new List<WateringDto>();
 
-            foreach (var watering in waterings)
-            {
-                wateringsDto.Add(watering.AssignToDto());
-            }
-
-            return Ok(waterings);
+            return Ok(waterings.Select(w => w.AssignToDto()).ToList());
         }
 
+        // GET /api/waterings
         [HttpGet]
         public async Task<ActionResult<IList<WateringDto>>> GetRecentWateringsAsync()
         {
             var waterings = await _wateringRepository.GetRecentWateringsAsync();
-            var wateringsDto = new List<WateringDto>();
 
-            foreach (var watering in waterings)
-            {
-                wateringsDto.Add(watering.AssignToDto());
-            }
-            
-            return Ok(waterings);
+            return Ok(waterings.Select(w => w.AssignToDto()).ToList());
         }
 
+        // GET /api/waterings/{id}
         [HttpGet, Route("{id}")]
         public async Task<ActionResult<WateringDto>> GetWateringByIdAsync(int id)
         {
             Watering watering = await _wateringRepository.GetByIdAsync(id);
 
-            if (watering == null)
-            {
-                return NotFound();
-            }
-
             return Ok(watering.AssignToDto());
         }
 
+        // POST /api/waterings
         [HttpPost]
         public async Task<ActionResult<Watering>> CreateWateringAsync([FromBody] WateringDto wateringDto)
         {
@@ -86,7 +75,7 @@ namespace Almostengr.PetFeeder.Web.Controllers.Api
                 }
 
                 Watering watering = new Watering();
-                watering.AssignFromDto(wateringDto);
+                watering.CreateFromDto(wateringDto);
 
                 await _wateringRepository.AddAsync(watering);
                 await _wateringRepository.SaveChangesAsync();
@@ -100,16 +89,18 @@ namespace Almostengr.PetFeeder.Web.Controllers.Api
                 }
 
                 _waterBowlRelay.CloseWaterValve();
-                return StatusCode(201);
+                // return StatusCode(201);
+                return CreatedAtAction(nameof(GetWateringByIdAsync), new { id = watering.WateringId }, watering.AssignToDto());
             }
             catch (Exception ex)
             {
                 _waterBowlRelay.CloseWaterValve();
                 _logger.LogError(ex, ex.Message);
-                return StatusCode(500, "A problem occurred when handling your request");
+                return StatusCode(500, ErrorMessage.Api500);
             }
         }
 
+        // GET /api/waterings/status/bowllow
         [HttpGet, Route("status/bowllow")]
         public ActionResult<bool> GetWaterBowlStatus()
         {

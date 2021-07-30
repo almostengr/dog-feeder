@@ -11,21 +11,23 @@ namespace Almostengr.PetFeeder.Web.Models
         public int ScheduleId { get; set; }
         public DateTime? Created { get; set; }
         public double Amount { get; set; }
-        public DateTime Modified { get; internal set; }
 
-        internal void AssignFromDto(FeedingDto feedingDto)
+        internal void CreateFromDto(FeedingDto feedingDto)
         {
-            Amount = feedingDto.Amount;
-            Created = DateTime.Now;
+            this.ScheduleId = feedingDto.ScheduleId;
+            this.Created = DateTime.Now;
+            this.Amount = feedingDto.Amount;
         }
 
         public FeedingDto AssignToDto()
         {
             return new FeedingDto()
             {
-                ScheduleId = ScheduleId,
-                Created = Created,
-                Amount = Amount
+                FeedingId = this.FeedingId,
+                ScheduleId = this.ScheduleId,
+                Created = this.Created,
+                Amount = this.Amount,
+                WasScheduled = this.ScheduleId > 0 ? "Yes" : "No"
             };
         }
 

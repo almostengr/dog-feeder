@@ -9,11 +9,16 @@ namespace Almostengr.PetFeeder.Web.Models
         [Key]
         public int WateringId { get; set; }
         
+        [Required]
         public DateTime Created { get; set; }
 
-        internal void AssignFromDto(WateringDto wateringDto)
+        [Required]
+        public double Amount { get; set; }
+
+        internal void CreateFromDto(WateringDto wateringDto)
         {
-            Created = DateTime.Now;
+            this.Created = DateTime.Now;
+            this.Amount = wateringDto.Amount;
         }
 
         internal WateringDto AssignToDto()
@@ -21,7 +26,8 @@ namespace Almostengr.PetFeeder.Web.Models
             return new WateringDto()
             {
                 WateringId = this.WateringId,
-                Created = this.Created
+                Created = this.Created,
+                Amount = this.Amount
             };
         }
     }

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.Web.Repository
 {
+
     public class FeedingRepository : RepositoryBase<Feeding>, IFeedingRepository
     {
         private readonly PetFeederDbContext _dbContext;
@@ -19,13 +20,21 @@ namespace Almostengr.PetFeeder.Web.Repository
             _dbContext = dbContext;
         }
 
-        public virtual async Task<IList<Feeding>> GetLatestAsync()
+        public async Task<IList<Feeding>> GetLatestAsync()
         {
             return await _dbContext.Feedings
                 .OrderByDescending(f => f.Created)
                 .Take(5)
                 .ToListAsync();
         }
+
+        public async Task<Feeding> GetByIdAsync(int id)
+        {
+            return await _dbContext.Feedings
+                .Where(f => f.FeedingId == id)
+                .SingleOrDefaultAsync();
+        }
+
 
     }
 }

@@ -16,8 +16,9 @@ namespace Almostengr.PetFeeder.Web.Controllers.Api
             _nightLightRelay = nightLightRelay;
         }
 
+        // POST /api/nightlights
         [HttpPost]
-        public async Task<ActionResult<NightLight>> CreateNightLightAsync([FromBody] NightLightDto nightLightDto)
+        public async Task<ActionResult> CreateNightLightAsync([FromBody] NightLightDto nightLightDto)
         {
             if (nightLightDto.LightOn)
             {

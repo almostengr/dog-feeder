@@ -6,6 +6,8 @@ using Almostengr.PetFeeder.Web.Repository;
 using Almostengr.PetFeeder.Web.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Linq;
+using Almostengr.PetFeeder.Web.Constants;
 
 namespace Almostengr.PetFeeder.Web.Controllers.Api
 {
@@ -21,35 +23,25 @@ namespace Almostengr.PetFeeder.Web.Controllers.Api
             _settingRepository = settingRepository;
         }
 
+        // GET /api/settings
         [HttpGet]
         public async Task<ActionResult<IList<SettingDto>>> GetAllSettingsAsync()
         {
             IList<Setting> settings = await _settingRepository.GetAllAsync();
-            var settingsDto = new List<SettingDto>();
 
-            foreach (Setting setting in settings)
-            {
-                settingsDto.Add(setting.AssignToDto());
-            }
-
-            return Ok(settingsDto);
+            return Ok(settings.Select(s => s.AssignToDto()).ToList());
         }
 
+        // GET /api/settings/{key}
         [HttpGet("{key}")]
         public async Task<ActionResult<SettingDto>> GetSettingByKeyAsync(string key)
         {
             Setting setting = await _settingRepository.GetSettingByKeyAsync(key);
 
-            if (setting == null)
-            {
-                return NotFound();
-            }
-
-            SettingDto settingDto = setting.AssignToDto();
-
-            return Ok(settingDto);
+            return Ok(setting.AssignToDto());
         }
 
+        // PUT /api/settings
         [HttpPut]
         public async Task<ActionResult> UpdateSettingAsync([FromBody] SettingDto settingDto)
         {
@@ -62,7 +54,7 @@ namespace Almostengr.PetFeeder.Web.Controllers.Api
 
             try
             {
-                setting.AssignFromDto(settingDto);
+                setting.CreateFromDto(settingDto);
 
                 _settingRepository.Update(setting);
                 await _settingRepository.SaveChangesAsync();
@@ -70,7 +62,7 @@ namespace Almostengr.PetFeeder.Web.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return StatusCode(500, "A problem occurred when handling your request");
+                return StatusCode(500, ErrorMessage.Api500);
             }
 
             return NoContent();

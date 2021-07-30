@@ -9,6 +9,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.Web.Repository
 {
+    
+
     public class AlarmRepository : RepositoryBase<Alarm>, IAlarmRepository
     {
         private readonly PetFeederDbContext _dbContext;
@@ -23,13 +25,6 @@ namespace Almostengr.PetFeeder.Web.Repository
             alarm.IsActive = false;
             alarm.Modified = DateTime.Now;
             _dbContext.Alarms.Update(alarm);
-        }
-
-        public async Task<bool> GetActiveAlarmsExistByTypeAsync(string type)
-        {
-            return await _dbContext.Alarms
-                .Where(a => a.Type == type && a.IsActive == true)
-                .AnyAsync();
         }
 
         public async Task<List<Alarm>> GetActiveAlarmsAsync()
@@ -63,5 +58,6 @@ namespace Almostengr.PetFeeder.Web.Repository
                 .Take(5)
                 .ToListAsync();
         }
+
     }
 }

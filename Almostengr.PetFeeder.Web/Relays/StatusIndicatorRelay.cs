@@ -1,6 +1,6 @@
 using System;
 using System.Device.Gpio;
-using Almostengr.PetFeeder.Common.Constants;
+using Almostengr.PetFeeder.Web.Constants;
 using Almostengr.PetFeeder.Web.Relays;
 using Microsoft.Extensions.Logging;
 

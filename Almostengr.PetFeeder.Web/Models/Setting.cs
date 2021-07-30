@@ -15,8 +15,10 @@ namespace Almostengr.PetFeeder.Web.Models
         [Required]
         public string Value { get; set; }
 
-        public string Type { get; set; }
+        [Required]
         public DateTime Created { get; set; }
+
+        [Required]
         public DateTime Modified { get; set; }
 
         internal SettingDto AssignToDto()
@@ -25,10 +27,20 @@ namespace Almostengr.PetFeeder.Web.Models
             {
                 Key = this.Key,
                 Value = this.Value,
+                Created = this.Created,
+                Modified = this.Modified,
             };
         }
 
-        internal void AssignFromDto(SettingDto settingDto)
+        internal void CreateFromDto(SettingDto settingDto)
+        {
+            this.Key = settingDto.Key;
+            this.Value = settingDto.Value;
+            this.Modified = DateTime.Now;
+            this.Created = DateTime.Now;
+        }
+
+        internal void UpdateFromDto(SettingDto settingDto)
         {
             this.Key = settingDto.Key;
             this.Value = settingDto.Value;

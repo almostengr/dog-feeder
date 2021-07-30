@@ -1,4 +1,4 @@
-namespace Almostengr.PetFeeder.Common.Constants
+namespace Almostengr.PetFeeder.Web.Constants
 {
     public static class GpioPin
     {

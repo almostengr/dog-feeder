@@ -8,6 +8,6 @@ namespace Almostengr.PetFeeder.Web.Repository
     {
         Task<List<Schedule>> GetAllActiveSchedulesAsync();
         Task<Schedule> GetByIdAsync(int id);
-        Task<IList<Schedule>> GetLatestAsync();
+        Task<List<Schedule>> GetOldOneTimeSchedulesAsync();
     }
 }

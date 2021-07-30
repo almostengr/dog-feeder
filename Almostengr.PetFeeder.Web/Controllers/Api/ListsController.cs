@@ -13,6 +13,7 @@ namespace Almostengr.PetFeeder.Web.Controllers.Api
         {
         }
 
+        // GET /api/lists/dayfrequency
         [HttpGet("dayfrequency")]
         public ActionResult<IList<DayFrequency>> DayFrequency()
         {

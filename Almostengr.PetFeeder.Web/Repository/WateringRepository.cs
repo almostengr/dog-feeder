@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.Web.Repository
 {
+
     public class WateringRepository : RepositoryBase<Watering>, IWateringRepository
     {
         private readonly PetFeederDbContext _dbContext;

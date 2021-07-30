@@ -12,6 +12,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
         {
         }
 
+        // GET /schedule
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -21,6 +22,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
             return View(schedules);
         }
 
+        // POST /schedule/delete/{id}
         [HttpPost("{id}")]
         // [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
@@ -32,6 +34,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
             return RedirectToAction("index");
         }
 
+        // GET /schedule/create
         [HttpGet]
         public IActionResult Create()
         {
@@ -40,6 +43,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
             return View("CreateEdit", new ScheduleDto());
         }
 
+        // GET /schedule/{id}/edit
         [HttpGet]
         public async Task<IActionResult> Edit(int scheduleId)
         {
@@ -53,6 +57,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
             return View("CreateEdit", scheduleDto);
         }
 
+        // POST /schedule/{id}/createupdate
         [HttpPost]
         // [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateUpdate(ScheduleDto scheduleDto)

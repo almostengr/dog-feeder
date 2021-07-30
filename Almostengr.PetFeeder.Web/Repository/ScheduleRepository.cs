@@ -22,29 +22,21 @@ namespace Almostengr.PetFeeder.Web.Repository
 
         public async Task<List<Schedule>> GetAllActiveSchedulesAsync()
         {
-            return await _dbContext.Schedules.Where(s => s.IsActive == true).ToListAsync();
+            return await _dbContext.Schedules
+                .Where(s => s.IsActive == true).ToListAsync();
         }
 
-        public async Task<List<Schedule>> GetAllInactiveSchedulesAsync()
+        public async Task<Schedule> GetByIdAsync(int id)
         {
-            return await _dbContext.Schedules.Where(s => s.IsActive == false).ToListAsync();
-        }
-
-        public Task<Schedule> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IList<Schedule>> GetLatestAsync()
-        {
-            throw new NotImplementedException();
+            return await _dbContext.Schedules
+                .Where(s => s.ScheduleId == id)
+                .SingleOrDefaultAsync();
         }
 
         public async Task<List<Schedule>> GetOldOneTimeSchedulesAsync()
         {
             return await _dbContext.Schedules
-                .Where(s => s.ScheduledTime <= DateTime.Now && 
-                    s.Frequency == DayFrequency.Once)
+                .Where(s => s.ScheduledTime <= DateTime.Now && s.Frequency == DayFrequency.Once)
                 .ToListAsync();
         }
     }

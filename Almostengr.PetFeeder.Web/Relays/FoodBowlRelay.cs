@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Almostengr.PetFeeder.Web.Enums;
 using Almostengr.PetFeeder.Web.Models;
 using Microsoft.Extensions.Logging;
-using Almostengr.PetFeeder.Common.Constants;
+using Almostengr.PetFeeder.Web.Constants;
 
 namespace Almostengr.PetFeeder.Web.Relays
 {

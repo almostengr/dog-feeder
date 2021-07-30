@@ -6,6 +6,7 @@ namespace Almostengr.PetFeeder.Web.Repository
 {
     public interface IFeedingRepository : IRepositoryBase<Feeding>
     {
+        Task<Feeding> GetByIdAsync(int id);
         Task<IList<Feeding>> GetLatestAsync();
     }
 }

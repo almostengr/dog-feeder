@@ -21,15 +21,15 @@
     <div class="row">
         <div class="col bg-dark text-white">Date/Time</div>
         <div class="col bg-dark text-white">Scheduled</div>
+        <div class="col bg-dark text-white">Amount</div>
     </div>
 
     @foreach (var item in Model)
     {
-        string wasScheduled = item.ScheduleId > 0 ? "Yes" : "No";
-
         <div class="row">
             <div class="col px-1">@item.Created</div>
-            <div class="col px-1">@wasScheduled</div>
+            <div class="col px-1">@item.WasScheduled</div>
+            <div class="col px-1">@item.Amount</div>
         </div>
     }
 }

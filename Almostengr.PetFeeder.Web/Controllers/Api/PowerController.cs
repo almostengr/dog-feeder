@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Almostengr.PetFeeder.Web.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -13,47 +14,43 @@ namespace Almostengr.PetFeeder.Web.Controllers.Api
             _logger = logger;
         }
 
-        [HttpPost("shutdown")]
-        public ActionResult ShutDown()
+        [HttpPost]
+        public ActionResult CreatePower(PowerDto powerDto)
         {
-            _logger.LogInformation("System shutdown requested");
-
-            Process process = new Process()
+            if (powerDto == null)
             {
-                StartInfo = new ProcessStartInfo()
-                {
-                    FileName = "shutdown",
-                    ArgumentList = {
-                        "-h",
-                        "now"
-                    },
-                    UseShellExecute = true,
-                    CreateNoWindow = true,
-                }
-            };
+                return BadRequest();
+            }
 
+            Process process = new Process();
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+
+            if (powerDto.Action == "restart" || powerDto.Action == "reboot")
+            {
+                _logger.LogInformation("System restart requested");
+
+                startInfo.FileName = "reboot";
+            }
+            else if (powerDto.Action == "shutdown")
+            {
+                _logger.LogInformation("System shutdown requested");
+
+                startInfo.FileName = "shutdown";
+                startInfo.ArgumentList.Add("-h");
+                startInfo.ArgumentList.Add("now");
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+            startInfo.UseShellExecute = true;
+            startInfo.CreateNoWindow = true;
+            process.StartInfo = startInfo;
             process.Start();
+
             return Ok();
         }
 
-        [HttpPost("restart")]
-        public ActionResult Restart()
-        {
-            _logger.LogInformation("System restart requested");
-
-            Process process = new Process()
-            {
-                StartInfo = new ProcessStartInfo()
-                {
-                    FileName = "reboot",
-                    UseShellExecute = true,
-                    CreateNoWindow = true,
-                }
-            };
-
-            process.Start();
-            return Ok();
-        }
-        
     }
 }
