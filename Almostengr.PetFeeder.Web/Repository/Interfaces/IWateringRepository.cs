@@ -7,7 +7,6 @@ namespace Almostengr.PetFeeder.Web.Repository
     public interface IWateringRepository : IRepositoryBase<Watering>
     {        
         Task<Watering> GetByIdAsync(int id);
-        Task<IList<Watering>> GetLatestAsync();
-        Task<List<Watering>> GetRecentWateringsAsync();
+        Task<List<Watering>> GetLatestWateringsAsync();
     }
 }

@@ -31,8 +31,6 @@ namespace Almostengr.PetFeeder.Web.Models
 
         internal void UpdateFromDto(AlarmDto alarmDto)
         {
-            this.Type = alarmDto.Type;
-            this.Message = alarmDto.Message;
             this.IsActive = alarmDto.IsActive;
             this.Modified = DateTime.Now;
         }

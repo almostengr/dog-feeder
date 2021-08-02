@@ -42,7 +42,6 @@ namespace Almostengr.PetFeeder.Web.Models
 
         internal void UpdateFromDto(SettingDto settingDto)
         {
-            this.Key = settingDto.Key;
             this.Value = settingDto.Value;
             this.Modified = DateTime.Now;
         }

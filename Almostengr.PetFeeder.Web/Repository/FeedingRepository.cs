@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +8,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.Web.Repository
 {
-
     public class FeedingRepository : RepositoryBase<Feeding>, IFeedingRepository
     {
         private readonly PetFeederDbContext _dbContext;
@@ -34,7 +32,6 @@ namespace Almostengr.PetFeeder.Web.Repository
                 .Where(f => f.FeedingId == id)
                 .SingleOrDefaultAsync();
         }
-
 
     }
 }

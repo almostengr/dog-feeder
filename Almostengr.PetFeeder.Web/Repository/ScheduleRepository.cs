@@ -23,7 +23,8 @@ namespace Almostengr.PetFeeder.Web.Repository
         public async Task<List<Schedule>> GetAllActiveSchedulesAsync()
         {
             return await _dbContext.Schedules
-                .Where(s => s.IsActive == true).ToListAsync();
+                .Where(s => s.IsActive == true)
+                .ToListAsync();
         }
 
         public async Task<Schedule> GetByIdAsync(int id)

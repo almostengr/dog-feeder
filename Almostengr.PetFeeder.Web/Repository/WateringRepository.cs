@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,23 +19,18 @@ namespace Almostengr.PetFeeder.Web.Repository
             _dbContext = dbContext;
         }
 
-        public Task<Watering> GetByIdAsync(int id)
+        public async Task<Watering> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<IList<Watering>> GetLatestAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<List<Watering>> GetRecentWateringsAsync()
-        {
-            DateTime currentDateTime = DateTime.Now;
-
             return await _dbContext.Waterings
-                .Where(w => w.Created >= currentDateTime.AddDays(-7))
+                .Where(w => w.WateringId == id)
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task<List<Watering>> GetLatestWateringsAsync()
+        {
+            return await _dbContext.Waterings
                 .OrderByDescending(w => w.Created)
+                .Take(5)
                 .ToListAsync();
         }
 
