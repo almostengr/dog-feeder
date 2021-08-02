@@ -1,4 +1,7 @@
 using System.Net.Http.Headers;
+using Almostengr.PetFeeder.Monitor.Workers;
+using Almostengr.PetFeeder.Web.Client;
+using Almostengr.PetFeeder.Web.Client.Interface;
 using Almostengr.PetFeeder.Web.Data;
 using Almostengr.PetFeeder.Web.InputSensor;
 using Almostengr.PetFeeder.Web.Relays;
@@ -30,42 +33,62 @@ namespace Almostengr.PetFeeder.Web
                 options.AppendTrailingSlash = false;
             });
 
+            // ******************************************************************
+            // workers
+            // ******************************************************************
+
+            services.AddHostedService<FoodBowlWorker>();
+            services.AddHostedService<NightLightWorker>();
+            services.AddHostedService<WaterBowlWorker>();
+
+            // ******************************************************************
+            // controllers
+            // ******************************************************************
+
             services.AddControllersWithViews();
+            services.AddControllers();
 
-                        services.AddControllers();
-
+            // ******************************************************************
             // repositories
+            // ******************************************************************
 
-            // services.AddScoped<IAlarmRepository, AlarmRepository>();
-            // services.AddScoped<IFeedingRepository, FeedingRepository>();
-            // services.AddScoped<IScheduleRepository, ScheduleRepository>();
-            // services.AddScoped<ISettingRepository, SettingRepository>();
-            // services.AddScoped<IWateringRepository, WateringRepository>();
-            
             services.AddTransient<IAlarmRepository, AlarmRepository>();
             services.AddTransient<IFeedingRepository, FeedingRepository>();
             services.AddTransient<IScheduleRepository, ScheduleRepository>();
             services.AddTransient<ISettingRepository, SettingRepository>();
             services.AddTransient<IWateringRepository, WateringRepository>();
 
+            // ******************************************************************
+            // clients
+            // ******************************************************************
+
+            services.AddSingleton<IAlarmClient, AlarmClient>();
+            services.AddSingleton<IFeedingClient, FeedingClient>();
+            services.AddSingleton<IListClient, ListClient>();
+            services.AddSingleton<INightLightClient, NightLightClient>();
+            services.AddSingleton<IPowerClient, PowerClient>();
+            services.AddSingleton<IScheduleClient, ScheduleClient>();
+            services.AddSingleton<ISettingClient, SettingClient>();
+            services.AddSingleton<IWateringClient, WateringClient>();
+
+            // ******************************************************************
             // database
+            // ******************************************************************
+
             services.AddDbContext<PetFeederDbContext>(options =>
                 options.UseMySQL(Configuration.GetConnectionString("DbConnection")));
 
+            // ******************************************************************
             // relays
-
-            // services.AddSingleton<IFoodBowlRelay, FoodBowlRelay>();
-            // services.AddSingleton<IWaterBowlRelay, WaterBowlRelay>();
-            // services.AddSingleton<INightLightRelay, NightLightRelay>();
+            // ******************************************************************
 
             services.AddSingleton<IFoodBowlRelay, MockFoodBowlRelay>();
             services.AddSingleton<IWaterBowlRelay, MockWaterBowlRelay>();
             services.AddSingleton<INightLightRelay, MockNightLightRelay>();
 
+            // ******************************************************************
             // input sensors
-
-            // services.AddSingleton<IWaterInputSensor, WaterSignalInput>();
-            // services.AddSingleton<IFoodStorageInputSensor, FoodStorageInputSensor>();
+            // ******************************************************************
 
             services.AddSingleton<IWaterBowlInputSensor, MockWaterBowlInputSensor>();
         }
@@ -83,6 +106,7 @@ namespace Almostengr.PetFeeder.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             // app.UseHttpsRedirection();
             app.UseStaticFiles();
 
