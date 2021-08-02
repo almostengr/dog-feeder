@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using Almostengr.PetFeeder.Web.Client.Interface;
 using Almostengr.PetFeeder.Web.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -8,17 +8,20 @@ namespace Almostengr.PetFeeder.Web.Controllers
 {
     public class AlarmController : BaseController
     {
-        public AlarmController(ILogger<AlarmController> logger) :
+        private readonly IAlarmClient _alarmClient;
+
+        public AlarmController(ILogger<AlarmController> logger, IAlarmClient alarmClient):
             base(logger)
         {
+            _alarmClient = alarmClient;
         }
 
         [HttpGet]
         public async Task<IActionResult> All()
         {
-            ViewData["Title"] = "All Feedings";
+            ViewData["Title"] = "All Alarms";
 
-            var feedings = await GetAsync<IList<AlarmDto>>("api/alarms/all");
+            var feedings = await _alarmClient.GetAllAlarmsAsync();
 
             return View(feedings);
         }
@@ -26,9 +29,9 @@ namespace Almostengr.PetFeeder.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            ViewData["Title"] = "Latest Feedings";
+            ViewData["Title"] = "Latest Alarms";
 
-            var feedings = await GetAsync<IList<AlarmDto>>("api/alarms");
+            var feedings = await _alarmClient.GetActiveAlarmsAsync();
 
             return View(feedings);
         }
@@ -44,13 +47,11 @@ namespace Almostengr.PetFeeder.Web.Controllers
 
             if (alarmDto.AlarmId > 0)
             {
-                // existing record
-                await PutAsync<AlarmDto>("/api/alarms/", alarmDto);
+                await _alarmClient.UpdateAlarmAsync(alarmDto); // existing record
             }
             else
             {
-                // new record
-                await PostAsync<AlarmDto>("/api/alarms", alarmDto);
+                await _alarmClient.CreateAlarmAsync(alarmDto); // new record
             }
 
             return RedirectToAction("index");

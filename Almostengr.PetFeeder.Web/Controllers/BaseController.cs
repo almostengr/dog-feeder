@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Almostengr.PetFeeder.Web.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
     public abstract class BaseController : Controller
     {
         public readonly HttpClient _httpClient;
+
         public BaseController(ILogger<BaseController> logger)
         {
             _httpClient = new HttpClient();
@@ -21,7 +23,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<Entity> GetAsync<Entity>(string route) where Entity : class
+        public async Task<Entity> GetAsync<Entity>(string route) where Entity : BaseDto
         {
             Entity responseEntity = null;
 
@@ -49,14 +51,14 @@ namespace Almostengr.PetFeeder.Web.Controllers
             return responseEntity;
         }
 
-        public async Task<HttpStatusCode> DeleteAsync<Entity>(string route) where Entity : class
+        public async Task<HttpStatusCode> DeleteAsync<Entity>(string route) where Entity : BaseDto
         {
             var response = await _httpClient.DeleteAsync(route);
 
             return response.StatusCode;
         }
 
-        public async Task<Entity> PostAsync<Entity>(string route, Entity entity) where Entity : class
+        public async Task<Entity> PostAsync<Entity>(string route, Entity entity) where Entity : BaseDto
         {
             Entity responseEntity = null;
 
@@ -70,7 +72,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
             return responseEntity;
         }
 
-        public async Task<Entity> PutAsync<Entity>(string route, Entity entity) where Entity : class
+        public async Task<Entity> PutAsync<Entity>(string route, Entity entity) where Entity : BaseDto
         {
             Entity responseEntity = null;
 

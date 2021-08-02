@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Almostengr.PetFeeder.Web.Enums;
@@ -17,7 +16,7 @@ namespace Almostengr.PetFeeder.Web.Controllers.Api
         [HttpGet("dayfrequency")]
         public ActionResult<IList<DayFrequency>> DayFrequency()
         {
-            return Enum.GetValues(typeof(DayFrequency)).Cast<DayFrequency>().ToList();
+            return System.Enum.GetValues(typeof(DayFrequency)).Cast<DayFrequency>().ToList();
         }
     }
 }

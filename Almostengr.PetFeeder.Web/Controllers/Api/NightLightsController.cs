@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Web.DataTransferObjects;
-using Almostengr.PetFeeder.Web.Models;
 using Almostengr.PetFeeder.Web.Relays;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

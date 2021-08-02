@@ -44,7 +44,7 @@ namespace Almostengr.PetFeeder.Web.Controllers.Api
         [HttpGet]
         public async Task<ActionResult<IList<WateringDto>>> GetRecentWateringsAsync()
         {
-            var waterings = await _wateringRepository.GetRecentWateringsAsync();
+            var waterings = await _wateringRepository.GetLatestWateringsAsync();
 
             return Ok(waterings.Select(w => w.AssignToDto()).ToList());
         }

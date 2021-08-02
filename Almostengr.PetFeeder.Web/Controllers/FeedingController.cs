@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Almostengr.PetFeeder.Web.Client.Interface;
 using Almostengr.PetFeeder.Web.DataTransferObjects;
 using Almostengr.PetFeeder.Web.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,13 @@ namespace Almostengr.PetFeeder.Web.Controllers
 {
     public class FeedingController : BaseController
     {
-        public FeedingController(ILogger<FeedingController> logger) :
+        private readonly IFeedingClient _feedingClient;
+
+        public FeedingController(ILogger<FeedingController> logger, 
+            IFeedingClient feedingClient) :
             base(logger)
         {
+            _feedingClient = feedingClient;
         }
 
         [HttpGet]
@@ -20,7 +25,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
         {
             ViewData["Title"] = "All Feedings";
 
-            var feedings = await GetAsync<IList<FeedingDto>>("api/feedings/all");
+            var feedings = await _feedingClient.GetAllFeedingsAsync();
 
             return View(feedings);
         }
@@ -30,7 +35,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
         {
             ViewData["Title"] = "Latest Feedings";
 
-            var feedings = await GetAsync<IList<FeedingDto>>("api/feedings");
+            var feedings = await _feedingClient.GetLatestFeedingsAsync();
 
             return View(feedings);
         }
@@ -44,7 +49,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
                 return View(feedingDto);
             }
 
-            await PostAsync<FeedingDto>("api/feedings", feedingDto);
+            await _feedingClient.CreateFeedingAsync(feedingDto);
 
             return RedirectToAction("index");
         }

@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using Almostengr.PetFeeder.Web.Client.Interface;
 using Almostengr.PetFeeder.Web.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -8,16 +8,20 @@ namespace Almostengr.PetFeeder.Web.Controllers
 {
     public class SettingController : BaseController
     {
-        public SettingController(ILogger<SettingController> logger) : base(logger)
+        private readonly ISettingClient _settingClient;
+
+        public SettingController(ILogger<SettingController> logger,
+            ISettingClient settingClient) : base(logger)
         {
+            _settingClient = settingClient;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "All Settings";
-            
-            var settings = await GetAsync<IList<SettingDto>>("api/settings");
+
+            var settings = await _settingClient.GetSettingsAsync();
 
             return View(settings);
         }
@@ -27,7 +31,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
         {
             ViewData["Title"] = "Edit Setting";
 
-            var setting = await GetAsync<SettingDto>("api/settings/" + id);
+            var setting = await _settingClient.GetSettingAsync(id);
 
             if (setting == null)
                 return NotFound();
@@ -39,7 +43,13 @@ namespace Almostengr.PetFeeder.Web.Controllers
         // [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateUpdate(SettingDto settingDto)
         {
-            await PutAsync("api/settings/" + settingDto.Key, settingDto);
+            if (ModelState.IsValid == false)
+            {
+                return View(settingDto);
+            }
+
+            await _settingClient.UpdateSettingAsync(settingDto);
+
             return RedirectToAction("index");
         }
 

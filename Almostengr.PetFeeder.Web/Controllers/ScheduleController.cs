@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Almostengr.PetFeeder.Web.Client.Interface;
 using Almostengr.PetFeeder.Web.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -8,8 +9,12 @@ namespace Almostengr.PetFeeder.Web.Controllers
 {
     public class ScheduleController : BaseController
     {
-        public ScheduleController(ILogger<ScheduleController> logger) : base(logger)
+        private readonly IScheduleClient _scheduleClient;
+
+        public ScheduleController(ILogger<ScheduleController> logger,   
+            IScheduleClient scheduleClient) : base(logger)
         {
+            _scheduleClient = scheduleClient;
         }
 
         // GET /schedule
@@ -17,7 +22,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Scheduled Feedings";
-            var schedules = await GetAsync<IList<ScheduleDto>>("/api/schedules");
+            var schedules = await _scheduleClient.GetAllSchedulesAsync();
 
             return View(schedules);
         }
@@ -29,7 +34,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
         {
             ViewData["Title"] = "Delete Scheduled Feeding";
 
-            await DeleteAsync<ScheduleDto>("/api/schedules/" + id);
+            await _scheduleClient.DeleteScheduleAsync(id);
 
             return RedirectToAction("index");
         }
@@ -49,7 +54,7 @@ namespace Almostengr.PetFeeder.Web.Controllers
         {
             ViewData["Title"] = "Edit Scheduled Feeding";
 
-            ScheduleDto scheduleDto = await GetAsync<ScheduleDto>("/api/schedules/" + scheduleId);
+            ScheduleDto scheduleDto = await _scheduleClient.GetScheduleAsync(scheduleId);
 
             if (scheduleDto == null)
                 return NotFound();
@@ -70,12 +75,12 @@ namespace Almostengr.PetFeeder.Web.Controllers
             if (scheduleDto.ScheduleId > 0)
             {
                 // existing record
-                await PutAsync<ScheduleDto>("/api/schedules/", scheduleDto);
+                await _scheduleClient.UpdateScheduleAsync(scheduleDto); 
             }
             else
             {
                 // new record
-                await PostAsync<ScheduleDto>("/api/schedules", scheduleDto);
+                await _scheduleClient.CreateScheduleAsync(scheduleDto);
             }
 
             return RedirectToAction("index");

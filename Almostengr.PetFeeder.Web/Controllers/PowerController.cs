@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
+using Almostengr.PetFeeder.Web.Client.Interface;
 using Almostengr.PetFeeder.Web.DataTransferObjects;
-using Almostengr.PetFeeder.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -8,25 +8,27 @@ namespace Almostengr.PetFeeder.Web.Controllers
 {
     public class PowerController : BaseController
     {
-        public PowerController(ILogger<BaseController> logger) : base(logger)
+        private readonly IPowerClient _powerClient;
+
+        public PowerController(ILogger<BaseController> logger, 
+            IPowerClient powerClient) : base(logger)
         {
+            _powerClient = powerClient;
         }
 
+        // POST /power/
         [HttpPost]
         // [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SystemShutDown()
+        public async Task<IActionResult> CreateUpdate(PowerDto powerDto)
         {
-            await PostAsync<PowerDto>("/api/power/shutdown", new PowerDto());
-            return RedirectToAction("Index", "Home");
-        }
+            if (ModelState.IsValid == false)
+            {
+                return View(powerDto);
+            }
 
-        [HttpPost]
-        // [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SystemRestart()
-        {
-            await PostAsync<PowerDto>("/api/power/restart", new PowerDto());
-            return RedirectToAction("Index", "Home");
+            await _powerClient.PostAsync(powerDto);
+
+            return RedirectToAction("index");
         }
-        
     }
 }

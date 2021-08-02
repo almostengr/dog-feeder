@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Almostengr.PetFeeder.Web.Client.Interface;
 using Almostengr.PetFeeder.Web.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -7,8 +8,12 @@ namespace Almostengr.PetFeeder.Web.Controllers
 {
     public class NightLightController : BaseController
     {
-        public NightLightController(ILogger<BaseController> logger) : base(logger)
+        private readonly INightLightClient _nightLightClient;
+
+        public NightLightController(ILogger<BaseController> logger,
+            INightLightClient nightLightClient) : base(logger)
         {
+            _nightLightClient = nightLightClient;
         }
 
         public IActionResult Index()
@@ -20,8 +25,13 @@ namespace Almostengr.PetFeeder.Web.Controllers
         // [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateNightLight(NightLightDto nightLightDto)
         {
-            // await _nightLightClient.CreateNightLightAsync(model.FromViewModel());
-            await PostAsync<NightLightDto>("/api/nightlight", nightLightDto);
+            if (ModelState.IsValid == false)
+            {
+                return View(nightLightDto);
+            }
+
+            await _nightLightClient.CreateNightLightAsync(nightLightDto);
+
             return RedirectToAction("index");
         }
     }

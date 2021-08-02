@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Almostengr.PetFeeder.Web.Client.Interface;
 using Almostengr.PetFeeder.Web.DataTransferObjects;
 using Almostengr.PetFeeder.Web.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -9,48 +10,53 @@ namespace Almostengr.PetFeeder.Web.Controllers
 {
     public class WateringController : BaseController
     {
-        public WateringController(ILogger<WateringController> logger) : base(logger)
+        private readonly IWateringClient _wateringClient;
+
+        public WateringController(ILogger<WateringController> logger,
+            IWateringClient wateringClient) : base(logger)
         {
+            _wateringClient = wateringClient;
         }
 
         [HttpGet("all")]
         public async Task<IActionResult> All()
         {
             ViewData["Title"] = "All Waterings";
-            var result = await GetAsync<IList<WateringDto>>("/api/waterings/all");
+            var result = await _wateringClient.GetAllWateringsAsync();
             return View(result);
         }
-    
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Latest Waterings";
-            var waterings = await GetAsync<IList<WateringDto>>("/api/waterings");
+            var waterings = await _wateringClient.GetLatestWateringsAsync();
             return View(waterings);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetWatering(int id)
         {
-            var watering = await GetAsync<WateringDto>("/api/waterings/{id}");
+            var watering = await _wateringClient.GetWateringAsync(id);
 
-            if(watering == null)
+            if (watering == null)
             {
-                return NotFound();
+                return View();
             }
 
-            return View(new WateringViewModel(watering));
+            return View(watering);
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostWatering([FromBody] WateringDto wateringDto)
+        public async Task<IActionResult> CreateUpdateWatering([FromBody] WateringDto wateringDto)
         {
-            if(ModelState.IsValid == false)
+            if (ModelState.IsValid == false)
             {
                 return View(wateringDto);
             }
 
-            await PostAsync("/api/waterings", wateringDto);
+            await _wateringClient.CreateWateringAsync(wateringDto);
+            
             return RedirectToAction("Index");
         }
 
