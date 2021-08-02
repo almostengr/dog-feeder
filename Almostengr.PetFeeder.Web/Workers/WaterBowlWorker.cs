@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Almostengr.PetFeeder.Web.Client.Interface;
-using Almostengr.PetFeeder.Web.DataTransferObject;
+using Almostengr.PetFeeder.Web.DataTransferObjects;
 
 namespace Almostengr.PetFeeder.Monitor.Workers
 {
@@ -37,7 +37,7 @@ namespace Almostengr.PetFeeder.Monitor.Workers
                     if (currentTime >= earliestTime && currentTime <= latestTime && isWaterLow == true)
                     {
                         WateringDto watering = new WateringDto();
-                        watering.Timestamp = DateTime.Now;
+                        watering.Created = DateTime.Now;
                         await _wateringClient.CreateWateringAsync(watering);
 
                         var isWaterStillLow = await _wateringClient.GetWaterBowlStatus();
