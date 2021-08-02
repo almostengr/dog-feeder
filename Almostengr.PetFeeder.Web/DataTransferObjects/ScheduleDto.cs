@@ -3,7 +3,7 @@ using Almostengr.PetFeeder.Web.Enums;
 
 namespace Almostengr.PetFeeder.Web.DataTransferObjects
 {
-    public class ScheduleDto
+    public class ScheduleDto : BaseDto
     {
         public int ScheduleId { get; set; }
         public DateTime ScheduledTime { get; set; }

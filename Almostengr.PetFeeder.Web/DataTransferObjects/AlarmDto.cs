@@ -2,7 +2,7 @@ using System;
 
 namespace Almostengr.PetFeeder.Web.DataTransferObjects
 {
-    public class AlarmDto
+    public class AlarmDto : BaseDto
     {
         public int AlarmId { get; set; }
         public DateTime Created { get; set; }

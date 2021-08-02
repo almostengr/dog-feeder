@@ -2,7 +2,7 @@ using System;
 
 namespace Almostengr.PetFeeder.Web.DataTransferObjects
 {
-    public class SettingDto
+    public class SettingDto : BaseDto
     {
         public string Value { get; set; }
         public string Key { get; set; }
