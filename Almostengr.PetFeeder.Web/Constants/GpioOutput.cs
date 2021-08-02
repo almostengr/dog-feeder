@@ -6,10 +6,5 @@ namespace Almostengr.PetFeeder.Web.Constants
     {
         public readonly static PinValue On ;
         public readonly static PinValue Off ;
-
-        static GpioOutput(){
-            On = PinValue.High;
-            Off = PinValue.Low;
-        }
     }
 }
