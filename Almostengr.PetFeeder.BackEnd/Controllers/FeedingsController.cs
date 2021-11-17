@@ -28,6 +28,7 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
         public async Task<ActionResult<IList<string>>> GetRecentFeedingsAsync()
         {
             // run process that will scan the log for feedings and return the last 10 feedings
+            List<string> feedings = new();
             return Ok();
         }
 

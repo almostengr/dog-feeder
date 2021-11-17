@@ -1,5 +1,5 @@
 using System;
-using Almostengr.PetFeeder.Web.DataTransferObject;
+using Almostengr.PetFeeder.Common.DataTransferObject;
 
 namespace Almostengr.PetFeeder.Common.DataTransferObjects
 {
