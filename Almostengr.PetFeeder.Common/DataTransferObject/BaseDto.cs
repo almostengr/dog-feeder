@@ -1,4 +1,4 @@
-namespace Almostengr.PetFeeer.Web.DataTransferObject
+namespace Almostengr.PetFeeder.Web.DataTransferObject
 {
     public abstract class BaseDto
     {

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Almostengr.PetFeeder.BackEnd.Relays;
+using Almostengr.PetFeeder.BackEnd.Relays.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,7 +28,10 @@ namespace Almostengr.PetFeeder.BackEnd
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddSingleton<IFoodBowlRelay, FoodBowlRelay>();
+            services.AddSingleton<INightLightRelay, NightLightRelay>();
+            services.AddSingleton<IWaterBowlRelay, WaterBowlRelay>();
+            
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -40,9 +45,10 @@ namespace Almostengr.PetFeeder.BackEnd
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Almostengr.PetFeeder.BackEnd v1"));
             }
+            
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Almostengr.PetFeeder.BackEnd v1"));
 
             app.UseHttpsRedirection();
 

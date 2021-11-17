@@ -1,4 +1,4 @@
-using Almostengr.PetFeeer.Web.DataTransferObject;
+using Almostengr.PetFeeder.Web.DataTransferObject;
 
 namespace Almostengr.PetFeeder.Common.DataTransferObjects
 {

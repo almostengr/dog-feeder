@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using Almostengr.PetFeeder.BackEnd.Constants;
 using Almostengr.PetFeeder.Common.DataTransferObjects;
 using Almostengr.PetFeeder.BackEnd.Relays;
-using Almostengr.PetFeeer.Web.Relays.Interfaces;
+using Almostengr.PetFeeder.BackEnd.Relays.Interfaces;
 using Microsoft.Extensions.Logging;
 
-namespace Almostengr.PetFeeer.Web.Relays
+namespace Almostengr.PetFeeder.BackEnd.Relays
 {
     public class WaterBowlRelay : RelayBase, IWaterBowlRelay
     {

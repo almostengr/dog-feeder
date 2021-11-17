@@ -1,4 +1,4 @@
-namespace Almostengr.PetFeeer.Web.Relays.Interfaces
+namespace Almostengr.PetFeeder.BackEnd.Relays.Interfaces
 {
     public interface IWaterBowlRelay
     {

@@ -5,11 +5,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.BackEnd.Controllers.Api
 {
-    public class PowerController : BaseApiController
+    public class PowersController : BaseApiController
     {
         private readonly ILogger<BaseApiController> _logger;
 
-        public PowerController(ILogger<BaseApiController> logger) : base(logger)
+        public PowersController(ILogger<BaseApiController> logger) : base(logger)
         {
             _logger = logger;
         }

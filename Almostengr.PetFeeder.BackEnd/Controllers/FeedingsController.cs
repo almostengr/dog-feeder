@@ -6,18 +6,21 @@ using Microsoft.Extensions.Logging;
 using Almostengr.PetFeeder.Common.DataTransferObject;
 using Almostengr.PetFeeder.Common.Constants;
 using Almostengr.PetFeeder.BackEnd.Relays.Interfaces;
+using System.Text;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace Almostengr.PetFeeder.BackEnd.Controllers
 {
     public class FeedingsController : BaseApiController
     {
         private readonly ILogger<FeedingsController> _logger;
-        private readonly IFoodBowlRelay _feedingRelay;
+        private readonly IFoodBowlRelay _foodBowlRelay;
 
-        public FeedingsController(ILogger<FeedingsController> logger, IFoodBowlRelay feedingRelay) : base(logger)
+        public FeedingsController(ILogger<FeedingsController> logger, IFoodBowlRelay foodBowlRelay) : base(logger)
         {
             _logger = logger;
-            _feedingRelay = feedingRelay;
+            _foodBowlRelay = foodBowlRelay;
         }
 
         // GET /api/feedings
@@ -39,7 +42,9 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
 
             try
             {
-                await _feedingRelay.PerformFeeding(feedingDto);
+                await _foodBowlRelay.PerformFeeding(feedingDto);
+                var entityJson =  new StringContent(JsonConvert.SerializeObject(feedingDto), Encoding.UTF8, "application/json");
+                _logger.LogInformation($"Feeding performed: {entityJson}");
             
                 return StatusCode(201);
                 // return CreatedAtAction(nameof(GetFeedingByIdAsync), new { id = feeding.FeedingId }, feeding.AssignToDto());
