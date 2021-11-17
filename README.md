@@ -17,5 +17,5 @@ Automatic pet feeder powered by a Raspberry PI and .NET Core C#
 
 ## EF CLI Commands
 
-* dotnet ef migrations add -p Almostengr.PetFeeder.Api/ "initialMigration"
-* dotnet ef database update -p Almostengr.PetFeeder.Api/
+* dotnet ef migrations add -p Almostengr.PetFeeder.Web/ "separatePrimaryKeyForEachTable" --context PetFeederDbContext
+* dotnet ef database update -p Almostengr.PetFeeder.Web/ --context PetFeederDbContext

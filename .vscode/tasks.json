@@ -32,7 +32,9 @@
                 "migrations",
                 "add",
                 "-p",
-                "Almostengr.PetFeeder.Api/",
+                "Almostengr.PetFeeder.Web/",
+                "--context",
+                "PetFeederDbContext",
                 "-o",
                 "${workspaceFolder}/Almostengr.PetFeeder.Web/Migrations",
                 "${input:migrationName}"
@@ -53,6 +55,8 @@
                 "update",
                 "-p",
                 "Almostengr.PetFeeder.Web/",
+                "--context",
+                "PetFeederDbContext",
             ],
             "group": "none",
             "presentation": {
@@ -71,6 +75,8 @@
                 "${input:migrationName}",
                 "-p",
                 "Almostengr.PetFeeder.Web/",
+                "--context",
+                "PetFeederDbContext",
             ],
             "group": "none",
             "presentation": {
@@ -79,7 +85,7 @@
             "problemMatcher": "$msCompile",
         },
         {
-            "label": "watch run WEB",
+            "label": "watch",
             "command": "dotnet",
             "type" : "shell",
             "args": [
