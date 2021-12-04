@@ -6,7 +6,7 @@ Documentation=https://thealmostengineer.com/petfeeder
 [Service]
 Type=simple
 Restart=always
-ExecStart=/home/pi/petfeeder/Almostengr.PetFeeder.Web/Almostengr.PetFeeder.Web
+ExecStart=/home/pi/petfeeder/Almostengr.PetFeeder.BackEnd/Almostengr.PetFeeder.BackEnd
 User=pi
 
 [Install]

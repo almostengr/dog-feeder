@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.BackEnd.Relays;
 using Almostengr.PetFeeder.BackEnd.Relays.Interfaces;
+using Almostengr.PetFeeder.BackEnd.Services;
+using Almostengr.PetFeeder.BackEnd.Services.Interfaces;
+using Almostengr.PetFeeder.BackEnd.Workers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,9 +31,15 @@ namespace Almostengr.PetFeeder.BackEnd
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IFoodBowlRelay, FoodBowlRelay>();
-            services.AddSingleton<INightLightRelay, NightLightRelay>();
-            services.AddSingleton<IWaterBowlRelay, WaterBowlRelay>();
+            services.AddSingleton<IFoodBowlRelay, MockFoodBowlRelay>();
+            // services.AddSingleton<IWaterBowlRelay, MockWaterBowlRelay>();
+            // services.AddSingleton<IWaterLevelRelay, MockWaterLevelRelay>();
+
+            services.AddSingleton<IFoodBowlService, MockFoodBowlService>();
+            // services.AddSingleton<IWaterBowlService, MockWaterBowlService>();
+
+            services.AddHostedService<FoodBowlWorker>();
+            // services.AddHostedService<WaterBowlWorker>();
             
             services.AddControllers();
             services.AddSwaggerGen(c =>

@@ -1,6 +1,6 @@
 namespace Almostengr.PetFeeder.BackEnd.Relays.Interfaces
 {
-    public interface IWaterBowlRelay
+    public interface IWaterLevelRelay : IRelayBase
     {
         void TurnOn();
         void TurnOff();

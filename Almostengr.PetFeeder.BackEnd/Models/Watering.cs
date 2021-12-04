@@ -1,6 +1,6 @@
 using System;
 
-namespace Almostengr.PetFeeder.Web.Models
+namespace Almostengr.PetFeeder.BackEnd.Models
 {
     public class Watering
     {

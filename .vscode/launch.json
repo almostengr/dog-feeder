@@ -10,9 +10,9 @@
             "request": "launch",
             // "preLaunchTask": "watch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Almostengr.PetFeeder.Web/bin/Debug/netcoreapp3.1/Almostengr.PetFeeder.Web.dll",
+            "program": "${workspaceFolder}/Almostengr.PetFeeder.BackEnd/bin/Debug/netcoreapp3.1/Almostengr.PetFeeder.BackEnd.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Almostengr.PetFeeder.Web",
+            "cwd": "${workspaceFolder}/Almostengr.PetFeeder.BackEnd",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",
