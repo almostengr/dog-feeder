@@ -28,7 +28,7 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
         public async Task<IActionResult> GetSchedule(int id)
         {
             ScheduleDto schedule = await _service.GetScheduleAsync(id);
-            
+
             if (schedule == null)
             {
                 return NotFound();
@@ -40,9 +40,9 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateSchedule([FromBody] ScheduleDto scheduleDto)
         {
-            if (scheduleDto == null)
+            if (ModelState.IsValid == false)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
             ScheduleDto createResponse = await _service.CreateScheduleAsync(scheduleDto);
@@ -55,6 +55,10 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
             if (scheduleDto == null)
             {
                 return BadRequest();
+            }
+            else if (ModelState.IsValid == false)
+            {
+                return BadRequest(ModelState);
             }
 
             var getResponse = await _service.GetScheduleAsync(scheduleDto.ScheduleId);

@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace Almostengr.PetFeeder.BackEnd.Workers
 {
-    public class WaterBowlWorker : BaseWorker
+    public class WateringWorker : BaseWorker
     {
-        public WaterBowlWorker()
+        public WateringWorker()
         {
         }
 

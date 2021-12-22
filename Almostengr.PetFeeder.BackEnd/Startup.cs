@@ -1,20 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Almostengr.PetFeeder.BackEnd.Interfaces;
 using Almostengr.PetFeeder.BackEnd.Relays;
 using Almostengr.PetFeeder.BackEnd.Relays.Interfaces;
-using Almostengr.PetFeeder.BackEnd.Services;
 using Almostengr.PetFeeder.BackEnd.Services.Interfaces;
 using Almostengr.PetFeeder.BackEnd.Workers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
 namespace Almostengr.PetFeeder.BackEnd
@@ -35,10 +28,11 @@ namespace Almostengr.PetFeeder.BackEnd
             // services.AddSingleton<IWaterBowlRelay, MockWaterBowlRelay>();
             // services.AddSingleton<IWaterLevelRelay, MockWaterLevelRelay>();
 
-            services.AddSingleton<IFoodBowlService, MockFoodBowlService>();
+            services.AddSingleton<IFeedingService, MockFoodBowlService>();
             // services.AddSingleton<IWaterBowlService, MockWaterBowlService>();
+            services.AddSingleton<IPowerService, MockPowerService>();
 
-            services.AddHostedService<FoodBowlWorker>();
+            services.AddHostedService<FeedingWorker>();
             // services.AddHostedService<WaterBowlWorker>();
             
             services.AddControllers();

@@ -1,4 +1,5 @@
-using System.Diagnostics;
+using Almostengr.PetFeeder.BackEnd.Interfaces;
+using Almostengr.PetFeeder.Common;
 using Almostengr.PetFeeder.Common.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -10,46 +11,29 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers.Api
     public class PowerController : BaseApiController
     {
         private readonly ILogger<PowerController> _logger;
+        private readonly IPowerService _service;
 
-        public PowerController(ILogger<PowerController> logger) : base(logger)
+        public PowerController(ILogger<PowerController> logger, IPowerService service) : base(logger)
         {
             _logger = logger;
+            _service = service;
         }
 
         [HttpPost]
         public ActionResult CreatePower(PowerDto powerDto)
         {
-            if (powerDto == null)
+            if (powerDto.Action == PowerAction.Reboot)
             {
-                return BadRequest();
+                _service.Reboot();
             }
-
-            Process process = new Process();
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-
-            if (powerDto.Action == "reboot")
+            else if (powerDto.Action == PowerAction.Shutdown)
             {
-                _logger.LogInformation("System restart requested");
-
-                startInfo.FileName = "reboot";
-            }
-            else if (powerDto.Action == "shutdown")
-            {
-                _logger.LogInformation("System shutdown requested");
-
-                startInfo.FileName = "shutdown";
-                startInfo.ArgumentList.Add("-h");
-                startInfo.ArgumentList.Add("now");
+                _service.Shutdown();
             }
             else
             {
                 return BadRequest();
             }
-
-            startInfo.UseShellExecute = true;
-            startInfo.CreateNoWindow = true;
-            process.StartInfo = startInfo;
-            process.Start();
 
             return Ok();
         }

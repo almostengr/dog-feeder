@@ -1,6 +1,4 @@
 using System;
-using System.Linq.Expressions;
-using Almostengr.PetFeeder.BackEnd.Models;
 
 namespace Almostengr.PetFeeder.Common.DataTransferObject
 {

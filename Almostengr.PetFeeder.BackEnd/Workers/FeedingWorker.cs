@@ -7,17 +7,17 @@ using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.BackEnd.Workers
 {
-    public class FoodBowlWorker : BaseWorker
+    public class FeedingWorker : BaseWorker
     {
-        private readonly IFoodBowlService _foodService;
+        private readonly IFeedingService _foodService;
         private readonly IScheduleService _scheduleService;
-        private readonly ILogger<FoodBowlWorker> _logger;
-        private readonly IFoodBowlRepository _repository;
+        private readonly ILogger<FeedingWorker> _logger;
+        private readonly IFeedingRepository _repository;
 
-        public FoodBowlWorker(ILogger<FoodBowlWorker> logger, 
-            IFoodBowlRepository fbRepository,
+        public FeedingWorker(ILogger<FeedingWorker> logger, 
+            IFeedingRepository fbRepository,
             IScheduleService scheduleService,
-            IFoodBowlService foodService) : base()
+            IFeedingService foodService) : base()
         {
             _foodService = foodService;
             _scheduleService = scheduleService;
