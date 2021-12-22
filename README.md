@@ -15,11 +15,6 @@ Automatic pet feeder powered by a Raspberry PI and .NET Core C#
 * https://www.assemblyai.com/blog/getting-started-with-httpclientfactory-in-c-sharp-and-net-5
 * https://dotnettutorials.net/lesson/repository-design-pattern-csharp/
 
-## EF CLI Commands
-
-* dotnet ef migrations add -p Almostengr.PetFeeder.BackEnd/ "separatePrimaryKeyForEachTable" --context PetFeederDbContext
-* dotnet ef database update -p Almostengr.PetFeeder.BackEnd/ --context PetFeederDbContext
-
 ## Coding References
 
 * https://docs.microsoft.com/en-us/samples/microsoft/windows-iotcore-samples/push-button/
