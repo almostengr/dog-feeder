@@ -11,9 +11,9 @@ namespace Almostengr.PetFeeder.BackEnd.Services
     public class FeedingService : IFeedingService
     {
         private readonly IFeedingRepository _repository;
-        private readonly IFoodBowlRelay _relay;
+        private readonly IFeedingRelay _relay;
 
-        public FeedingService(IFeedingRepository repository, IFoodBowlRelay relay)
+        public FeedingService(IFeedingRepository repository, IFeedingRelay relay)
         {
             _repository = repository;
             _relay = relay;

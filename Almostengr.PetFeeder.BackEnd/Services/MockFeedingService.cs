@@ -10,9 +10,9 @@ namespace Almostengr.PetFeeder.BackEnd
     public class MockFoodBowlService : IFeedingService
     {
         private readonly IFeedingRepository _repository;
-        private readonly IFoodBowlRelay _relay;
+        private readonly IFeedingRelay _relay;
 
-        public MockFoodBowlService(IFeedingRepository repository, IFoodBowlRelay relay)
+        public MockFoodBowlService(IFeedingRepository repository, IFeedingRelay relay)
         {
             _repository = repository;
             _relay = relay;

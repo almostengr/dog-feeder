@@ -8,7 +8,7 @@ using Almostengr.PetFeeder.BackEnd.Constants;
 
 namespace Almostengr.PetFeeder.BackEnd.Relays
 {
-    public class FoodBowlRelay : RelayBase, IFoodBowlRelay
+    public class FoodBowlRelay : RelayBase, IFeedingRelay
     {
         private readonly ILogger<FoodBowlRelay> _logger;
         private readonly GpioController _gpio;

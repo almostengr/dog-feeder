@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.BackEnd.Relays
 {
-    public class MockFoodBowlRelay : MockRelayBase, IFoodBowlRelay
+    public class MockFoodBowlRelay : MockRelayBase, IFeedingRelay
     {
         public MockFoodBowlRelay(ILogger<MockFoodBowlRelay> logger) : base(logger)
         {
