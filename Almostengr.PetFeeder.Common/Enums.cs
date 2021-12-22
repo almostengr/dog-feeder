@@ -1,4 +1,4 @@
-namespace Almostengr.PetFeeder.Common
+namespace Almostengr.PetFeeder.Common.Enum
 {
     public enum SettingName
     {
@@ -18,5 +18,11 @@ namespace Almostengr.PetFeeder.Common
     {
         Manual,
         Auto
+    }
+    
+    public enum FeedingFrequency
+    {
+        Once = 1,
+        Daily = 2
     }
 }
