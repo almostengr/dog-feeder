@@ -18,7 +18,6 @@ namespace Almostengr.PetFeeder.BackEnd.Services
         {
             _logger = logger;
             _repository = repository;
-            _relay = relay;
         }
 
         public async Task<WateringDto> CreateWateringAsync(WateringDto wateringDto)

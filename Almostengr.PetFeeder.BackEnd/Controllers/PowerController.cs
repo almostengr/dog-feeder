@@ -1,5 +1,5 @@
 using Almostengr.PetFeeder.BackEnd.Interfaces;
-using Almostengr.PetFeeder.Common;
+using Almostengr.PetFeeder.Common.Constants;
 using Almostengr.PetFeeder.Common.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

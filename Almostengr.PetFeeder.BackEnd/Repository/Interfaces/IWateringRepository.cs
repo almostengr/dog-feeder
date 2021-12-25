@@ -11,5 +11,6 @@ namespace Almostengr.PetFeeder.BackEnd.Repository.Interfaces
         Task<WateringDto> UpdateWateringAsync(WateringDto wateringDto);
         Task<List<WateringDto>> GetAllWateringsAsync();
         Task DeleteWateringAsync(int id);
+        Task SaveChangesAsync();
     }
 }

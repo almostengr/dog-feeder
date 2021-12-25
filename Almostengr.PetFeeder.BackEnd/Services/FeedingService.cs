@@ -41,6 +41,8 @@ namespace Almostengr.PetFeeder.BackEnd.Services
             feedingDto.Created = DateTime.Now;
 
             FeedingDto response = await _repository.CreateFeedingAsync(feedingDto);
+            await _repository.SaveChangesAsync();
+
             return response;
         }
     }

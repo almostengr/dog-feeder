@@ -12,5 +12,6 @@ namespace Almostengr.PetFeeder.BackEnd.Repository.Interfaces
         Task<List<ScheduleDto>> GetSchedules();
         Task<ScheduleDto> GetSchedule(int id);
         Task<List<ScheduleDto>> GetSchedulesForCurrentTimeAsync();
+        Task SaveChangesAsync();
     }
 }

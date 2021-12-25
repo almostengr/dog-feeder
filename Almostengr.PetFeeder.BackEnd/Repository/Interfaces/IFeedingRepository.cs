@@ -11,5 +11,6 @@ namespace Almostengr.PetFeeder.BackEnd.Repository.Interfaces
         Task<FeedingDto> CreateFeedingAsync(FeedingDto feedingDto);
         Task<FeedingDto> UpdateFeedingAsync(FeedingDto feedingDto);
         Task DeleteFeedingAsync(int id);
+        Task SaveChangesAsync();
     }
 }

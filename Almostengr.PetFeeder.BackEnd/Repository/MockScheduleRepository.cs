@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.BackEnd.Data;
+using Almostengr.PetFeeder.BackEnd.Models;
 using Almostengr.PetFeeder.BackEnd.Repository.Interfaces;
 using Almostengr.PetFeeder.Common.DataTransferObject;
 using Microsoft.EntityFrameworkCore;
@@ -44,13 +45,18 @@ namespace Almostengr.PetFeeder.BackEnd.Repository
             
             return await _context.Schedules
                 .Where(s => s.ScheduledTime.Hour == currentDateTime.Hour &&  s.ScheduledTime.Minute == currentDateTime.Minute)
-                .Select(ScheduleDto.ToDto())
+                .Select(Schedule.ToDto())
                 .ToListAsync();
         }
 
         public async Task<ScheduleDto> UpdateSchedule(ScheduleDto schedule)
         {
             throw new System.NotImplementedException();
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
         }
     }
 }

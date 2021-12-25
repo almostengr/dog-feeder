@@ -1,6 +1,7 @@
 using System;
 using System.Linq.Expressions;
 using Almostengr.PetFeeder.Common.DataTransferObject;
+using Almostengr.PetFeeder.Common.Enum;
 
 namespace Almostengr.PetFeeder.BackEnd.Models
 {
@@ -12,14 +13,16 @@ namespace Almostengr.PetFeeder.BackEnd.Models
         public bool IsActive { get; set; }
         public DateTime Created { get; set; }
         public DateTime Modified { get; set; }
+        public int FeedingFrequency { get; set; }
 
-
-        public static Expression<Func<Schedule,ScheduleDto>> ToDto()
+        public static Expression<Func<Schedule, ScheduleDto>> ToDto()
         {
-            return s => new ScheduleDto{
+            return s => new ScheduleDto
+            {
                 ScheduleId = s.ScheduleId,
                 StartTime = s.ScheduledTime,
                 FeedingAmount = s.FeedingAmount,
+                FeedingFrequency = (FeedingFrequency)s.FeedingFrequency,
                 IsActive = s.IsActive,
                 Created = s.Created,
                 Modified = s.Modified

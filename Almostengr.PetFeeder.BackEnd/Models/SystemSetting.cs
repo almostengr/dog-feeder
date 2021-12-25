@@ -1,8 +1,8 @@
 using System;
 
-namespace Almostengr.PetFeeder.Common.DataTransferObject
+namespace Almostengr.PetFeeder.BackEnd.Models
 {
-    public class SystemSettingDto
+    public class SystemSetting
     {
         public int SystemSettingId { get; set; }
         public string Name { get; set; }

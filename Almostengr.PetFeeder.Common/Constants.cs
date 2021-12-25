@@ -1,4 +1,4 @@
-namespace Almostengr.PetFeeder.Common
+namespace Almostengr.PetFeeder.Common.Constants
 {
     public static class PowerAction
     {
