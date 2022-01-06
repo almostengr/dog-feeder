@@ -1,4 +1,4 @@
-namespace Almostengr.PetFeeder.BackEnd.Interfaces
+namespace Almostengr.PetFeeder.BackEnd.Services.Interfaces
 {
     public interface IPowerService
     {
