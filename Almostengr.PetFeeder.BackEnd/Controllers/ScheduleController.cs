@@ -10,7 +10,7 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
     {
         private readonly IScheduleService _service;
 
-        public ScheduleController(ILogger<BaseApiController> logger, IScheduleService service) : base(logger)
+        public ScheduleController(ILogger<ScheduleController> logger, IScheduleService service) : base(logger)
         {
             _service = service;
         }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.BackEnd.Enums;
 using Almostengr.PetFeeder.BackEnd.Models;
 using Almostengr.PetFeeder.BackEnd.Services.Interfaces;
 using Almostengr.PetFeeder.Common.DataTransferObject;
