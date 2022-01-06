@@ -49,6 +49,11 @@ namespace Almostengr.PetFeeder.Services
             return await _repository.GetSchedulesAsync();
         }
 
+        public async Task<List<ScheduleDto>> GetSchedulesByTimeAsync(TimeSpan time)
+        {
+            return await _repository.GetSchedulesByTimeAsync(time);
+        }
+
         public async Task<ScheduleDto> UpdateScheduleAsync(ScheduleDto scheduleDto)
         {
             Schedule schedule = await _repository.GetScheduleEntity(scheduleDto.ScheduleId);

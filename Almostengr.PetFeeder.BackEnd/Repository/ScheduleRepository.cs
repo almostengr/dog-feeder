@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -50,6 +51,14 @@ namespace Almostengr.PetFeeder.BackEnd.Repository
         {
             return await _dbContext.Schedules
                 .OrderBy(s => s.ScheduleId)
+                .Select(s => s.ToScheduleDto())
+                .ToListAsync();
+        }
+
+        public async Task<List<ScheduleDto>> GetSchedulesByTimeAsync(TimeSpan time)
+        {
+            return await _dbContext.Schedules
+                .Where(s => s.ScheduledTime.Hour == time.Hours && s.ScheduledTime.Minute == time.Minutes)
                 .Select(s => s.ToScheduleDto())
                 .ToListAsync();
         }

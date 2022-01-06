@@ -37,19 +37,5 @@ namespace Almostengr.PetFeeder.BackEnd.Models
         public DateTime Modified { get; set; }
         
         public int ScheduleType { get; set; }
-
-        // public static Expression<Func<Schedule, ScheduleDto>> ToDto()
-        // {
-        //     return s => new ScheduleDto
-        //     {
-        //         ScheduleId = s.ScheduleId,
-        //         ScheduledTime = s.ScheduledTime,
-        //         FeedingAmount = s.FeedingAmount,
-        //         IsActive = s.IsActive,
-        //         ScheduleType = (ScheduleType)s.ScheduleType,
-        //         Created = s.Created,
-        //         Modified = s.Modified
-        //     };
-        // }
     }
 }
