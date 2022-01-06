@@ -19,24 +19,40 @@ namespace Almostengr.PetFeeder.Services
 
         public async Task<ScheduleDto> CreateScheduleAsync(ScheduleDto scheduleDto)
         {
-            Schedule schedule = new Schedule(scheduleDto);
-            scheduleDto.Created = DateTime.Now;
-            scheduleDto.Modified = DateTime.Now;
-            
-            return await _repository.CreateScheduleAsync(schedule);
+            try
+            {
+                Schedule schedule = new Schedule(scheduleDto);
+                scheduleDto.Created = DateTime.Now;
+                scheduleDto.Modified = DateTime.Now;
+                
+                return await _repository.CreateScheduleAsync(schedule);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public async Task DeleteScheduleAsync(int id)
         {
-            ScheduleDto scheduleDto = await _repository.GetScheduleAsync(id);
-
-            if (scheduleDto == null)
+            try
             {
-                throw new ArgumentException($"Schedule with id {id} does not exist");
-            }
+                ScheduleDto scheduleDto = await _repository.GetScheduleAsync(id);
 
-            Schedule schedule = new Schedule(scheduleDto);
-            await _repository.DeleteScheduleAsync(schedule);
+                if (scheduleDto == null)
+                {
+                    throw new ArgumentException($"Schedule with id {id} does not exist");
+                }
+
+                Schedule schedule = new Schedule(scheduleDto);
+                await _repository.DeleteScheduleAsync(schedule);
+
+                return 0;
+            } 
+            catch (Exception ex)
+            {
+                return 1;
+            }
         }
 
         public async Task<ScheduleDto> GetScheduleAsync(int id)
@@ -56,20 +72,27 @@ namespace Almostengr.PetFeeder.Services
 
         public async Task<ScheduleDto> UpdateScheduleAsync(ScheduleDto scheduleDto)
         {
-            Schedule schedule = await _repository.GetScheduleEntity(scheduleDto.ScheduleId);
-
-            if (schedule == null)
+            try 
             {
-                throw new ArgumentException($"Schedule with id {scheduleDto.ScheduleId} does not exist");
+                Schedule schedule = await _repository.GetScheduleEntity(scheduleDto.ScheduleId);
+
+                if (schedule == null)
+                {
+                    throw new ArgumentException($"Schedule with id {scheduleDto.ScheduleId} does not exist");
+                }
+
+                schedule.Modified = DateTime.Now;
+                schedule.FeedingAmount = scheduleDto.FeedingAmount;
+                schedule.IsActive = scheduleDto.IsActive;
+                // schedule.ScheduleType = (ScheduleType)scheduleDto.ScheduleType;
+                schedule.ScheduledTime = scheduleDto.ScheduledTime;
+
+                return await _repository.UpdateScheduleAsync(schedule);
             }
-
-            schedule.Modified = DateTime.Now;
-            schedule.FeedingAmount = scheduleDto.FeedingAmount;
-            schedule.IsActive = scheduleDto.IsActive;
-            // schedule.ScheduleType = (ScheduleType)scheduleDto.ScheduleType;
-            schedule.ScheduledTime = scheduleDto.ScheduledTime;
-
-            return await _repository.UpdateScheduleAsync(schedule);
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

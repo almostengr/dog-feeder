@@ -40,17 +40,27 @@ namespace Almostengr.PetFeeder.BackEnd.Services
             }
         }
 
-        public async Task DeleteSystemSettingAsync(string settingName)
+        public async Task<int> DeleteSystemSettingAsync(string settingName)
         {
-            var settingDto = await _repository.GetSystemSettingAsync(settingName);
-
-            if (settingDto == null)
+            try
             {
-                throw new ArgumentException($"Setting with name {settingName} does not exist");
-            }
+                SystemSettingDto settingDto = await _repository.GetSystemSettingAsync(settingName);
 
-            SystemSetting systemSetting = new SystemSetting(settingDto);
-            await _repository.DeleteSystemSettingAsync(systemSetting);
+                if (settingDto == null)
+                {
+                    throw new ArgumentException($"Setting with name {settingName} does not exist");
+                }
+
+                SystemSetting systemSetting = new SystemSetting(settingDto);
+                await _repository.DeleteSystemSettingAsync(systemSetting);
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return 1;
+            }
         }
 
         public async Task<SystemSettingDto> GetSystemSettingAsync(string name)
@@ -65,17 +75,25 @@ namespace Almostengr.PetFeeder.BackEnd.Services
 
         public async Task<SystemSettingDto> UpdateSystemSettingAsync(SystemSettingDto systemSettingDto)
         {
-            SystemSetting setting = await _repository.GetSystemSettingEntity(systemSettingDto.Name);
-
-            if (setting == null)
+            try
             {
-                throw new ArgumentException($"System setting with name {systemSettingDto.Name} does not exist.");
-            }
-            
-            setting.Modified = DateTime.Now;
-            setting.Value = systemSettingDto.Value;
+                SystemSetting setting = await _repository.GetSystemSettingEntity(systemSettingDto.Name);
 
-            return await _repository.UpdateSystemSettingAsync(setting);
+                if (setting == null)
+                {
+                    throw new ArgumentException($"System setting with name {systemSettingDto.Name} does not exist.");
+                }
+                
+                setting.Modified = DateTime.Now;
+                setting.Value = systemSettingDto.Value;
+
+                return await _repository.UpdateSystemSettingAsync(setting);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return null;
+            }
         }
     }
 }
