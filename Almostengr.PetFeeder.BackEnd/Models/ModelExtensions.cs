@@ -30,5 +30,15 @@ namespace Almostengr.PetFeeder.BackEnd.Models
             };
         }
 
+        public static FeedingDto ToFeedingDto(this Feeding feeding)
+        {
+            return new FeedingDto
+            {
+                FeedingId = feeding.FeedingId,
+                Amount = feeding.Amount,
+                Created = feeding.Created,
+            };
+        }
+
     }
 }
