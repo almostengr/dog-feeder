@@ -11,19 +11,33 @@ namespace Almostengr.PetFeeder.BackEnd.Services
     public class SystemSettingService : ISystemSettingService
     {
         private readonly ISystemSettingRepository _repository;
+        private readonly ILogger<SystemSettingService> _logger;
 
-        public SystemSettingService(ISystemSettingRepository repository)
+        public SystemSettingService(ISystemSettingRepository repository, ILogger<SystemSettingService> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
         public async Task<SystemSettingDto> CreateSystemSettingAsync(SystemSettingDto systemSettingDto)
         {
-            SystemSetting systemSetting = new SystemSetting(systemSettingDto);
-            systemSettingDto.Created = DateTime.Now;
-            systemSettingDto.Modified = DateTime.Now;
+            try 
+            {
+                if (systemSettingDto == null){
+                    throw new ArgumentNullException(nameof(systemSettingDto));
+                }
+                    
+                SystemSetting systemSetting = new SystemSetting(systemSettingDto);
+                systemSettingDto.Created = DateTime.Now;
+                systemSettingDto.Modified = DateTime.Now;
 
-            return await _repository.CreateSystemSettingAsync(systemSetting);
+                return await _repository.CreateSystemSettingAsync(systemSetting);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return null;
+            }
         }
 
         public async Task DeleteSystemSettingAsync(string settingName)
