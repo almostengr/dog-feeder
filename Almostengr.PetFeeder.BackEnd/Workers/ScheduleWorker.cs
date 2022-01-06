@@ -52,12 +52,7 @@ namespace Almostengr.PetFeeder.BackEnd.Workers
         {
             var feedingMode = await _systemSettingService.GetSystemSettingAsync(nameof(FeedingMode));
 
-            if (feedingMode.Value == FeedingMode.Manual.ToString())
-            {
-                continue;
-            }
-
-            if (schedules.Count > 0)
+            if (schedules.Count > 0 && feedingMode.Value == FeedingMode.Auto.ToString())
             {
                 FeedingDto feedingDto = new FeedingDto()
                 {
