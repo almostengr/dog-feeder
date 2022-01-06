@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.Common.DataTransferObject;
 
@@ -8,5 +9,7 @@ namespace Almostengr.PetFeeder.BackEnd.Services.Interfaces
         Task<SystemSettingDto> GetSystemSettingAsync(string name);
         Task<SystemSettingDto> UpdateSystemSettingAsync(SystemSettingDto systemSetting);
         Task<SystemSettingDto> CreateSystemSettingAsync(SystemSettingDto systemSetting);
+        Task<List<SystemSettingDto>> GetSystemSettingsAsync();
+        Task DeleteSystemSettingAsync(string settingName);
     }
 }

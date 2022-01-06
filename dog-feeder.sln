@@ -5,10 +5,6 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Almostengr.PetFeeder.BackEnd", "Almostengr.PetFeeder.BackEnd\Almostengr.PetFeeder.BackEnd.csproj", "{4BDB0E8E-1A73-4321-8777-E38D6B060CA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Almostengr.PetFeeder.FrontEnd", "Almostengr.PetFeeder.FrontEnd\Almostengr.PetFeeder.FrontEnd.csproj", "{D90B47E5-1813-4EE7-827F-D3AF8ED2ECE3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Almostengr.PetFeeder.Common", "Almostengr.PetFeeder.Common\Almostengr.PetFeeder.Common.csproj", "{9C5B38A7-E5E8-4DE3-95C9-624055B472B6}"
-EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

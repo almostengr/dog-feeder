@@ -8,9 +8,8 @@
             "name": ".NET Core Launch (web)",
             "type": "coreclr",
             "request": "launch",
-            // "preLaunchTask": "watch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Almostengr.PetFeeder.BackEnd/bin/Debug/netcoreapp3.1/Almostengr.PetFeeder.BackEnd.dll",
+            "program": "${workspaceFolder}/Almostengr.PetFeeder.BackEnd/bin/Debug/net5.0/Almostengr.PetFeeder.BackEnd.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Almostengr.PetFeeder.BackEnd",
             "stopAtEntry": false,
@@ -28,8 +27,7 @@
         {
             "name": ".NET Core Attach",
             "type": "coreclr",
-            "request": "attach",
-            "processId": "${command:pickProcess}"
+            "request": "attach"
         }
     ]
 }

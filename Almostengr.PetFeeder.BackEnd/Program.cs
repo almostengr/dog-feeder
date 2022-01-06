@@ -12,9 +12,14 @@ namespace Almostengr.PetFeeder.BackEnd
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseSystemd()
+                .UseContentRoot(
+                    System.IO.Path.GetDirectoryName(
+                        System.Reflection.Assembly.GetExecutingAssembly().Location))
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>()
+                        .UseUrls("http://*:8081");;
                 });
     }
 }

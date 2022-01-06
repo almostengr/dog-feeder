@@ -8,6 +8,7 @@ namespace Almostengr.PetFeeder.BackEnd.Services.Interfaces
     {
         Task<FeedingDto> GetFeedingAsync(int id);
         Task<List<FeedingDto>> GetFeedingsAsync();
-        Task<FeedingDto> PerformFeedingAsync(FeedingDto FeedingDto);
+        // Task<FeedingDto> CreateFeedingAsync(FeedingDto FeedingDto);
+        Task CreateFeedingAsync(FeedingDto FeedingDto);
     }
 }

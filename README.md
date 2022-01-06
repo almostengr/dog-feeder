@@ -18,3 +18,4 @@ Automatic pet feeder powered by a Raspberry PI and .NET Core C#
 ## Coding References
 
 * https://docs.microsoft.com/en-us/samples/microsoft/windows-iotcore-samples/push-button/
+* https://www.thereformedprogrammer.net/six-ways-to-build-better-entity-framework-core-and-ef6-applications/#2-pattern-the-service-layer-separating-data-actions-from-presentation-actions

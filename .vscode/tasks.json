@@ -6,21 +6,13 @@
         {
             "label": "build",
             "command": "dotnet",
-            "type": "shell",
+            "type": "process",
             "args": [
                 "build",
-                // Ask dotnet build to generate full paths for file names.
+                "${workspaceFolder}/Almostengr.PetFeeder.BackEnd/Almostengr.PetFeeder.BackEnd.csproj",
                 "/property:GenerateFullPaths=true",
-                // Do not generate summary otherwise it leads to duplicate errors in Problems panel
                 "/consoleloggerparameters:NoSummary"
             ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "reveal": "silent"
-            },
             "problemMatcher": "$msCompile"
         },
         {
@@ -87,18 +79,15 @@
         {
             "label": "watch",
             "command": "dotnet",
-            "type" : "shell",
+            "type": "process",
             "args": [
                 "watch",
-                "-p",
-                "Almostengr.PetFeeder.BackEnd/",
-                "run"
+                "run",
+                "${workspaceFolder}/Almostengr.PetFeeder.BackEnd/Almostengr.PetFeeder.BackEnd.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
             ],
-            "group": "none",
-            "presentation": {
-                "reveal": "silent"
-            },
-            "problemMatcher": "$msCompile",
+            "problemMatcher": "$msCompile"
         },
         {
             "label": "Tag Release",
@@ -112,6 +101,18 @@
                 "\"version $(date +%Y.%m.%d)\""
             ],
             "dependsOn": ["Publish release"],
+        },
+        {
+            "label": "publish",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/Almostengr.PetFeeder.BackEnd/Almostengr.PetFeeder.BackEnd.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
         },
     ],
     "inputs": [

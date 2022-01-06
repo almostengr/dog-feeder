@@ -1,32 +1,55 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using Almostengr.PetFeeder.Common.DataTransferObject;
-using Almostengr.PetFeeder.Common.Enum;
+using Almostengr.PetFeeder.BackEnd.Enums;
 
 namespace Almostengr.PetFeeder.BackEnd.Models
 {
     public class Schedule
     {
-        public int ScheduleId { get; set; }
-        public DateTime ScheduledTime { get; set; }
-        public double FeedingAmount { get; set; }
-        public bool IsActive { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime Modified { get; set; }
-        public int FeedingFrequency { get; set; }
-
-        public static Expression<Func<Schedule, ScheduleDto>> ToDto()
+        public Schedule()
         {
-            return s => new ScheduleDto
-            {
-                ScheduleId = s.ScheduleId,
-                StartTime = s.ScheduledTime,
-                FeedingAmount = s.FeedingAmount,
-                FeedingFrequency = (FeedingFrequency)s.FeedingFrequency,
-                IsActive = s.IsActive,
-                Created = s.Created,
-                Modified = s.Modified
-            };
         }
+
+        public Schedule(ScheduleDto scheduleDto)
+        {
+            ScheduleId = scheduleDto.ScheduleId;
+            ScheduledTime = scheduleDto.ScheduledTime;
+            FeedingAmount = scheduleDto.FeedingAmount;
+            IsActive = scheduleDto.IsActive;
+            ScheduleType = (int)scheduleDto.ScheduleType;
+        }
+
+        [Key]
+        public int ScheduleId { get; set; }
+        
+        public DateTime ScheduledTime { get; set; }
+        
+        public double FeedingAmount { get; set; } = 0;
+        
+        public bool IsActive { get; set; } = true;
+
+        [Required]
+        public DateTime Created { get; set; }
+
+        [Required]
+        public DateTime Modified { get; set; }
+        
+        public int ScheduleType { get; set; }
+
+        // public static Expression<Func<Schedule, ScheduleDto>> ToDto()
+        // {
+        //     return s => new ScheduleDto
+        //     {
+        //         ScheduleId = s.ScheduleId,
+        //         ScheduledTime = s.ScheduledTime,
+        //         FeedingAmount = s.FeedingAmount,
+        //         IsActive = s.IsActive,
+        //         ScheduleType = (ScheduleType)s.ScheduleType,
+        //         Created = s.Created,
+        //         Modified = s.Modified
+        //     };
+        // }
     }
 }
