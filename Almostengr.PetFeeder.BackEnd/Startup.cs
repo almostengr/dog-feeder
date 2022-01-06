@@ -1,10 +1,7 @@
 using Almostengr.PetFeeder.BackEnd.Services.Interfaces;
-using Almostengr.PetFeeder.BackEnd.Relays;
-using Almostengr.PetFeeder.BackEnd.Relays.Interfaces;
 using Almostengr.PetFeeder.BackEnd.Repository;
 using Almostengr.PetFeeder.BackEnd.Repository.Interfaces;
 using Almostengr.PetFeeder.BackEnd.Services;
-using Almostengr.PetFeeder.BackEnd.Workers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;

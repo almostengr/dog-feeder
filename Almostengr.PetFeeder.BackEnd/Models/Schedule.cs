@@ -1,8 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq.Expressions;
 using Almostengr.PetFeeder.Common.DataTransferObject;
-using Almostengr.PetFeeder.BackEnd.Enums;
 
 namespace Almostengr.PetFeeder.BackEnd.Models
 {
