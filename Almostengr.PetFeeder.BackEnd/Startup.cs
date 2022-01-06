@@ -38,11 +38,16 @@ namespace Almostengr.PetFeeder.BackEnd
             AppSettings appSettings = Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
             services.AddSingleton(appSettings);
 
-            services.AddScoped<IScheduleService, ScheduleService>();
+            services.AddScoped<IFeedingRepository, FeedingRepository>();
+            services.AddScoped<IFeedingService, FeedingService>();
+
             services.AddScoped<IScheduleRepository, ScheduleRepository>();
+            services.AddScoped<IScheduleService, ScheduleService>();
 
             services.AddScoped<ISystemSettingRepository, SystemSettingRepository>();
             services.AddScoped<ISystemSettingService, SystemSettingService>();
+
+            services.AddSingleton<IPowerService, PowerService>();
 
             services.AddDbContext<PetFeederContext>(options => options.UseSqlite($"Data Source={appSettings.DatabaseFile}"));
 
