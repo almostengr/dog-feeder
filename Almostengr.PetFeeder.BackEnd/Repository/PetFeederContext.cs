@@ -10,7 +10,7 @@ namespace Almostengr.PetFeeder.BackEnd.Repository
         }
 
         // public DbSet<Feeding> Feedings { get; set; }
-        // public DbSet<Schedule> Schedules { get; set; }
+        public DbSet<Schedule> Schedules { get; set; }
         public DbSet<SystemSetting> SystemSettings { get; set; }
         // public DbSet<Watering> Waterings { get; set; }
     }

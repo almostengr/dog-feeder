@@ -10,8 +10,7 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
     {
         private readonly ISystemSettingService _service;
 
-        public SystemSettingController(ILogger<BaseApiController> logger,
-            ISystemSettingService service) : base(logger)
+        public SystemSettingController(ILogger<BaseApiController> logger, ISystemSettingService service) : base(logger)
         {
             _service = service;
         }
