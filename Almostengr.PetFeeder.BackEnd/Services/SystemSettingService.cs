@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Almostengr.PetFeeder.BackEnd.Constants;
 using Almostengr.PetFeeder.BackEnd.Models;
 using Almostengr.PetFeeder.BackEnd.Repository.Interfaces;
 using Almostengr.PetFeeder.BackEnd.Services.Interfaces;
 using Almostengr.PetFeeder.Common.DataTransferObject;
+using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.BackEnd.Services
 {
@@ -28,8 +30,8 @@ namespace Almostengr.PetFeeder.BackEnd.Services
                 }
                     
                 SystemSetting systemSetting = new SystemSetting(systemSettingDto);
-                systemSettingDto.Created = DateTime.Now;
-                systemSettingDto.Modified = DateTime.Now;
+                systemSetting.Created = DateTime.Now;
+                systemSetting.Modified = systemSetting.Created;
 
                 return await _repository.CreateSystemSettingAsync(systemSetting);
             }
@@ -54,12 +56,12 @@ namespace Almostengr.PetFeeder.BackEnd.Services
                 SystemSetting systemSetting = new SystemSetting(settingDto);
                 await _repository.DeleteSystemSettingAsync(systemSetting);
 
-                return 0;
+                return TaskResult.Success;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return 1;
+                return TaskResult.Error;
             }
         }
 
@@ -95,5 +97,6 @@ namespace Almostengr.PetFeeder.BackEnd.Services
                 return null;
             }
         }
+
     }
 }

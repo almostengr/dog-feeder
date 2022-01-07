@@ -1,20 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Almostengr.PetFeeder.BackEnd.Constants;
 using Almostengr.PetFeeder.BackEnd.Models;
 using Almostengr.PetFeeder.BackEnd.Services.Interfaces;
 using Almostengr.PetFeeder.Common.DataTransferObject;
 using Almostengr.PetFeeder.Repository.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.Services
 {
     public class ScheduleService : IScheduleService
     {
         private readonly IScheduleRepository _repository;
+        private readonly ILogger<ScheduleService> _logger;
 
-        public ScheduleService(IScheduleRepository repository)
+        public ScheduleService(IScheduleRepository repository, ILogger<ScheduleService> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
         public async Task<ScheduleDto> CreateScheduleAsync(ScheduleDto scheduleDto)
@@ -22,18 +26,19 @@ namespace Almostengr.PetFeeder.Services
             try
             {
                 Schedule schedule = new Schedule(scheduleDto);
-                scheduleDto.Created = DateTime.Now;
-                scheduleDto.Modified = DateTime.Now;
+                schedule.Created = DateTime.Now;
+                schedule.Modified = schedule.Created;
                 
                 return await _repository.CreateScheduleAsync(schedule);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return null;
             }
         }
 
-        public async Task DeleteScheduleAsync(int id)
+        public async Task<int> DeleteScheduleAsync(int id)
         {
             try
             {
@@ -47,11 +52,12 @@ namespace Almostengr.PetFeeder.Services
                 Schedule schedule = new Schedule(scheduleDto);
                 await _repository.DeleteScheduleAsync(schedule);
 
-                return 0;
-            } 
+                return TaskResult.Success;
+            }
             catch (Exception ex)
             {
-                return 1;
+                _logger.LogError(ex, ex.Message);
+                return TaskResult.Error;
             }
         }
 
@@ -91,6 +97,7 @@ namespace Almostengr.PetFeeder.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return null;
             }
         }

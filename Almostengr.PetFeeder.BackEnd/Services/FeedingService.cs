@@ -5,29 +5,33 @@ using Almostengr.PetFeeder.BackEnd.Models;
 using Almostengr.PetFeeder.BackEnd.Repository.Interfaces;
 using Almostengr.PetFeeder.BackEnd.Services.Interfaces;
 using Almostengr.PetFeeder.Common.DataTransferObject;
+using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.BackEnd.Services
 {
     public class FeedingService : IFeedingService
     {
         private readonly IFeedingRepository _repository;
+        private readonly ILogger<FeedingService> _logger;
 
-        public FeedingService(IFeedingRepository repository)
+        public FeedingService(IFeedingRepository repository, ILogger<FeedingService> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
         public async Task<FeedingDto> CreateFeedingAsync(FeedingDto feedingDto)
         {
             try
             {
-            Feeding feeding = new Feeding(feedingDto);
-            feeding.Created = DateTime.Now;
-            
-            return await _repository.CreateFeedingAsync(feeding);
+                Feeding feeding = new Feeding(feedingDto);
+                feeding.Created = DateTime.Now;
+
+                return await _repository.CreateFeedingAsync(feeding);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return null;
             }
         }

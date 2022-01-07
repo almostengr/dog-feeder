@@ -10,6 +10,6 @@ namespace Almostengr.PetFeeder.BackEnd.Services.Interfaces
         Task<SystemSettingDto> UpdateSystemSettingAsync(SystemSettingDto systemSetting);
         Task<SystemSettingDto> CreateSystemSettingAsync(SystemSettingDto systemSetting);
         Task<List<SystemSettingDto>> GetSystemSettingsAsync();
-        Task DeleteSystemSettingAsync(string settingName);
+        Task<int> DeleteSystemSettingAsync(string settingName);
     }
 }
