@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.BackEnd.Services.Interfaces;
 using Almostengr.PetFeeder.Common.DataTransferObject;
@@ -18,14 +19,14 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
         [HttpGet]
         public async Task<IActionResult> GetSchedules()
         {
-            var schedules = await _service.GetSchedulesAsync();
+            List<ScheduleDto> schedules = await _service.GetSchedulesAsync();
             return Ok(schedules);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSchedule(int id)
         {
-            var schedule = await _service.GetScheduleAsync(id);
+            ScheduleDto schedule = await _service.GetScheduleAsync(id);
             return Ok(schedule);
         }
 
@@ -37,7 +38,7 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
                 return BadRequest(ModelState);
             }
 
-            var createdSchedule = await _service.CreateScheduleAsync(scheduleDto);
+            ScheduleDto createdSchedule = await _service.CreateScheduleAsync(scheduleDto);
 
             if (createdSchedule == null)
             {
@@ -55,7 +56,7 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
                 return BadRequest(ModelState);
             }
 
-            var updatedSchedule = await _service.UpdateScheduleAsync(schedule);
+            ScheduleDto updatedSchedule = await _service.UpdateScheduleAsync(schedule);
 
             if (updatedSchedule == null)
             {

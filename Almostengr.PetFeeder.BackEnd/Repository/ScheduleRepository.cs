@@ -20,7 +20,7 @@ namespace Almostengr.PetFeeder.BackEnd.Repository
 
         public async Task<ScheduleDto> CreateScheduleAsync(Schedule schedule)
         {
-            var createdSchedule = await _dbContext.Schedules.AddAsync(schedule);
+            Schedule createdSchedule = await _dbContext.Schedules.AddAsync(schedule);
             await _dbContext.SaveChangesAsync();
 
             return createdSchedule.Entity.ToScheduleDto();

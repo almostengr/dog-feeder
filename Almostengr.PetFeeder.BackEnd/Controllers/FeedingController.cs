@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.BackEnd.Services.Interfaces;
 using Almostengr.PetFeeder.Common.DataTransferObject;
@@ -18,14 +19,14 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
         [HttpGet]
         public async Task<IActionResult> GetFeedings()
         {
-            var feedings = await _service.GetFeedingsAsync();
+            List<FeedingDto> feedings = await _service.GetFeedingsAsync();
             return Ok(feedings);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetFeeding(int id)
         {
-            var feeding = await _service.GetFeedingAsync(id);
+            FeedingDto feeding = await _service.GetFeedingAsync(id);
             return Ok(feeding);
         }
 

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.BackEnd.Services.Interfaces;
 using Almostengr.PetFeeder.Common.DataTransferObject;
@@ -18,14 +19,14 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
         [HttpGet("name")]
         public async Task<IActionResult> GetSystemSetting(string settingName)
         {
-            var systemSetting = await _service.GetSystemSettingAsync(settingName);
+            SystemSettingDto systemSetting = await _service.GetSystemSettingAsync(settingName);
             return Ok(systemSetting);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetSystemSettings()
         {
-            var systemSettings = await _service.GetSystemSettingsAsync();
+            List<SystemSettingDto> systemSettings = await _service.GetSystemSettingsAsync();
             return Ok(systemSettings);
         }
 
@@ -37,7 +38,7 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
                 return BadRequest(ModelState);
             }
 
-            var createdSystemSetting = await _service.CreateSystemSettingAsync(systemSettingDto);
+            SystemSettingDto createdSystemSetting = await _service.CreateSystemSettingAsync(systemSettingDto);
 
             if (createdSystemSetting == null)
             {
@@ -55,7 +56,7 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
                 return BadRequest(ModelState);
             }
 
-            var updatedSystemSetting = await _service.UpdateSystemSettingAsync(systemSetting);
+            SystemSettingDto updatedSystemSetting = await _service.UpdateSystemSettingAsync(systemSetting);
 
             if (updatedSystemSetting == null)
             {

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.BackEnd.Enums;
@@ -30,9 +31,9 @@ namespace Almostengr.PetFeeder.BackEnd.Workers
 
                 TimeSpan currentTime = DateTime.Now.TimeOfDay;
 
-                var schedules = await _scheduleService.GetSchedulesByTimeAsync(currentTime);
+                List<ScheduleDto> schedules = await _scheduleService.GetSchedulesByTimeAsync(currentTime);
 
-                foreach (var schedule in schedules)
+                foreach (ScheduleDto schedule in schedules)
                 {
                     await FeedingTimeAsync(schedule);
                     
@@ -46,7 +47,7 @@ namespace Almostengr.PetFeeder.BackEnd.Workers
 
         private async Task FeedingTimeAsync(ScheduleDto schedule)
         {
-            var feedingMode = await _systemSettingService.GetSystemSettingAsync(nameof(FeedingMode));
+            SystemSettingDto feedingMode = await _systemSettingService.GetSystemSettingAsync(nameof(FeedingMode));
 
             if (schedule != null && feedingMode.Value == FeedingMode.Auto.ToString())
             {
@@ -56,7 +57,7 @@ namespace Almostengr.PetFeeder.BackEnd.Workers
                     FeedingType = FeedingType.Scheduled
                 };
 
-                Task.Run(() => _feedingService.CreateFeedingAsync(feedingDto));
+                Task createFeeding = Task.Run(() => _feedingService.CreateFeedingAsync(feedingDto));
             }
         }
 

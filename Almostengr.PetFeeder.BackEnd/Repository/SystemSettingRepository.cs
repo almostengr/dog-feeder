@@ -20,7 +20,7 @@ namespace Almostengr.PetFeeder.BackEnd.Repository
 
         public async Task<SystemSettingDto> CreateSystemSettingAsync(SystemSetting systemSetting)
         {
-            var result = await _dbContext.SystemSettings.AddAsync(systemSetting);
+            List<SystemSettings> result = await _dbContext.SystemSettings.AddAsync(systemSetting);
             await _dbContext.SaveChangesAsync();
 
             return result.Entity.ToSystemSettingDto();
@@ -55,7 +55,7 @@ namespace Almostengr.PetFeeder.BackEnd.Repository
 
         public async Task<SystemSettingDto> UpdateSystemSettingAsync(SystemSetting systemSetting)
         {
-            var updatedEntity = _dbContext.SystemSettings.Update(systemSetting);
+            SystemSettings updatedEntity = _dbContext.SystemSettings.Update(systemSetting);
             await _dbContext.SaveChangesAsync();
 
             return updatedEntity.Entity.ToSystemSettingDto();
