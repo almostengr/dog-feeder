@@ -6,6 +6,10 @@ namespace Almostengr.PetFeeder.BackEnd.Models
 {
     public class Feeding
     {
+        public Feeding() 
+        {
+        }
+        
         public Feeding(FeedingDto feedingDto)
         {
             Amount = feedingDto.Amount;
