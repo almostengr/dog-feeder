@@ -33,5 +33,11 @@ namespace Almostengr.PetFeeder.BackEnd.Constants
         public const string FeedingMode = "FeedingMode";
         public const string WateringMode = "WateringMode";
     }
+    
+    public static class TaskResult
+    {
+        public const int Success = 0;
+        public const int Error = 1;
+    }
 
 }
