@@ -10,9 +10,11 @@ namespace Almostengr.PetFeeder.Common.DataTransferObject
 
         [Required]
         public FeedingType FeedingType { get; set; }
-        public DateTime Created { get; set; }
 
         [Required]
+        [Range(0.1, 10, ErrorMessage = "Amount must be between 0.1 and 10")]
         public double Amount { get; set; }
+
+        public DateTime Created { get; set; }
     }
 }
