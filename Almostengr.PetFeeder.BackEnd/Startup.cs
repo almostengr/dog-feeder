@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Almostengr.PetFeeder.Services;
 using Almostengr.PetFeeder.Repository.Interfaces;
+using Almostengr.PetFeeder.BackEnd.Workers;
 
 namespace Almostengr.PetFeeder.BackEnd
 {
@@ -46,6 +47,8 @@ namespace Almostengr.PetFeeder.BackEnd
 
             services.AddSingleton<IPowerService, PowerService>();
 
+            services.AddHostedService<ScheduleWorker>();
+
             services.AddDbContext<PetFeederContext>(options => options.UseSqlite($"Data Source={appSettings.DatabaseFile}"));
 
             services.AddControllers();
@@ -63,6 +66,8 @@ namespace Almostengr.PetFeeder.BackEnd
                 app.UseDeveloperExceptionPage();
             }
 
+            UpdateDatabase(app);
+
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Almostengr.PetFeeder.BackEnd v1"));
 
@@ -76,6 +81,20 @@ namespace Almostengr.PetFeeder.BackEnd
             {
                 endpoints.MapControllers();
             });
+        }
+
+        // perform database updates if any are available
+        private static void UpdateDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<PetFeederContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
         }
     }
 }
