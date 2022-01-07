@@ -16,7 +16,7 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
             _service = service;
         }
 
-        [HttpGet("name")]
+        [HttpGet("{settingName}")]
         public async Task<IActionResult> GetSystemSetting(string settingName)
         {
             SystemSettingDto systemSetting = await _service.GetSystemSettingAsync(settingName);
