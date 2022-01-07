@@ -35,6 +35,7 @@ namespace Almostengr.PetFeeder.BackEnd.Models
             return new FeedingDto
             {
                 FeedingId = feeding.FeedingId,
+                FeedingType = (FeedingType)feeding.FeedingType,
                 Amount = feeding.Amount,
                 Created = feeding.Created,
             };
