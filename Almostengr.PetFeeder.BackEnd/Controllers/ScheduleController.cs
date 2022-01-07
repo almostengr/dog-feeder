@@ -34,11 +34,17 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
         {
             if (ModelState.IsValid == false)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
             var createdSchedule = await _service.CreateScheduleAsync(scheduleDto);
-            return CreatedAtRoute(nameof(GetSchedule), new { id = createdSchedule.ScheduleId }, createdSchedule);
+
+            if (createdSchedule == null)
+            {
+                return StatusCode(500, "Failed to create schedule");
+            }
+            
+            return CreatedAtAction(nameof(GetSchedule), new { id = createdSchedule.ScheduleId }, createdSchedule);
         }
 
         [HttpPut]
@@ -46,17 +52,29 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
         {
             if (ModelState.IsValid == false)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
             var updatedSchedule = await _service.UpdateScheduleAsync(schedule);
+
+            if (updatedSchedule == null)
+            {
+                return StatusCode(500, "Failed to update schedule");
+            }
+
             return Ok(updatedSchedule);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSchedule(int id)
         {
-            await _service.DeleteScheduleAsync(id);
+            int result = await _service.DeleteScheduleAsync(id);
+
+            if (result == 1)
+            {
+                return StatusCode(500, "Failed to delete schedule");
+            }
+
             return NoContent();
         }
 

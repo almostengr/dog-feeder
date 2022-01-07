@@ -34,11 +34,17 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
         {
             if (ModelState.IsValid == false)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
             var createdSystemSetting = await _service.CreateSystemSettingAsync(systemSettingDto);
-            return CreatedAtRoute(nameof(GetSystemSetting), new { settingName = createdSystemSetting.Name }, createdSystemSetting);
+
+            if (createdSystemSetting == null)
+            {
+                return StatusCode(500, "Failed to create system setting");
+            }
+
+            return CreatedAtAction(nameof(GetSystemSetting), new { settingName = createdSystemSetting.Name }, createdSystemSetting);
         }
 
         [HttpPut]
@@ -46,19 +52,31 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
         {
             if (ModelState.IsValid == false)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
             var updatedSystemSetting = await _service.UpdateSystemSettingAsync(systemSetting);
+
+            if (updatedSystemSetting == null)
+            {
+                return StatusCode(500, "Failed to update system setting");
+            }
+
             return Ok(updatedSystemSetting);
         }
 
         [HttpDelete("{settingName}")]
         public async Task<IActionResult> DeleteSystemSetting(string settingName)
         {
-            await _service.DeleteSystemSettingAsync(settingName);
+            int result = await _service.DeleteSystemSettingAsync(settingName);
+
+            if (result == 1)
+            {
+                return StatusCode(500, "Failed to delete system setting");
+            }
+            
             return NoContent();
         }
-        
+
     }
 }

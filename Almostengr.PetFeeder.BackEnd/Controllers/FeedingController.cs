@@ -34,11 +34,17 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
         {
             if (ModelState.IsValid == false)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
             FeedingDto createdFeeding = await _service.CreateFeedingAsync(feedingDto);
-            return CreatedAtRoute(nameof(GetFeeding), new { id = createdFeeding.FeedingId }, createdFeeding);
+
+            if (createdFeeding == null)
+            {
+                return StatusCode(500, "Failed to create feeding");
+            }
+            
+            return CreatedAtAction(nameof(GetFeeding), new { id = createdFeeding.FeedingId }, createdFeeding);
         }
     }
 }
