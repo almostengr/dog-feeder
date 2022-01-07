@@ -2,27 +2,27 @@ namespace Almostengr.PetFeeder.BackEnd.Enums
 {
     public enum MotorDirection
     {
-        Forward,
-        Backward,
-        Off
+        Forward = 1,
+        Backward = 2,
+        Off = 3
     }
 
     public enum FeedingType
     {
-        Scheduled,
-        Manual
+        Scheduled = 1,
+        Manual = 2
     }
 
     public enum WateringMode
     {
-        Off,
-        Auto
+        Off = 1,
+        Auto =2 
     }
 
     public enum FeedingMode
     {
-        Manual,
-        Auto
+        Manual = 1,
+        Auto = 2
     }
     
     public enum FeedingFrequency
@@ -36,4 +36,5 @@ namespace Almostengr.PetFeeder.BackEnd.Enums
         Feeding = 1,
         Lighting = 2
     }
+
 }
