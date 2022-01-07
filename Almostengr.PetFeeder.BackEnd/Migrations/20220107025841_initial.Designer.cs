@@ -3,14 +3,16 @@ using System;
 using Almostengr.PetFeeder.BackEnd.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Almostengr.PetFeeder.Migrations
 {
     [DbContext(typeof(PetFeederContext))]
-    partial class PetFeederContextModelSnapshot : ModelSnapshot
+    [Migration("20220107025841_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
