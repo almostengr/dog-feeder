@@ -40,7 +40,7 @@ namespace Almostengr.PetFeeder.Services
 
             if (scheduleDto == null)
             {
-                // throw new ArgumentException($"Schedule with id {id} does not exist");
+                _logger.LogError($"Schedule with id {id} does not exist");
                 return false;
             }
 
@@ -69,7 +69,7 @@ namespace Almostengr.PetFeeder.Services
 
             if (schedule == null)
             {
-                // throw new ArgumentException($"Schedule with id {scheduleDto.ScheduleId} does not exist");
+                _logger.LogError($"Schedule with id {scheduleDto.ScheduleId} does not exist");
                 return null;
             }
 

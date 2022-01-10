@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.BackEnd.Constants;
 using Almostengr.PetFeeder.BackEnd.Models;
 using Almostengr.PetFeeder.BackEnd.Repository.Interfaces;
 using Almostengr.PetFeeder.BackEnd.Services.Interfaces;
@@ -41,7 +40,7 @@ namespace Almostengr.PetFeeder.BackEnd.Services
 
             if (settingDto == null)
             {
-                // throw new ArgumentException($"Setting with name {settingName} does not exist");
+                _logger.LogError($"Setting with name {settingName} does not exist");
                 return false;
             }
 
@@ -65,7 +64,7 @@ namespace Almostengr.PetFeeder.BackEnd.Services
 
             if (setting == null)
             {
-                // throw new ArgumentException($"System setting with name {systemSettingDto.Name} does not exist.");
+                _logger.LogError($"System setting with name {systemSettingDto.Name} does not exist.");
                 return null;
             }
 
