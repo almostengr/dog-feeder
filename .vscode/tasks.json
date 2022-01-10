@@ -13,7 +13,14 @@
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
-            "problemMatcher": "$msCompile"
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "silent"
+            },
         },
         {
             "label": "Add database migration",
@@ -91,7 +98,7 @@
         },
         {
             "label": "Tag Release",
-            "command" : "git",
+            "command": "git",
             "type": "shell",
             "args": [
                 "tag",
@@ -100,7 +107,9 @@
                 "-m",
                 "\"version $(date +%Y.%m.%d)\""
             ],
-            "dependsOn": ["Publish release"],
+            "dependsOn": [
+                "Publish release"
+            ],
         },
         {
             "label": "publish",
