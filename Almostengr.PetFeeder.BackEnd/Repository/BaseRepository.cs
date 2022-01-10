@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Almostengr.PetFeeder.BackEnd.Repository.Interfaces;
 
 namespace Almostengr.PetFeeder.BackEnd.Repository
@@ -12,11 +11,5 @@ namespace Almostengr.PetFeeder.BackEnd.Repository
             _dbContext = dbContext;
         }
 
-        // public async Task<int> SaveChangesAsync()
-        public async Task<bool> SaveChangesAsync()
-        {
-            // return await _dbContext.SaveChangesAsync();
-            return (await _dbContext.SaveChangesAsync() >= 0);
-        }
     }
 }

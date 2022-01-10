@@ -12,6 +12,8 @@ using Microsoft.OpenApi.Models;
 using Almostengr.PetFeeder.Services;
 using Almostengr.PetFeeder.Repository.Interfaces;
 using Almostengr.PetFeeder.BackEnd.Workers;
+using Almostengr.PetFeeder.BackEnd.Relays;
+using Almostengr.PetFeeder.BackEnd.Relays.Interfaces;
 
 namespace Almostengr.PetFeeder.BackEnd
 {
@@ -38,6 +40,7 @@ namespace Almostengr.PetFeeder.BackEnd
 
             services.AddScoped<IFeedingRepository, FeedingRepository>();
             services.AddScoped<IFeedingService, FeedingService>();
+            services.AddScoped<IFeedingRelay, MockFeedingRelay>();
 
             services.AddScoped<IScheduleRepository, ScheduleRepository>();
             services.AddScoped<IScheduleService, ScheduleService>();
@@ -64,6 +67,9 @@ namespace Almostengr.PetFeeder.BackEnd
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+            else {
+                app.UseExceptionHandler("/error");
             }
 
             UpdateDatabase(app);

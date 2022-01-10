@@ -4,7 +4,6 @@ namespace Almostengr.PetFeeder.BackEnd.Relays.Interfaces
 {
     public interface IFeedingRelay : IRelayBase
     {
-        Task RunMotorForwardAsync(double runTime);
-        Task RunMotorBackwardAsync(double runTime);
+        Task<bool> FeedMeAsync(double runTime);
     }
 }

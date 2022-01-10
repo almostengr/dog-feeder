@@ -8,12 +8,12 @@ using Almostengr.PetFeeder.BackEnd.Constants;
 
 namespace Almostengr.PetFeeder.BackEnd.Relays
 {
-    public class FoodBowlRelay : RelayBase, IFeedingRelay
+    public class FeedingRelay : RelayBase, IFeedingRelay
     {
-        private readonly ILogger<FoodBowlRelay> _logger;
+        private readonly ILogger<FeedingRelay> _logger;
         private readonly GpioController _gpio;
 
-        public FoodBowlRelay(ILogger<FoodBowlRelay> logger, GpioController gpio) : base()
+        public FeedingRelay(ILogger<FeedingRelay> logger, GpioController gpio) : base()
         {
             _logger = logger;
             _gpio = gpio;
@@ -21,8 +21,10 @@ namespace Almostengr.PetFeeder.BackEnd.Relays
             OpenPins(gpio, PinMode.Output, new Int32[] { GpioPin.FoodForwardRelay, GpioPin.FoodBackwardRelay });
         }
 
-        private async Task RunMotor(MotorDirection direction, double onTime)
+        private async Task<bool> RunMotor(MotorDirection direction, double onTime)
         {
+            bool success = false;
+
             try
             {
                 switch (direction)
@@ -44,6 +46,7 @@ namespace Almostengr.PetFeeder.BackEnd.Relays
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(onTime));
+                success = true;
             }
             catch (Exception ex)
             {
@@ -52,16 +55,27 @@ namespace Almostengr.PetFeeder.BackEnd.Relays
 
             _gpio.Write(GpioPin.FoodForwardRelay, GpioOutput.Off);
             _gpio.Write(GpioPin.FoodBackwardRelay, GpioOutput.Off);
+
+            return success;
         }
 
-        public async Task RunMotorBackwardAsync(double runTime)
+        public async Task<bool> FeedMeAsync(double runTime)
         {
-            await RunMotor(MotorDirection.Forward, runTime);
+            try
+            {
+                await RunMotor(MotorDirection.Forward, 0.5);
+                await RunMotor(MotorDirection.Backward, 0.5);
+                await RunMotor(MotorDirection.Forward, 0.5);
+                await RunMotor(MotorDirection.Backward, 0.5);
+                await RunMotor(MotorDirection.Forward, runTime);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return false;
+            }
         }
 
-        public async Task RunMotorForwardAsync(double runTime)
-        {
-            await RunMotor(MotorDirection.Backward, runTime);
-        }
     }
 }

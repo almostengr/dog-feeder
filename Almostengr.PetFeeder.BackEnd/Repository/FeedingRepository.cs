@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.BackEnd.Models;
+using Almostengr.PetFeeder.BackEnd.Relays.Interfaces;
 using Almostengr.PetFeeder.BackEnd.Repository.Interfaces;
 using Almostengr.PetFeeder.Common.DataTransferObject;
 using Microsoft.EntityFrameworkCore;
@@ -14,17 +15,25 @@ namespace Almostengr.PetFeeder.BackEnd.Repository
     {
         private readonly PetFeederContext _dbContext;
         private readonly ILogger<FeedingRepository> _logger;
+        private readonly IFeedingRelay _relay;
 
-        public FeedingRepository(PetFeederContext dbContext, ILogger<FeedingRepository> logger)
+        public FeedingRepository(PetFeederContext dbContext, ILogger<FeedingRepository> logger, IFeedingRelay relay)
         {
             _dbContext = dbContext;
             _logger = logger;
+            _relay = relay;
         }
 
         public async Task<FeedingDto> CreateFeedingAsync(Feeding feeding)
         {
             try
             {
+                var dispenseFood = await _relay.FeedMeAsync(feeding.Amount);
+                if (dispenseFood == false)
+                {
+                    return null;
+                }
+
                 var createdFeeding = await _dbContext.Feedings.AddAsync(feeding);
                 await _dbContext.SaveChangesAsync();
 
