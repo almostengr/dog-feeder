@@ -69,9 +69,9 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSchedule(int id)
         {
-            int result = await _service.DeleteScheduleAsync(id);
+            bool isDeleted = await _service.DeleteScheduleAsync(id);
 
-            if (result == 1)
+            if (isDeleted == false)
             {
                 return StatusCode(500, "Failed to delete schedule");
             }

@@ -69,9 +69,9 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
         [HttpDelete("{settingName}")]
         public async Task<IActionResult> DeleteSystemSetting(string settingName)
         {
-            int result = await _service.DeleteSystemSettingAsync(settingName);
+            bool isDeleted = await _service.DeleteSystemSettingAsync(settingName);
 
-            if (result == 1)
+            if (isDeleted)
             {
                 return StatusCode(500, "Failed to delete system setting");
             }

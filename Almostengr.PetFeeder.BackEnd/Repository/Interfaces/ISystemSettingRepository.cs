@@ -12,6 +12,6 @@ namespace Almostengr.PetFeeder.BackEnd.Repository.Interfaces
         Task<SystemSetting> GetSystemSettingEntity(string name);
         Task<SystemSettingDto> CreateSystemSettingAsync(SystemSetting systemSetting);
         Task<SystemSettingDto> UpdateSystemSettingAsync(SystemSetting systemSetting);
-        Task DeleteSystemSettingAsync(SystemSetting systemSetting);
+        Task<bool> DeleteSystemSettingAsync(SystemSetting systemSetting);
     }
 }

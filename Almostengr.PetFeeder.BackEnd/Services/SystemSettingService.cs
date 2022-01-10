@@ -23,46 +23,30 @@ namespace Almostengr.PetFeeder.BackEnd.Services
 
         public async Task<SystemSettingDto> CreateSystemSettingAsync(SystemSettingDto systemSettingDto)
         {
-            try 
+            if (systemSettingDto == null)
             {
-                if (systemSettingDto == null){
-                    throw new ArgumentNullException(nameof(systemSettingDto));
-                }
-                    
-                SystemSetting systemSetting = new SystemSetting(systemSettingDto);
-                systemSetting.Created = DateTime.Now;
-                systemSetting.Modified = systemSetting.Created;
-
-                return await _repository.CreateSystemSettingAsync(systemSetting);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
                 return null;
             }
+
+            SystemSetting systemSetting = new SystemSetting(systemSettingDto);
+            systemSetting.Created = DateTime.Now;
+            systemSetting.Modified = systemSetting.Created;
+
+            return await _repository.CreateSystemSettingAsync(systemSetting);
         }
 
-        public async Task<int> DeleteSystemSettingAsync(string settingName)
+        public async Task<bool> DeleteSystemSettingAsync(string settingName)
         {
-            try
+            SystemSettingDto settingDto = await _repository.GetSystemSettingAsync(settingName);
+
+            if (settingDto == null)
             {
-                SystemSettingDto settingDto = await _repository.GetSystemSettingAsync(settingName);
-
-                if (settingDto == null)
-                {
-                    throw new ArgumentException($"Setting with name {settingName} does not exist");
-                }
-
-                SystemSetting systemSetting = new SystemSetting(settingDto);
-                await _repository.DeleteSystemSettingAsync(systemSetting);
-
-                return TaskResult.Success;
+                // throw new ArgumentException($"Setting with name {settingName} does not exist");
+                return false;
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                return TaskResult.Error;
-            }
+
+            SystemSetting systemSetting = new SystemSetting(settingDto);
+            return await _repository.DeleteSystemSettingAsync(systemSetting);
         }
 
         public async Task<SystemSettingDto> GetSystemSettingAsync(string name)
@@ -77,25 +61,18 @@ namespace Almostengr.PetFeeder.BackEnd.Services
 
         public async Task<SystemSettingDto> UpdateSystemSettingAsync(SystemSettingDto systemSettingDto)
         {
-            try
-            {
-                SystemSetting setting = await _repository.GetSystemSettingEntity(systemSettingDto.Name);
+            SystemSetting setting = await _repository.GetSystemSettingEntity(systemSettingDto.Name);
 
-                if (setting == null)
-                {
-                    throw new ArgumentException($"System setting with name {systemSettingDto.Name} does not exist.");
-                }
-                
-                setting.Modified = DateTime.Now;
-                setting.Value = systemSettingDto.Value;
-
-                return await _repository.UpdateSystemSettingAsync(setting);
-            }
-            catch (Exception ex)
+            if (setting == null)
             {
-                _logger.LogError(ex, ex.Message);
+                // throw new ArgumentException($"System setting with name {systemSettingDto.Name} does not exist.");
                 return null;
             }
+
+            setting.Modified = DateTime.Now;
+            setting.Value = systemSettingDto.Value;
+
+            return await _repository.UpdateSystemSettingAsync(setting);
         }
 
     }

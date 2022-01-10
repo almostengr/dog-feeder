@@ -32,7 +32,7 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers.Api
             }
             else
             {
-                return BadRequest();
+                return BadRequest("Action was not valid");
             }
 
             return Ok();

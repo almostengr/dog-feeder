@@ -6,30 +6,50 @@ using Almostengr.PetFeeder.BackEnd.Models;
 using Almostengr.PetFeeder.Common.DataTransferObject;
 using Almostengr.PetFeeder.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.BackEnd.Repository
 {
     public class ScheduleRepository : IScheduleRepository
     {
         private readonly PetFeederContext _dbContext;
+        private readonly ILogger<ScheduleRepository> _logger;
 
-        public ScheduleRepository(PetFeederContext dbContext)
+        public ScheduleRepository(PetFeederContext dbContext, ILogger<ScheduleRepository> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
         public async Task<ScheduleDto> CreateScheduleAsync(Schedule schedule)
         {
-            Schedule createdSchedule = await _dbContext.Schedules.AddAsync(schedule);
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+                var createdSchedule = await _dbContext.Schedules.AddAsync(schedule);
+                await _dbContext.SaveChangesAsync();
 
-            return createdSchedule.Entity.ToScheduleDto();
+                return createdSchedule.Entity.ToScheduleDto();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return null;
+            }
         }
 
-        public async Task DeleteScheduleAsync(Schedule schedule)
+        public async Task<bool> DeleteScheduleAsync(Schedule schedule)
         {
-            _dbContext.Schedules.Remove(schedule);
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+                _dbContext.Schedules.Remove(schedule);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return false;
+            }
         }
 
         public async Task<ScheduleDto> GetScheduleAsync(int id)
@@ -65,10 +85,19 @@ namespace Almostengr.PetFeeder.BackEnd.Repository
 
         public async Task<ScheduleDto> UpdateScheduleAsync(Schedule schedule)
         {
-            var updatedEntity = _dbContext.Schedules.Update(schedule);
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+                var updatedEntity = _dbContext.Schedules.Update(schedule);
+                await _dbContext.SaveChangesAsync();
 
-            return updatedEntity.Entity.ToScheduleDto();
+                return updatedEntity.Entity.ToScheduleDto();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return null;
+            }
         }
+        
     }
 }

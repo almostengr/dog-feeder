@@ -22,18 +22,10 @@ namespace Almostengr.PetFeeder.BackEnd.Services
 
         public async Task<FeedingDto> CreateFeedingAsync(FeedingDto feedingDto)
         {
-            try
-            {
-                Feeding feeding = new Feeding(feedingDto);
-                feeding.Created = DateTime.Now;
+            Feeding feeding = new Feeding(feedingDto);
+            feeding.Created = DateTime.Now;
 
-                return await _repository.CreateFeedingAsync(feeding);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                return null;
-            }
+            return await _repository.CreateFeedingAsync(feeding);
         }
 
         public async Task<FeedingDto> GetFeedingAsync(int id)
