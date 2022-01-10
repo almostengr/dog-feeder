@@ -11,6 +11,7 @@ namespace Almostengr.PetFeeder.BackEnd.Models
             {
                 Name = systemSetting.Name,
                 Value = systemSetting.Value,
+                Description = systemSetting.Description,
                 Created = systemSetting.Created,
                 Modified = systemSetting.Modified
             };

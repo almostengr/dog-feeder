@@ -14,6 +14,7 @@ namespace Almostengr.PetFeeder.BackEnd.Models
         {
             Name = systemSetting.Name;
             Value = systemSetting.Value;
+            Description = systemSetting.Description;
         }
 
         [Key]
@@ -26,6 +27,6 @@ namespace Almostengr.PetFeeder.BackEnd.Models
         
         [Required]
         public DateTime Modified { get; set; }
-
+        public string Description { get; set; }
     }
 }
