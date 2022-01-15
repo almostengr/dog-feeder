@@ -73,6 +73,9 @@ namespace Almostengr.PetFeeder.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("Modified")
                         .HasColumnType("TEXT");
 

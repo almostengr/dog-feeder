@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Almostengr.PetFeeder.Migrations
 {
     [DbContext(typeof(PetFeederContext))]
-    [Migration("20220107033901_SeedData")]
-    partial class SeedData
+    [Migration("20220115212634_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -73,6 +73,9 @@ namespace Almostengr.PetFeeder.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Modified")
