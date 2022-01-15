@@ -19,15 +19,21 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
         [HttpGet("{settingName}")]
         public async Task<IActionResult> GetSystemSetting(string settingName)
         {
-            SystemSettingDto systemSetting = await _service.GetSystemSettingAsync(settingName);
-            return Ok(systemSetting);
+            SystemSettingDto systemSettingDto = await _service.GetSystemSettingAsync(settingName);
+
+            if (systemSettingDto == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(systemSettingDto);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetSystemSettings()
         {
-            List<SystemSettingDto> systemSettings = await _service.GetSystemSettingsAsync();
-            return Ok(systemSettings);
+            List<SystemSettingDto> systemSettingDtos = await _service.GetSystemSettingsAsync();
+            return Ok(systemSettingDtos);
         }
 
         [HttpPost]

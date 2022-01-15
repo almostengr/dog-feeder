@@ -19,15 +19,21 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
         [HttpGet]
         public async Task<IActionResult> GetFeedings()
         {
-            List<FeedingDto> feedings = await _service.GetFeedingsAsync();
-            return Ok(feedings);
+            List<FeedingDto> feedingDtos = await _service.GetFeedingsAsync();
+            return Ok(feedingDtos);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetFeeding(int id)
         {
-            FeedingDto feeding = await _service.GetFeedingAsync(id);
-            return Ok(feeding);
+            FeedingDto feedingDto = await _service.GetFeedingAsync(id);
+
+            if (feedingDto == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(feedingDto);
         }
 
         [HttpPost]
@@ -38,14 +44,14 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
                 return BadRequest(ModelState);
             }
 
-            FeedingDto createdFeeding = await _service.CreateFeedingAsync(feedingDto);
+            FeedingDto createdFeedingDto = await _service.CreateFeedingAsync(feedingDto);
 
-            if (createdFeeding == null)
+            if (createdFeedingDto == null)
             {
                 return StatusCode(500, "Failed to create feeding");
             }
             
-            return CreatedAtAction(nameof(GetFeeding), new { id = createdFeeding.FeedingId }, createdFeeding);
+            return CreatedAtAction(nameof(GetFeeding), new { id = createdFeedingDto.FeedingId }, createdFeedingDto);
         }
     }
 }

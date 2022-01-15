@@ -27,6 +27,12 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
         public async Task<IActionResult> GetSchedule(int id)
         {
             ScheduleDto schedule = await _service.GetScheduleAsync(id);
+
+            if (schedule == null)
+            {
+                return NotFound();
+            }
+            
             return Ok(schedule);
         }
 
