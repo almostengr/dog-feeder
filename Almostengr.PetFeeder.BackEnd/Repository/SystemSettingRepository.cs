@@ -20,36 +20,6 @@ namespace Almostengr.PetFeeder.BackEnd.Repository
             _logger = logger;
         }
 
-        public async Task<SystemSettingDto> CreateSystemSettingAsync(SystemSetting systemSetting)
-        {
-            try
-            {
-                var result = await _dbContext.SystemSettings.AddAsync(systemSetting);
-                await _dbContext.SaveChangesAsync();
-                return result.Entity.ToSystemSettingDto();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                return null;
-            }
-        }
-
-        public async Task<bool> DeleteSystemSettingAsync(SystemSetting systemSetting)
-        {
-            try
-            {
-                _dbContext.SystemSettings.Remove(systemSetting);
-                await _dbContext.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                return false;
-            }
-        }
-
         public async Task<SystemSettingDto> GetSystemSettingAsync(string name)
         {
             return await _dbContext.SystemSettings
@@ -58,9 +28,11 @@ namespace Almostengr.PetFeeder.BackEnd.Repository
                 .SingleOrDefaultAsync();
         }
 
-        public Task<SystemSetting> GetSystemSettingEntity(string name)
+        public async Task<SystemSetting> GetSystemSettingEntity(string name)
         {
-            throw new NotImplementedException();
+            return await _dbContext.SystemSettings
+                .Where(s => s.Name == name)
+                .SingleOrDefaultAsync();
         }
 
         public async Task<List<SystemSettingDto>> GetSystemSettingsAsync()
@@ -73,17 +45,9 @@ namespace Almostengr.PetFeeder.BackEnd.Repository
 
         public async Task<SystemSettingDto> UpdateSystemSettingAsync(SystemSetting systemSetting)
         {
-            try
-            {
-                var updatedEntity = _dbContext.SystemSettings.Update(systemSetting);
-                await _dbContext.SaveChangesAsync();
-                return updatedEntity.Entity.ToSystemSettingDto();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                return null;
-            }
+            var updatedEntity = _dbContext.SystemSettings.Update(systemSetting);
+            await _dbContext.SaveChangesAsync();
+            return updatedEntity.Entity.ToSystemSettingDto();
         }
 
     }

@@ -26,24 +26,9 @@ namespace Almostengr.PetFeeder.BackEnd.Repository
 
         public async Task<FeedingDto> CreateFeedingAsync(Feeding feeding)
         {
-            try
-            {
-                var dispenseFood = await _relay.FeedMeAsync(feeding.Amount);
-                if (dispenseFood == false)
-                {
-                    return null;
-                }
-
-                var createdFeeding = await _dbContext.Feedings.AddAsync(feeding);
-                await _dbContext.SaveChangesAsync();
-
-                return createdFeeding.Entity.ToFeedingDto();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                return null;
-            }
+            var createdFeeding = await _dbContext.Feedings.AddAsync(feeding);
+            await _dbContext.SaveChangesAsync();
+            return createdFeeding.Entity.ToFeedingDto();
         }
 
         public async Task<FeedingDto> GetFeedingAsync(int id)

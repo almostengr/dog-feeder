@@ -22,20 +22,17 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers.Api
         [HttpPost]
         public ActionResult CreatePower(PowerDto powerDto)
         {
-            if (powerDto.Action == PowerAction.Reboot)
+            switch(powerDto.Action)
             {
-                _service.Reboot();
+                case PowerAction.Reboot:
+                    _service.Reboot();
+                    return Ok("Rebooted");
+                case PowerAction.Shutdown:
+                    _service.Shutdown();
+                    return Ok("Shutdown");
+                default:
+                    return BadRequest("Action was not valid");
             }
-            else if (powerDto.Action == PowerAction.Shutdown)
-            {
-                _service.Shutdown();
-            }
-            else
-            {
-                return BadRequest("Action was not valid");
-            }
-
-            return Ok();
         }
 
     }

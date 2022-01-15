@@ -46,11 +46,6 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
 
             FeedingDto createdFeedingDto = await _service.CreateFeedingAsync(feedingDto);
 
-            if (createdFeedingDto == null)
-            {
-                return StatusCode(500, "Failed to create feeding");
-            }
-            
             return CreatedAtAction(nameof(GetFeeding), new { id = createdFeedingDto.FeedingId }, createdFeedingDto);
         }
     }

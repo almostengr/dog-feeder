@@ -46,11 +46,6 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
 
             ScheduleDto createdSchedule = await _service.CreateScheduleAsync(scheduleDto);
 
-            if (createdSchedule == null)
-            {
-                return StatusCode(500, "Failed to create schedule");
-            }
-            
             return CreatedAtAction(nameof(GetSchedule), new { id = createdSchedule.ScheduleId }, createdSchedule);
         }
 
@@ -64,17 +59,19 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
 
             ScheduleDto updatedSchedule = await _service.UpdateScheduleAsync(schedule);
 
-            if (updatedSchedule == null)
-            {
-                return StatusCode(500, "Failed to update schedule");
-            }
-
             return Ok(updatedSchedule);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSchedule(int id)
         {
+            var scheduleDto = await _service.GetScheduleAsync(id);
+
+            if (scheduleDto == null)
+            {
+                return NotFound();
+            }
+            
             bool isDeleted = await _service.DeleteScheduleAsync(id);
 
             if (isDeleted == false)

@@ -23,33 +23,16 @@ namespace Almostengr.PetFeeder.BackEnd.Repository
 
         public async Task<ScheduleDto> CreateScheduleAsync(Schedule schedule)
         {
-            try
-            {
-                var createdSchedule = await _dbContext.Schedules.AddAsync(schedule);
-                await _dbContext.SaveChangesAsync();
-
-                return createdSchedule.Entity.ToScheduleDto();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                return null;
-            }
+            var createdSchedule = await _dbContext.Schedules.AddAsync(schedule);
+            await _dbContext.SaveChangesAsync();
+            return createdSchedule.Entity.ToScheduleDto();
         }
 
         public async Task<bool> DeleteScheduleAsync(Schedule schedule)
         {
-            try
-            {
-                _dbContext.Schedules.Remove(schedule);
-                await _dbContext.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                return false;
-            }
+            _dbContext.Schedules.Remove(schedule);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
 
         public async Task<ScheduleDto> GetScheduleAsync(int id)
@@ -85,19 +68,10 @@ namespace Almostengr.PetFeeder.BackEnd.Repository
 
         public async Task<ScheduleDto> UpdateScheduleAsync(Schedule schedule)
         {
-            try
-            {
-                var updatedEntity = _dbContext.Schedules.Update(schedule);
-                await _dbContext.SaveChangesAsync();
-
-                return updatedEntity.Entity.ToScheduleDto();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                return null;
-            }
+            var updatedEntity = _dbContext.Schedules.Update(schedule);
+            await _dbContext.SaveChangesAsync();
+            return updatedEntity.Entity.ToScheduleDto();
         }
-        
+
     }
 }
