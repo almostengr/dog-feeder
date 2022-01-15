@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.BackEnd.Controllers
 {
-    public class SystemSettingController : BaseApiController
+    public class SystemSettingController : BaseApiController, ISystemSettingController
     {
         private readonly ISystemSettingService _service;
 
