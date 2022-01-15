@@ -32,6 +32,11 @@ namespace Almostengr.PetFeeder.BackEnd.Constants
     {
         public const string FeedingMode = "FeedingMode";
         public const string WateringMode = "WateringMode";
+        // public const string LightRelay = "LightRelay"; // tood - implement in future release
+        public const string FoodForwardRelay = "FoodForwardRelay";
+        public const string FoodBackwardRelay = "FoodBackwardRelay";
+        // public const string WaterValveRelay = "WaterValveRelay";  // todo - implement in future release
+        // public const string PottyButton = "PottyButton";  // todo - implement in future release
     }
     
     public static class TaskResult

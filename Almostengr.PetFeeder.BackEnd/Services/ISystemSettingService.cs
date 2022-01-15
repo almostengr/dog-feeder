@@ -8,8 +8,6 @@ namespace Almostengr.PetFeeder.BackEnd.Services
     {
         Task<SystemSettingDto> GetSystemSettingAsync(string name);
         Task<SystemSettingDto> UpdateSystemSettingAsync(SystemSettingDto systemSetting);
-        Task<SystemSettingDto> CreateSystemSettingAsync(SystemSettingDto systemSetting);
         Task<List<SystemSettingDto>> GetSystemSettingsAsync();
-        Task<bool> DeleteSystemSettingAsync(string settingName);
     }
 }
