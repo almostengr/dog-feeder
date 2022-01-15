@@ -6,14 +6,14 @@
         {
             "label": "build",
             "command": "dotnet",
-            "type": "shell",
+            "type": "process",
             "args": [
                 "build",
-                // Ask dotnet build to generate full paths for file names.
+                "${workspaceFolder}/Almostengr.PetFeeder.BackEnd/Almostengr.PetFeeder.BackEnd.csproj",
                 "/property:GenerateFullPaths=true",
-                // Do not generate summary otherwise it leads to duplicate errors in Problems panel
                 "/consoleloggerparameters:NoSummary"
             ],
+            "problemMatcher": "$msCompile",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -21,7 +21,6 @@
             "presentation": {
                 "reveal": "silent"
             },
-            "problemMatcher": "$msCompile"
         },
         {
             "label": "Add database migration",
@@ -32,9 +31,11 @@
                 "migrations",
                 "add",
                 "-p",
-                "Almostengr.PetFeeder.Api/",
+                "Almostengr.PetFeeder.BackEnd/",
+                "--context",
+                "PetFeederDbContext",
                 "-o",
-                "${workspaceFolder}/Almostengr.PetFeeder.Web/Migrations",
+                "${workspaceFolder}/Almostengr.PetFeeder.BackEnd/Migrations",
                 "${input:migrationName}"
             ],
             "group": "none",
@@ -52,7 +53,9 @@
                 "database",
                 "update",
                 "-p",
-                "Almostengr.PetFeeder.Web/",
+                "Almostengr.PetFeeder.BackEnd/",
+                "--context",
+                "PetFeederDbContext",
             ],
             "group": "none",
             "presentation": {
@@ -70,7 +73,9 @@
                 "remove",
                 "${input:migrationName}",
                 "-p",
-                "Almostengr.PetFeeder.Web/",
+                "Almostengr.PetFeeder.BackEnd/",
+                "--context",
+                "PetFeederDbContext",
             ],
             "group": "none",
             "presentation": {
@@ -79,20 +84,44 @@
             "problemMatcher": "$msCompile",
         },
         {
-            "label": "watch run WEB",
+            "label": "watch",
             "command": "dotnet",
-            "type" : "shell",
+            "type": "process",
             "args": [
                 "watch",
-                "-p",
-                "Almostengr.PetFeeder.Web/",
-                "run"
+                "run",
+                "${workspaceFolder}/Almostengr.PetFeeder.BackEnd/Almostengr.PetFeeder.BackEnd.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
             ],
-            "group": "none",
-            "presentation": {
-                "reveal": "silent"
-            },
-            "problemMatcher": "$msCompile",
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Tag Release",
+            "command": "git",
+            "type": "shell",
+            "args": [
+                "tag",
+                "-a",
+                "\"v$(date +%Y.%m.%d)\"",
+                "-m",
+                "\"version $(date +%Y.%m.%d)\""
+            ],
+            "dependsOn": [
+                "Publish release"
+            ],
+        },
+        {
+            "label": "publish",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/Almostengr.PetFeeder.BackEnd/Almostengr.PetFeeder.BackEnd.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
         },
     ],
     "inputs": [
