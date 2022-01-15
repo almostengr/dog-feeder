@@ -3,7 +3,6 @@ using System.Device.Gpio;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.BackEnd.Enums;
 using Microsoft.Extensions.Logging;
-using Almostengr.PetFeeder.BackEnd.Relays;
 using Almostengr.PetFeeder.BackEnd.Constants;
 
 namespace Almostengr.PetFeeder.BackEnd.Relays

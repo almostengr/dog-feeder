@@ -42,7 +42,7 @@ namespace Almostengr.PetFeeder.BackEnd
             services.AddScoped<ISystemSettingRepository, SystemSettingRepository>();
 
             services.AddScoped<IFeedingService, FeedingService>();
-            services.AddSingleton<IPowerService, PowerService>();
+            services.AddScoped<IPowerService, PowerService>();
             services.AddScoped<IScheduleService, ScheduleService>();
             services.AddScoped<ISystemSettingService, SystemSettingService>();
 
