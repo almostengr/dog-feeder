@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.BackEnd.Models;
-using Almostengr.PetFeeder.BackEnd.Repository.Interfaces;
-using Almostengr.PetFeeder.BackEnd.Services.Interfaces;
+using Almostengr.PetFeeder.BackEnd.Repository;
+using Almostengr.PetFeeder.BackEnd.Services;
 using Almostengr.PetFeeder.Common.DataTransferObject;
 using Microsoft.Extensions.Logging;
 

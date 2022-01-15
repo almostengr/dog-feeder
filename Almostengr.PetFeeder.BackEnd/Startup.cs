@@ -1,7 +1,5 @@
-using Almostengr.PetFeeder.BackEnd.Services.Interfaces;
-using Almostengr.PetFeeder.BackEnd.Repository;
-using Almostengr.PetFeeder.BackEnd.Repository.Interfaces;
 using Almostengr.PetFeeder.BackEnd.Services;
+using Almostengr.PetFeeder.BackEnd.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +11,6 @@ using Almostengr.PetFeeder.Services;
 using Almostengr.PetFeeder.Repository.Interfaces;
 using Almostengr.PetFeeder.BackEnd.Workers;
 using Almostengr.PetFeeder.BackEnd.Relays;
-using Almostengr.PetFeeder.BackEnd.Relays.Interfaces;
 
 namespace Almostengr.PetFeeder.BackEnd
 {
@@ -38,17 +35,16 @@ namespace Almostengr.PetFeeder.BackEnd
             AppSettings appSettings = Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
             services.AddSingleton(appSettings);
 
-            services.AddScoped<IFeedingRepository, FeedingRepository>();
-            services.AddScoped<IFeedingService, FeedingService>();
             services.AddScoped<IFeedingRelay, MockFeedingRelay>();
 
+            services.AddScoped<IFeedingRepository, FeedingRepository>();
             services.AddScoped<IScheduleRepository, ScheduleRepository>();
-            services.AddScoped<IScheduleService, ScheduleService>();
-
             services.AddScoped<ISystemSettingRepository, SystemSettingRepository>();
-            services.AddScoped<ISystemSettingService, SystemSettingService>();
 
+            services.AddScoped<IFeedingService, FeedingService>();
             services.AddSingleton<IPowerService, PowerService>();
+            services.AddScoped<IScheduleService, ScheduleService>();
+            services.AddScoped<ISystemSettingService, SystemSettingService>();
 
             services.AddHostedService<ScheduleWorker>();
 
@@ -102,5 +98,6 @@ namespace Almostengr.PetFeeder.BackEnd
                 }
             }
         }
+        
     }
 }

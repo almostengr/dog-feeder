@@ -1,4 +1,4 @@
-using Almostengr.PetFeeder.BackEnd.Repository.Interfaces;
+using Almostengr.PetFeeder.BackEnd.Repository;
 
 namespace Almostengr.PetFeeder.BackEnd.Repository
 {

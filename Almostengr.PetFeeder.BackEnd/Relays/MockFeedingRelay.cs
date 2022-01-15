@@ -1,7 +1,7 @@
 using System;
 using System.Device.Gpio;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.BackEnd.Relays.Interfaces;
+using Almostengr.PetFeeder.BackEnd.Relays;
 using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.BackEnd.Relays

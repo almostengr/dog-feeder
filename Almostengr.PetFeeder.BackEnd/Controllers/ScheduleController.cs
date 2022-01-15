@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Almostengr.PetFeeder.BackEnd.Services.Interfaces;
+using Almostengr.PetFeeder.BackEnd.Services;
 using Almostengr.PetFeeder.Common.DataTransferObject;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -32,7 +32,7 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
             {
                 return NotFound();
             }
-            
+
             return Ok(schedule);
         }
 

@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Almostengr.PetFeeder.BackEnd.Relays.Interfaces
+namespace Almostengr.PetFeeder.BackEnd.Relays
 {
     public interface IFeedingRelay : IRelayBase
     {

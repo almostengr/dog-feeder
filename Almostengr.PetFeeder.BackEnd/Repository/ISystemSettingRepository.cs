@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Almostengr.PetFeeder.BackEnd.Models;
 using Almostengr.PetFeeder.Common.DataTransferObject;
 
-namespace Almostengr.PetFeeder.BackEnd.Repository.Interfaces
+namespace Almostengr.PetFeeder.BackEnd.Repository
 {
     public interface ISystemSettingRepository : IBaseRepository
     {

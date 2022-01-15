@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Almostengr.PetFeeder.BackEnd.Models;
-using Almostengr.PetFeeder.BackEnd.Repository.Interfaces;
 using Almostengr.PetFeeder.Common.DataTransferObject;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
