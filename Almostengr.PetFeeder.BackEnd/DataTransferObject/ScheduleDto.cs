@@ -12,15 +12,16 @@ namespace Almostengr.PetFeeder.Common.DataTransferObject
         public DateTime ScheduledTime { get; set; }
 
         [Required]
-        [Range(0,10)]
+        [Range(0.1, 15)]
         public double FeedingAmount { get; set; }
 
         [Required]
+        [Range(1,2)]
         public FeedingFrequency FeedingFrequency { get; set; }
 
         public bool IsActive { get; set; } = true;
-    
-        [Range(1,2, ErrorMessage = "Invalid Schedule Type")]
+
+        [Range(1, 2, ErrorMessage = "Invalid Schedule Type")]
         public ScheduleType ScheduleType { get; set; }
 
         public DateTime Created { get; set; }

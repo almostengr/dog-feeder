@@ -12,7 +12,7 @@ namespace Almostengr.PetFeeder.Common.DataTransferObject
         public FeedingType FeedingType { get; set; }
 
         [Required]
-        [Range(0.1, 10, ErrorMessage = "Amount must be between 0.1 and 10")]
+        [Range(0.1, 15, ErrorMessage = "Amount must be between 0.1 and 15")]
         public double Amount { get; set; }
 
         public DateTime Created { get; set; }
