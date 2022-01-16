@@ -13,5 +13,6 @@ namespace Almostengr.PetFeeder.BackEnd.Services
         Task<ScheduleDto> UpdateScheduleAsync(ScheduleDto schedule);
         Task<bool> DeleteScheduleAsync(int id);
         Task<List<ScheduleDto>> GetSchedulesByTimeAsync(TimeSpan time);
+        Task<bool> IsSchedulerActiveAsync();
     }
 }
