@@ -27,6 +27,13 @@ namespace Almostengr.PetFeeder.BackEnd.Workers
         {
             while(stoppingToken.IsCancellationRequested == false)
             {
+                bool schedulerActive = await _scheduleService.IsSchedulerActiveAsync();
+                if (schedulerActive == false)
+                {
+                    await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
+                    continue;
+                }
+
                 await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
 
                 TimeSpan currentTime = DateTime.Now.TimeOfDay;
@@ -39,7 +46,7 @@ namespace Almostengr.PetFeeder.BackEnd.Workers
                     
                     if (schedule.FeedingFrequency == FeedingFrequency.Once)
                     {
-                        await _scheduleService.DeleteScheduleAsync(schedule.ScheduleId);
+                        var d = Task.Run(() => _scheduleService.DeleteScheduleAsync(schedule.ScheduleId));
                     }
                 }
             }

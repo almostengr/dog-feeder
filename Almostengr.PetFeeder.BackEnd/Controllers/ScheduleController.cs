@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Almostengr.PetFeeder.BackEnd.Controllers
 {
-    public class ScheduleController : BaseApiController
+    public class ScheduleController : BaseApiController, IScheduleController
     {
         private readonly IScheduleService _service;
 

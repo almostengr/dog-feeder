@@ -10,7 +10,6 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers
         protected BaseApiController(ILogger<BaseApiController> logger)
         {
         }
-
         
     }
 }

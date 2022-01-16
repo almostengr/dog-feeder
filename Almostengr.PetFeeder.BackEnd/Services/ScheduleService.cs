@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Almostengr.PetFeeder.BackEnd.Constants;
+using Almostengr.PetFeeder.BackEnd.Enums;
 using Almostengr.PetFeeder.BackEnd.Models;
 using Almostengr.PetFeeder.BackEnd.Services;
 using Almostengr.PetFeeder.Common.DataTransferObject;
@@ -13,11 +15,14 @@ namespace Almostengr.PetFeeder.Services
     {
         private readonly IScheduleRepository _repository;
         private readonly ILogger<ScheduleService> _logger;
+        private readonly ISystemSettingService _systemSettingService;
 
-        public ScheduleService(IScheduleRepository repository, ILogger<ScheduleService> logger)
+        public ScheduleService(IScheduleRepository repository, ILogger<ScheduleService> logger,
+            ISystemSettingService systemSettingService)
         {
             _repository = repository;
             _logger = logger;
+            _systemSettingService = systemSettingService;
         }
 
         public async Task<ScheduleDto> CreateScheduleAsync(ScheduleDto scheduleDto)
@@ -63,6 +68,18 @@ namespace Almostengr.PetFeeder.Services
             return await _repository.GetSchedulesByTimeAsync(time);
         }
 
+        public async Task<bool> IsSchedulerActiveAsync()
+        {
+            SystemSettingDto systemSettingDto = await _systemSettingService.GetSystemSettingAsync(nameof(SettingName.FeedingMode));
+
+            if (systemSettingDto.Value == FeedingMode.Auto.ToString())
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public async Task<ScheduleDto> UpdateScheduleAsync(ScheduleDto scheduleDto)
         {
             Schedule schedule = await _repository.GetScheduleEntity(scheduleDto.ScheduleId);
@@ -76,7 +93,6 @@ namespace Almostengr.PetFeeder.Services
             schedule.Modified = DateTime.Now;
             schedule.FeedingAmount = scheduleDto.FeedingAmount;
             schedule.IsActive = scheduleDto.IsActive;
-            // schedule.ScheduleType = (ScheduleType)scheduleDto.ScheduleType;
             schedule.ScheduledTime = scheduleDto.ScheduledTime;
 
             return await _repository.UpdateScheduleAsync(schedule);

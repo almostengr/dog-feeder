@@ -23,11 +23,6 @@ namespace Almostengr.PetFeeder.BackEnd.Constants
         public const string Shutdown = "shutdown";
     }
 
-    public static class ErrorMessage
-    {
-        public static readonly string Api500 = "A problem occurred when handling your request";
-    }
-
     public static class SettingName
     {
         public const string FeedingMode = "FeedingMode";
@@ -39,10 +34,4 @@ namespace Almostengr.PetFeeder.BackEnd.Constants
         // public const string PottyButton = "PottyButton";  // todo - implement in future release
     }
     
-    public static class TaskResult
-    {
-        public const int Success = 0;
-        public const int Error = 1;
-    }
-
 }

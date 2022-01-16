@@ -8,7 +8,7 @@ namespace Almostengr.PetFeeder.BackEnd.Controllers.Api
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PowerController : BaseApiController
+    public class PowerController : BaseApiController, IPowerController
     {
         private readonly ILogger<PowerController> _logger;
         private readonly IPowerService _service;
