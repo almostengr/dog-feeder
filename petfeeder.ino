@@ -7,4 +7,11 @@ void setup() {
 
 void loop() {
   
+  // check button 1 state 
+  
+  // check button 2 state 
+  
+  // update display 
+  
+  // 
 }
