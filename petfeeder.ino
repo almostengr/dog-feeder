@@ -7,11 +7,15 @@ const int actionButtonPin = 5;
 const int motorPin = 10;
 const int ledLampPin = 14;
 
-const unsigned long lastFeedScreenInterval = 120000;
+ unsigned long lastFeedScreenInterval = secondsToMilliseconds(120);
 
 unsigned long lastFeedTime = 0;
 unsigned long lastButtonPressTime = 0;
 unsigned int currentScreenNumber = 0;
+
+long secondsToMilliseconds(long seconds){
+  return seconds * 60 * 1000;
+}
 
 void setup() {
   pinMode(screenButtonPin, INPUT);
@@ -43,14 +47,11 @@ void loop() {
   // 
 }
 
-int GoToHomeScreen() {
+void GoToHomeScreen() {
   unsigned long currentTime = millis();
   
   if ((currentTime - lastButtonPressTime) >= lastFeedScreenInterval){
     lastButtonPressTime = currentTime;
-    return 1;
+    currentScreenNumber = 1;
   }
-  
-  return currentScreenNumber;
-  
 }
