@@ -13,6 +13,9 @@ unsigned long lastFeedTime = 0;
 unsigned long lastButtonPressTime = 0;
 unsigned int currentScreenNumber = 0;
 
+// state to represent screen that is being displayed
+// transition to represent the phase to go from
+
 long secondsToMilliseconds(long seconds){
   return seconds * 60 * 1000;
 }
