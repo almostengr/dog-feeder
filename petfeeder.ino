@@ -3,12 +3,14 @@ int lastFeedMs = 0;
 const int screenButtonPin = 4;
 const int actionButtonPin = 5;
 const int motorPin = 10;
+const int ledLampPin = 14;
 
 void setup() {
-  pinMode(actionButtonPin, INPUT); // input button 1
-  pinMode(actionButtonPin, INPUT); // input button 2 
+  pinMode(actionButtonPin, INPUT);
+  pinMode(actionButtonPin, INPUT);
   // lcd display
-  pinMode(motorPin, OUTPUT); // motor gpio
+  pinMode(motorPin, OUTPUT);
+  pinMode(ledLampPin, OUTPUT); 
 }
 
 void loop() {
