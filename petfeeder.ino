@@ -1,3 +1,9 @@
+int lastFeedMs = 0;
+
+const int screenButtonPin = 4;
+const int actionButtonPin = 5;
+const int motorPin = 10;
+
 void setup() {
   // input button 1
   // input button 2 
