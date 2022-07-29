@@ -6,7 +6,7 @@ const int motorPin = 10;
 const int ledLampPin = 14;
 
 void setup() {
-  pinMode(actionButtonPin, INPUT);
+  pinMode(screenButtonPin, INPUT);
   pinMode(actionButtonPin, INPUT);
   // lcd display
   pinMode(motorPin, OUTPUT);
@@ -14,8 +14,11 @@ void setup() {
 }
 
 void loop() {
+  screenButtonState = digitalRead(screenButtonPin); // check button 1 state 
   
-  // check button 1 state 
+  if (screenButtonState == HIGH) {
+    // do something
+  }
   
   // check button 2 state 
   
