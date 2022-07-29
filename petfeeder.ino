@@ -5,10 +5,10 @@ const int actionButtonPin = 5;
 const int motorPin = 10;
 
 void setup() {
-  // input button 1
-  // input button 2 
+  pinMode(actionButtonPin, INPUT); // input button 1
+  pinMode(actionButtonPin, INPUT); // input button 2 
   // lcd display
-  // motor gpio
+  pinMode(motorPin, OUTPUT); // motor gpio
 }
 
 void loop() {
